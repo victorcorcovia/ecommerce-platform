@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Produtos | Painel Administrativo</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="admin-container">
+      <!-- MENU LATERAL -->
+      <aside class="sidebar">
+        <div class="logo">
+          <h2>Lojas Lolly</h2>
+          <span>Painel Administrativo</span>
+        </div>
+
+        <nav>
+          <ul>
+            <li>
+              <a href="dashboard.html">Dashboard</a>
+            </li>
+
+            <li>
+              <a href="financeiro.html">Financeiro</a>
+            </li>
+
+            <li>
+              <a href="produtos.html">Produtos</a>
+            </li>
+
+            <li>
+              <a href="estoque.html">Estoque</a>
+            </li>
+
+            <li>
+              <a href="pedidos.html">Pedidos</a>
+            </li>
+
+            <li>
+              <a href="clientes.html">Clientes</a>
+            </li>
+
+            <li>
+              <a href="aparencia.html">Aparência</a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- CONTEÚDO PRINCIPAL -->
+      <main class="conteudo">
+        <!-- TOPO -->
+        <header class="topo">
+          <div>
+            <h1>Produtos</h1>
+            <p>Gerencie os produtos das duas lojas</p>
+          </div>
+
+          <div class="usuario">
+            <span>Administrador</span>
+          </div>
+        </header>
+
+        <!-- BARRA DE AÇÕES -->
+        <section class="barra-produtos">
+          <div class="filtros-produtos">
+            <div class="campo-filtro">
+              <label for="filtroLoja">Loja</label>
+
+              <select id="filtroLoja">
+                <option value="todas">Todas as lojas</option>
+                <option value="lolly">Lolly</option>
+                <option value="3d">3D</option>
+              </select>
+            </div>
+
+            <div class="campo-filtro">
+              <label for="buscarProduto">Buscar produto</label>
+
+              <input
+                type="text"
+                id="buscarProduto"
+                placeholder="Digite o nome do produto"
+              />
+            </div>
+          </div>
+
+          <button class="btn-novo-produto" id="btnNovoProduto">
+            + Novo produto
+          </button>
+        </section>
+
+        <!-- LISTA DE PRODUTOS -->
+        <section class="lista-produtos">
+          <!-- FORMULÁRIO DE NOVO PRODUTO -->
+          <section class="form-produto" id="formProduto">
+            <div class="cabecalho-form">
+              <div>
+                <h2>Novo produto</h2>
+                <p>Cadastre um produto em uma das lojas</p>
+              </div>
+
+              <button type="button" class="btn-fechar" id="btnFecharProduto">
+                ×
+              </button>
+            </div>
+
+            <form id="cadastroProduto">
+              <div class="grid-form">
+                <div class="campo-form">
+                  <label for="lojaProduto">Loja *</label>
+
+                  <select id="lojaProduto" required>
+                    <option value="">Selecione a loja</option>
+                    <option value="lolly">Lolly</option>
+                    <option value="3d">3D</option>
+                  </select>
+                </div>
+
+                <div class="campo-form">
+                  <label for="nomeProduto">Nome do produto *</label>
+
+                  <input
+                    type="text"
+                    id="nomeProduto"
+                    placeholder="Ex: Pijama Americano Rosa"
+                    required
+                  />
+                </div>
+
+                <div class="campo-form">
+                  <label for="categoriaProduto">Categoria *</label>
+
+                  <select id="categoriaProduto" required>
+                    <option value="">Selecione uma categoria</option>
+                  </select>
+                </div>
+
+                <div class="campo-form">
+                  <label for="precoProduto">Preço *</label>
+
+                  <input
+                    type="number"
+                    id="precoProduto"
+                    placeholder="0,00"
+                    min="0"
+                    step="0.01"
+                    required
+                  />
+                </div>
+
+                <div class="campo-form">
+                  <label for="estoqueProduto">Quantidade em estoque *</label>
+
+                  <input
+                    type="number"
+                    id="estoqueProduto"
+                    value="0"
+                    min="0"
+                    required
+                  />
+                </div>
+
+                <div class="campo-form">
+                  <label for="statusProduto">Status</label>
+
+                  <select id="statusProduto">
+                    <option value="ativo">Ativo</option>
+                    <option value="inativo">Inativo</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="campo-form campo-completo">
+                <label for="descricaoProduto">Descrição</label>
+
+                <textarea
+                  id="descricaoProduto"
+                  rows="5"
+                  placeholder="Descrição do produto..."
+                ></textarea>
+              </div>
+
+              <div class="campo-form campo-completo">
+                <label for="fotosProduto">Fotos do produto</label>
+
+                <input
+                  type="file"
+                  id="fotosProduto"
+                  accept="image/*"
+                  multiple
+                />
+
+                <small>Você poderá selecionar várias fotos.</small>
+              </div>
+
+              <div class="acoes-form">
+                <button
+                  type="button"
+                  class="btn-cancelar"
+                  id="btnCancelarProduto"
+                >
+                  Cancelar
+                </button>
+
+                <button type="submit" class="btn-salvar">Salvar produto</button>
+              </div>
+            </form>
+          </section>
+
+          <div class="titulo-secao">
+            <h2>Produtos cadastrados</h2>
+          </div>
+
+          <div class="tabela-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Loja</th>
+                  <th>Categoria</th>
+                  <th>Preço</th>
+                  <th>Estoque</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+
+              <tbody id="tabelaProdutos">
+                <tr>
+                  <td colspan="7" class="sem-dados">
+                    Nenhum produto cadastrado.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- GERENCIAMENTO DE CATEGORIAS -->
+        <section class="gerenciar-categorias">
+          <div class="cabecalho-categorias">
+            <div>
+              <h2>Categorias</h2>
+              <p>Gerencie as categorias de produtos de cada loja</p>
+            </div>
+
+            <button
+              type="button"
+              class="btn-novo-produto"
+              id="btnNovaCategoria"
+            >
+              + Nova categoria
+            </button>
+          </div>
+
+          <!-- FORMULÁRIO -->
+          <form id="cadastroCategoria" class="form-categoria-produto">
+            <div class="grid-form">
+              <div class="campo-form">
+                <label for="lojaCategoria">Loja *</label>
+
+                <select id="lojaCategoria" required>
+                  <option value="">Selecione a loja</option>
+                  <option value="lolly">Lolly</option>
+                  <option value="3d">3D</option>
+                </select>
+              </div>
+
+              <div class="campo-form">
+                <label for="nomeCategoria">Nome da categoria *</label>
+
+                <input
+                  type="text"
+                  id="nomeCategoria"
+                  placeholder="Ex: Americano curto"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="acoes-form">
+              <button
+                type="button"
+                class="btn-cancelar"
+                id="btnCancelarCategoria"
+              >
+                Cancelar
+              </button>
+
+              <button type="submit" class="btn-salvar">Salvar categoria</button>
+            </div>
+          </form>
+
+          <!-- TABELA -->
+          <div class="tabela-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Categoria</th>
+                  <th>Loja</th>
+                  <th>Produtos</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+
+              <tbody id="tabelaCategorias">
+                <tr>
+                  <td colspan="4" class="sem-dados">
+                    Nenhuma categoria cadastrada.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script type="module" src="./auth-guard.js"></script>
+  </body>
+</html>

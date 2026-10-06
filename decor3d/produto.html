@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Produto | Lolly Decor 3D</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header>
+      <div class="logo">
+        <a href="index.html">
+          <h1>Lolly Decor 3D</h1>
+        </a>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="index.html">Início</a></li>
+          <li><a href="produtos.html">Produtos</a></li>
+          <li><a href="index.html#sobre">Sobre</a></li>
+        </ul>
+      </nav>
+
+      <div class="acoes">
+        <a href="#" class="btn">Minha conta</a>
+
+        <a href="#" class="btn btn-outline carrinho" id="abrir-carrinho">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="9" cy="20" r="1"></circle>
+            <circle cx="19" cy="20" r="1"></circle>
+            <path d="M3 4h2l2.5 11h10.5l2-7H7"></path>
+          </svg>
+
+          <span id="contador-carrinho">0</span>
+        </a>
+      </div>
+    </header>
+
+    <div class="painel-carrinho" id="painel-carrinho">
+      <div class="cabecalho-carrinho">
+        <h2>Seu carrinho</h2>
+        <button id="fechar-carrinho">✕</button>
+      </div>
+
+      <div class="conteudo-carrinho" id="conteudo-carrinho">
+        <p>Seu carrinho está vazio.</p>
+      </div>
+
+      <!-- CALCULAR FRETE -->
+      <div class="calculo-frete">
+        <label for="cep-frete">Calcule o frete</label>
+
+        <div class="campo-frete">
+          <input
+            type="text"
+            id="cep-frete"
+            placeholder="00000-000"
+            maxlength="9"
+          />
+
+          <button type="button" id="calcular-frete">Calcular</button>
+        </div>
+
+        <div class="resultado-frete" id="resultado-frete"></div>
+
+        <a href="carrinho.html" class="btn-ver-carrinho"> Ver carrinho </a>
+      </div>
+    </div>
+
+    <main class="pagina-produto">
+      <div class="produto-detalhes">
+        <!-- FOTOS DO PRODUTO -->
+        <div class="produto-fotos">
+          <!-- FOTO PRINCIPAL -->
+          <div class="foto-principal">
+            <button
+              type="button"
+              class="seta-galeria seta-anterior"
+              id="foto-anterior"
+              aria-label="Foto anterior"
+            >
+              ‹
+            </button>
+
+            <img
+              id="produto-imagem"
+              src="https://placehold.co/600x600?text=Produto+3D"
+              alt="Produto Lolly Decor 3D"
+            />
+
+            <button
+              type="button"
+              class="seta-galeria seta-proxima"
+              id="foto-proxima"
+              aria-label="Próxima foto"
+            >
+              ›
+            </button>
+          </div>
+
+          <!-- MINIATURAS -->
+          <div class="galeria-miniaturas" id="galeria-miniaturas"></div>
+        </div>
+        <div class="produto-informacoes">
+          <h1 id="produto-nome">Produto</h1>
+
+          <p class="produto-preco" id="produto-preco">R$ 0,00</p>
+
+          <p class="produto-descricao" id="produto-descricao">
+            Carregando informações do produto...
+          </p>
+
+          <p class="produto-estoque" id="produto-estoque"></p>
+
+          <!-- COR DO PRODUTO -->
+          <div class="escolha-cor" id="produto-cores">
+            <p>Cor</p>
+
+            <div class="cores">
+              <!-- As cores serão adicionadas pelo JavaScript -->
+            </div>
+          </div>
+
+          <div
+            class="personalizacao-produto"
+            id="personalizacao-produto"
+            style="display: none"
+          >
+            <label for="nome-personalizado">Nome para personalização</label>
+
+            <input
+              type="text"
+              id="nome-personalizado"
+              maxlength="20"
+              placeholder="Digite o nome"
+            />
+
+            <button
+              type="button"
+              class="btn-confirmar-personalizacao"
+              id="confirmar-personalizacao"
+            >
+              Confirmar nome
+            </button>
+
+            <p id="personalizacao-confirmada"></p>
+          </div>
+
+          <div class="produto-quantidade">
+            <label for="quantidade-produto">Quantidade</label>
+            <input type="number" id="quantidade-produto" value="1" min="1" />
+          </div>
+
+          <button
+            type="button"
+            class="btn-adicionar-produto"
+            id="adicionar-produto"
+          >
+            Adicionar ao carrinho
+          </button>
+
+          <p id="mensagem-produto"></p>
+        </div>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,122 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f5f2;
+    color: #333;
+}
+
+.inicio {
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 40px 20px;
+}
+
+.titulo {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.titulo h1 {
+    font-size: 3rem;
+    letter-spacing: 5px;
+    margin-bottom: 10px;
+}
+
+.titulo p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.lojas {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.loja {
+    width: 350px;
+    min-height: 350px;
+
+    padding: 40px;
+
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.loja h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.loja p {
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.loja a {
+    padding: 12px 25px;
+
+    border-radius: 8px;
+
+    text-decoration: none;
+    font-weight: bold;
+
+    transition: 0.3s;
+}
+
+
+/* LOLLY 3D */
+
+.loja-3d {
+    background-color: #B8CBB8;
+    color: #2F3A30;
+}
+
+.loja-3d a {
+    background-color: #466348;
+    color: white;
+}
+
+.loja-3d a:hover {
+    background-color: #789B7A;
+}
+
+
+/* LOLLY CLOSET */
+
+.loja-closet {
+    background-color: #f3dcea;
+    color: #3d3439;
+}
+
+.loja-closet h2 {
+    color: #96713c;
+}
+
+.loja-closet a {
+    background-color: #b9904f;
+    color: white;
+}
+
+.loja-closet a:hover {
+    background-color: #96713c;
+}

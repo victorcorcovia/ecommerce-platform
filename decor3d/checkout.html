@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Checkout | Lolly Decor 3D</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- CABEÇALHO -->
+    <header>
+      <div class="logo">
+        <a href="index.html">
+          <h1>Lolly Decor 3D</h1>
+        </a>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="index.html">Início</a></li>
+          <li><a href="produtos.html">Produtos</a></li>
+          <li><a href="index.html#sobre">Sobre</a></li>
+        </ul>
+      </nav>
+
+      <div class="acoes">
+        <a href="#" class="btn">Minha conta</a>
+
+        <a href="carrinho.html" class="btn btn-outline carrinho">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="9" cy="20" r="1"></circle>
+            <circle cx="19" cy="20" r="1"></circle>
+            <path d="M3 4h2l2.5 11h10.5l2-7H7"></path>
+          </svg>
+
+          <span id="contador-carrinho">0</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- CHECKOUT -->
+    <main class="pagina-checkout">
+      <h1>Finalizar compra</h1>
+
+      <div class="checkout-conteudo">
+        <section class="checkout-dados">
+          <!-- DADOS DO CLIENTE -->
+          <div class="checkout-bloco">
+            <h2>Dados do cliente</h2>
+
+            <div class="campo-checkout">
+              <label for="nome">Nome completo</label>
+              <input
+                type="text"
+                id="nome"
+                placeholder="Digite seu nome completo"
+              />
+            </div>
+
+            <div class="campo-checkout">
+              <label for="email">E-mail</label>
+              <input type="email" id="email" placeholder="Digite seu e-mail" />
+            </div>
+
+            <div class="campo-checkout">
+              <label for="telefone">Telefone</label>
+              <input
+                type="tel"
+                id="telefone"
+                placeholder="(00) 00000-0000"
+                maxlength="15"
+              />
+            </div>
+          </div>
+
+          <!-- ENDEREÇO DE ENTREGA -->
+          <div class="checkout-bloco">
+            <h2>Endereço de entrega</h2>
+
+            <div class="campo-checkout">
+              <label for="cep-checkout">CEP</label>
+              <input
+                type="text"
+                id="cep-checkout"
+                placeholder="00000-000"
+                maxlength="9"
+              />
+            </div>
+
+            <div class="campo-checkout">
+              <label for="rua">Rua</label>
+              <input type="text" id="rua" placeholder="Digite sua rua" />
+            </div>
+
+            <div class="checkout-linha">
+              <div class="campo-checkout">
+                <label for="numero">Número</label>
+                <input type="text" id="numero" placeholder="Número" />
+              </div>
+
+              <div class="campo-checkout">
+                <label for="complemento">Complemento</label>
+                <input type="text" id="complemento" placeholder="Opcional" />
+              </div>
+            </div>
+
+            <div class="campo-checkout">
+              <label for="bairro">Bairro</label>
+              <input type="text" id="bairro" placeholder="Digite seu bairro" />
+            </div>
+
+            <div class="checkout-linha">
+              <div class="campo-checkout">
+                <label for="cidade">Cidade</label>
+                <input
+                  type="text"
+                  id="cidade"
+                  placeholder="Digite sua cidade"
+                />
+              </div>
+
+              <div class="campo-checkout">
+                <label for="estado">Estado</label>
+                <input type="text" id="estado" placeholder="UF" maxlength="2" />
+              </div>
+            </div>
+          </div>
+
+          <!-- FORMA DE PAGAMENTO -->
+          <div class="checkout-bloco checkout-pagamento">
+            <h2>Forma de pagamento</h2>
+
+            <label class="opcao-pagamento">
+              <input type="radio" name="pagamento" value="pix" />
+
+              <div>
+                <strong>Pix</strong>
+                <p>Pagamento rápido e seguro via Pix.</p>
+              </div>
+            </label>
+
+            <label class="opcao-pagamento">
+              <input type="radio" name="pagamento" value="cartao" />
+
+              <div>
+                <strong>Cartão de crédito</strong>
+                <p>Pague com segurança pelo Mercado Pago.</p>
+              </div>
+            </label>
+          </div>
+        </section>
+
+        <aside class="checkout-resumo">
+          <h2>Resumo do pedido</h2>
+
+          <div id="resumo-pedido-checkout">
+            <p>Carregando seu pedido...</p>
+          </div>
+
+          <button
+            type="button"
+            class="btn-finalizar-pedido"
+            id="finalizar-pedido"
+          >
+            Finalizar pedido
+          </button>
+
+          <p id="mensagem-checkout" class="mensagem-checkout"></p>
+        </aside>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

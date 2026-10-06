@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Lolly Closet</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- ========================================
+         CABEÇALHO
+         ======================================== -->
+
+    <header>
+      <div class="logo">
+        <a href="../index.html">
+          <h1>Lolly Closet</h1>
+        </a>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="index.html">Início</a></li>
+          <li><a href="produtos.html">Produtos</a></li>
+          <li><a href="#sobre">Sobre</a></li>
+        </ul>
+      </nav>
+
+      <div class="acoes">
+        <a href="#" class="minha-conta"> Minha conta </a>
+
+        <a href="#" class="carrinho" id="abrir-carrinho">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="9" cy="20" r="1"></circle>
+            <circle cx="19" cy="20" r="1"></circle>
+            <path d="M3 4h2l2.5 11h10.5l2-7H7"></path>
+          </svg>
+
+          <span id="contador-carrinho">0</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- ========================================
+         FUNDO DO CARRINHO
+         ======================================== -->
+
+    <div class="fundo-carrinho" id="fundo-carrinho"></div>
+
+    <!-- ========================================
+         CARRINHO LATERAL
+         ======================================== -->
+
+    <aside class="painel-carrinho" id="painel-carrinho">
+      <div class="cabecalho-carrinho">
+        <h2>Seu carrinho</h2>
+
+        <button type="button" id="fechar-carrinho">✕</button>
+      </div>
+
+      <div class="conteudo-carrinho" id="conteudo-carrinho">
+        <p class="carrinho-vazio">Seu carrinho está vazio.</p>
+      </div>
+
+      <div class="resumo-carrinho" id="resumo-carrinho">
+        <div class="linha-subtotal">
+          <span>Subtotal</span>
+
+          <strong id="subtotal-carrinho"> R$ 0,00 </strong>
+        </div>
+
+        <!-- CALCULAR FRETE -->
+
+        <div class="calculo-frete">
+          <label for="cep-frete"> Calcule o frete </label>
+
+          <div class="campo-frete">
+            <input
+              type="text"
+              id="cep-frete"
+              placeholder="00000-000"
+              maxlength="9"
+            />
+
+            <button type="button" id="calcular-frete">Calcular</button>
+          </div>
+
+          <div class="resultado-frete" id="resultado-frete"></div>
+        </div>
+
+        <a href="carrinho.html" class="btn-ver-carrinho">Ver carrinho</a>
+      </div>
+    </aside>
+
+    <main>
+      <!-- ========================================
+             BANNER
+             ======================================== -->
+
+      <section class="banner">
+        <div class="banner-conteudo">
+          <p class="subtitulo">LOLLY CLOSET</p>
+
+          <h2>Moda que combina com você</h2>
+
+          <p class="descricao">
+            Peças escolhidas para valorizar seu estilo em todos os momentos.
+          </p>
+
+          <a href="produtos.html" class="btn-produtos"> Ver coleção </a>
+        </div>
+      </section>
+
+      <!-- ========================================
+             PRODUTOS
+             ======================================== -->
+
+      <section class="produtos" id="produtos">
+        <div class="titulo-secao">
+          <p>LOLLY CLOSET</p>
+
+          <h2>Novidades</h2>
+
+          <span> Conheça as peças que acabaram de chegar </span>
+        </div>
+
+        <div class="lista-produtos">
+          <!-- BLUSA -->
+
+          <div class="produto">
+            <div class="produto-imagem">
+              <img
+                src="https://placehold.co/350x450?text=Blusa"
+                alt="Blusa Feminina"
+              />
+            </div>
+
+            <div class="produto-info">
+              <h3>Blusa Feminina</h3>
+
+              <p class="preco">R$ 79,90</p>
+
+              <a href="produto.html?id=blusa" class="btn-carrinho">
+                Ver produto
+              </a>
+            </div>
+          </div>
+
+          <!-- VESTIDO -->
+
+          <div class="produto">
+            <div class="produto-imagem">
+              <img
+                src="https://placehold.co/350x450?text=Vestido"
+                alt="Vestido Feminino"
+              />
+            </div>
+
+            <div class="produto-info">
+              <h3>Vestido Feminino</h3>
+
+              <p class="preco">R$ 129,90</p>
+
+              <a href="produto.html?id=vestido" class="btn-carrinho">
+                Ver produto
+              </a>
+            </div>
+          </div>
+
+          <!-- CALÇA  -->
+
+          <div class="produto">
+            <div class="produto-imagem">
+              <img
+                src="https://placehold.co/350x450?text=Calça"
+                alt="Calça Feminina"
+              />
+            </div>
+
+            <div class="produto-info">
+              <h3>Calça Feminina</h3>
+
+              <p class="preco">R$ 149,90</p>
+
+              <a href="produto.html?id=calca" class="btn-carrinho">
+                Ver produto
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================
+             CATEGORIAS
+             ======================================== -->
+
+      <section class="categorias" id="categorias">
+        <!-- TÍTULO -->
+
+        <div class="cabecalho-categorias">
+          <div class="titulo-categorias">
+            <span class="linha-decorativa"></span>
+
+            <h2>Nossas categorias</h2>
+
+            <span class="linha-decorativa"></span>
+          </div>
+
+          <p>Escolha o que você está procurando</p>
+        </div>
+
+        <!-- CARDS -->
+
+        <div class="lista-categorias">
+          <!-- VESTIDOS -->
+
+          <a href="produtos.html?categoria=vestidos" class="categoria categoria-vestidos">
+            <div class="categoria-visual">
+              <div class="icone-categoria">👗</div>
+            </div>
+
+            <div class="categoria-conteudo">
+              <h3>Vestidos</h3>
+
+              <span>
+                Ver coleção
+                <b>→</b>
+              </span>
+            </div>
+          </a>
+
+          <!-- BLUSAS -->
+
+          <a href="produtos.html?categoria=blusas" class="categoria categoria-blusas">
+            <div class="categoria-visual">
+              <div class="icone-categoria">👚</div>
+            </div>
+
+            <div class="categoria-conteudo">
+              <h3>Blusas</h3>
+
+              <span>
+                Ver coleção
+                <b>→</b>
+              </span>
+            </div>
+          </a>
+
+          <!-- CONJUNTOS -->
+
+          <a href="produtos.html?categoria=calcas" class="categoria categoria-calcas">
+            <div class="categoria-visual">
+              <div class="icone-categoria">👖</div>
+            </div>
+
+            <div class="categoria-conteudo">
+              <h3>Calças</h3>
+
+              <span>
+                Ver coleção
+                <b>→</b>
+              </span>
+            </div>
+          </a>
+        </div>
+
+        <!-- BOTÃO -->
+
+        <a href="produtos.html" class="ver-todos-produtos">
+          VER TODOS OS PRODUTOS
+          <span>→</span>
+        </a>
+      </section>
+
+      <!-- ========================================
+             SOBRE
+             ======================================== -->
+
+      <section class="sobre" id="sobre">
+        <div class="sobre-conteudo">
+          <p class="sobre-subtitulo">NOSSA HISTÓRIA</p>
+
+          <h2>Sobre a Lolly Closet</h2>
+
+          <p>
+            A Lolly Closet nasceu para trazer peças que valorizam a
+            personalidade e o estilo de cada mulher.
+          </p>
+
+          <p>
+            Selecionamos nossas peças com carinho, buscando unir estilo,
+            conforto e qualidade.
+          </p>
+
+          <p class="sobre-destaque">Vista-se do seu jeito. </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- ========================================
+         RODAPÉ
+         ======================================== -->
+
+    <footer>
+      <div class="footer-conteudo">
+        <div class="footer-marca">
+          <h2>Lolly Closet</h2>
+
+          <p>Vista-se do seu jeito.</p>
+        </div>
+
+        <div class="footer-links">
+          <h3>Navegação</h3>
+
+          <a href="index.html"> Início </a>
+
+          <a href="produtos.html"> Produtos </a>
+
+          <a href="#sobre"> Sobre </a>
+        </div>
+
+        <div class="footer-contato">
+          <h3>Contato</h3>
+
+          <a href="https://www.instagram.com/lolly.closet/" target="_blank" class="footer-link">
+            Instagram: @lolly.closet
+          </a>
+
+          <p>WhatsApp: (00) 00000-0000</p>
+        </div>
+      </div>
+
+      <div class="footer-final">
+        <p>© 2026 Lolly Closet. Todos os direitos reservados.</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Carrinho | Lolly Closet</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- ========================================
+         CABEÇALHO
+    ======================================== -->
+
+    <header>
+      <div class="logo">
+        <a href="index.html">
+          <h1>Lolly Closet</h1>
+        </a>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="index.html">Início</a></li>
+          <li><a href="produtos.html">Produtos</a></li>
+          <li><a href="#sobre">Sobre</a></li>
+        </ul>
+      </nav>
+
+      <div class="acoes">
+        <a href="#" class="minha-conta"> Minha conta </a>
+
+        <a href="#" class="carrinho" id="abrir-carrinho">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="9" cy="20" r="1"></circle>
+            <circle cx="19" cy="20" r="1"></circle>
+            <path d="M3 4h2l2.5 11h10.5l2-7H7"></path>
+          </svg>
+
+          <span id="contador-carrinho">0</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="pagina-carrinho">
+      <h1>Seu carrinho</h1>
+
+      <div id="carrinho-pagina">
+        <p>Carregando seu carrinho...</p>
+      </div>
+    </main>
+
+    <footer>
+      <div class="footer-conteudo">
+        <div class="footer-marca">
+          <h2>Lolly Closet</h2>
+          <p>Vista-se do seu jeito.</p>
+        </div>
+
+        <div class="footer-links">
+          <h3>Navegação</h3>
+
+          <a href="index.html">Início</a>
+          <a href="produtos.html">Produtos</a>
+          <a href="index.html#sobre">Sobre</a>
+        </div>
+
+        <div class="footer-contato">
+          <h3>Contato</h3>
+
+          <a
+            href="https://www.instagram.com/lolly.closet/"
+            target="_blank"
+            class="footer-link"
+          >
+            Instagram: @lolly.closet
+          </a>
+
+          <p>WhatsApp: (00) 00000-0000</p>
+        </div>
+      </div>
+
+      <div class="footer-final">
+        <p>© 2026 Lolly Closet. Todos os direitos reservados.</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

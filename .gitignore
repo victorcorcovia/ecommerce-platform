@@ -1,0 +1,41 @@
+# Variáveis de ambiente
+.env
+.env.*
+!.env.example
+
+# Credenciais e chaves privadas
+*.pem
+*.key
+*.p12
+*.pfx
+serviceAccountKey.json
+service-account*.json
+credentials.json
+
+# Dependências
+node_modules/
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Logs
+*.log
+
+# Builds
+dist/
+build/
+
+# VS Code / IDE
+.vscode/
+.idea/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Backups
+*.bak
+*.backup

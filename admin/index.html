@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Login | Painel Administrativo</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="pagina-login">
+    <main class="login-container">
+      <div class="login-card">
+        <div class="login-logo">
+          <h1>Lojas Lolly</h1>
+          <p>Painel Administrativo</p>
+        </div>
+
+        <form id="formLogin">
+          <div class="campo-login">
+            <label for="emailLogin">E-mail</label>
+
+            <input
+              type="email"
+              id="emailLogin"
+              placeholder="Digite seu e-mail"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="campo-login">
+            <label for="senhaLogin">Senha</label>
+
+            <input
+              type="password"
+              id="senhaLogin"
+              placeholder="Digite sua senha"
+              autocomplete="current-password"
+              required
+            />
+          </div>
+
+          <div class="opcoes-login">
+            <label>
+              <input type="checkbox" id="lembrarLogin" />
+              Lembrar de mim
+            </label>
+
+            <a href="#" class="esqueci-senha"> Esqueci minha senha </a>
+          </div>
+
+          <button type="submit" class="btn-entrar">Entrar</button>
+
+          <p class="mensagem-login" id="mensagemLogin"></p>
+        </form>
+      </div>
+    </main>
+
+    <script type="module" src="./login.js"></script>
+  </body>
+</html>

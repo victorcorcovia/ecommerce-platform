@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Painel Administrativo | Lojas Lolly</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="admin-container">
+      <!-- MENU LATERAL -->
+      <aside class="sidebar">
+        <div class="logo">
+          <h2>Lojas Lolly</h2>
+          <span>Painel Administrativo</span>
+        </div>
+
+        <nav>
+          <ul>
+            <li>
+              <a href="index.html">Dashboard</a>
+            </li>
+
+            <li>
+              <a href="financeiro.html">Financeiro</a>
+            </li>
+
+            <li>
+              <a href="produtos.html">Produtos</a>
+            </li>
+
+            <li>
+              <a href="estoque.html">Estoque</a>
+            </li>
+
+            <li>
+              <a href="pedidos.html">Pedidos</a>
+            </li>
+
+            <li>
+              <a href="clientes.html">Clientes</a>
+            </li>
+
+            <li>
+              <a href="aparencia.html">Aparência</a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- CONTEÚDO PRINCIPAL -->
+      <main class="conteudo">
+        <!-- TOPO -->
+        <header class="topo">
+          <div>
+            <h1>Dashboard</h1>
+            <p>Visão geral das lojas</p>
+          </div>
+
+          <div class="usuario">
+            <div class="dados-usuario">
+              <span>Administrador</span>
+              <small id="usuarioEmail">Carregando...</small>
+            </div>
+
+            <button type="button" id="btnSair" class="btn-sair">Sair</button>
+          </div>
+        </header>
+
+        <!-- FILTRO DE LOJA -->
+        <section class="filtro-loja">
+          <div>
+            <label for="lojaSelecionada">Visualizando:</label>
+
+            <select id="lojaSelecionada">
+              <option value="todas">Todas as lojas</option>
+              <option value="lolly">Lolly</option>
+              <option value="3d">3D</option>
+            </select>
+          </div>
+        </section>
+
+        <!-- CARDS PRINCIPAIS -->
+        <section class="cards">
+          <div class="card">
+            <span>Faturamento</span>
+            <h2 id="faturamento">R$ 0,00</h2>
+            <p>Total de vendas</p>
+          </div>
+
+          <div class="card">
+            <span>Pedidos</span>
+            <h2 id="totalPedidos">0</h2>
+            <p>Pedidos realizados</p>
+          </div>
+
+          <div class="card">
+            <span>Produtos</span>
+            <h2 id="totalProdutos">0</h2>
+            <p>Produtos cadastrados</p>
+          </div>
+
+          <div class="card">
+            <span>Estoque</span>
+            <h2 id="totalEstoque">0</h2>
+            <p>Itens disponíveis</p>
+          </div>
+        </section>
+
+        <!-- FATURAMENTO POR LOJA -->
+        <section class="resumo-lojas">
+          <div class="titulo-secao">
+            <h2>Faturamento por loja</h2>
+          </div>
+
+          <div class="cards-lojas">
+            <div class="card-loja">
+              <span>Lolly</span>
+              <h2 id="faturamentoLolly">R$ 0,00</h2>
+              <p>Faturamento da Lolly</p>
+            </div>
+
+            <div class="card-loja">
+              <span>3D</span>
+              <h2 id="faturamento3D">R$ 0,00</h2>
+              <p>Faturamento da 3D</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- PEDIDOS RECENTES -->
+        <section class="pedidos-recentes">
+          <div class="titulo-secao">
+            <h2>Pedidos recentes</h2>
+          </div>
+
+          <div class="tabela-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Pedido</th>
+                  <th>Loja</th>
+                  <th>Cliente</th>
+                  <th>Data</th>
+                  <th>Valor</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody id="listaPedidos">
+                <tr>
+                  <td colspan="6" class="sem-dados">
+                    Nenhum pedido realizado.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script type="module" src="./auth-guard.js"></script>
+  </body>
+</html>

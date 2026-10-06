@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Produto | Lolly Closet</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header>
+      <div class="logo">
+        <a href="index.html">
+          <h1>Lolly Closet</h1>
+        </a>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="index.html">Início</a></li>
+          <li><a href="produtos.html">Produtos</a></li>
+          <li><a href="index.html#sobre">Sobre</a></li>
+        </ul>
+      </nav>
+
+      <div class="acoes">
+        <a href="#" class="minha-conta"> Minha conta </a>
+
+        <a href="#" class="carrinho" id="abrir-carrinho">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="9" cy="20" r="1"></circle>
+            <circle cx="19" cy="20" r="1"></circle>
+            <path d="M3 4h2l2.5 11h10.5l2-7H7"></path>
+          </svg>
+
+          <span id="contador-carrinho">0</span>
+        </a>
+      </div>
+    </header>
+
+    <div class="fundo-carrinho" id="fundo-carrinho"></div>
+
+    <aside class="painel-carrinho" id="painel-carrinho">
+      <div class="cabecalho-carrinho">
+        <h2>Seu carrinho</h2>
+
+        <button type="button" id="fechar-carrinho">✕</button>
+      </div>
+
+      <div class="conteudo-carrinho" id="conteudo-carrinho">
+        <p class="carrinho-vazio">Seu carrinho está vazio.</p>
+      </div>
+
+      <div class="resumo-carrinho" id="resumo-carrinho">
+        <div class="linha-subtotal">
+          <span>Subtotal</span>
+
+          <strong id="subtotal-carrinho"> R$ 0,00 </strong>
+        </div>
+
+        <!-- CALCULAR FRETE -->
+
+        <div class="calculo-frete">
+          <label for="cep-frete"> Calcule o frete </label>
+
+          <div class="campo-frete">
+            <input
+              type="text"
+              id="cep-frete"
+              placeholder="00000-000"
+              maxlength="9"
+            />
+
+            <button type="button" id="calcular-frete">Calcular</button>
+          </div>
+
+          <div class="resultado-frete" id="resultado-frete"></div>
+        </div>
+
+        <a href="carrinho.html" class="btn-ver-carrinho">Ver carrinho</a>
+      </div>
+    </aside>
+
+    <main class="pagina-produto">
+      <div class="produto-detalhes">
+        <!-- FOTOS DO PRODUTO -->
+        <div class="produto-fotos">
+          <div class="foto-principal">
+            <button
+              type="button"
+              class="seta-galeria seta-anterior"
+              id="foto-anterior"
+              aria-label="Foto anterior"
+            >
+              ‹
+            </button>
+
+            <img
+              src="https://placehold.co/600x750?text=Blusa+Feminina"
+              alt="Blusa Feminina"
+              id="produto-imagem"
+            />
+
+            <button
+              type="button"
+              class="seta-galeria seta-proxima"
+              id="foto-proxima"
+              aria-label="Próxima foto"
+            >
+              ›
+            </button>
+          </div>
+
+          <!-- MINIATURAS DAS FOTOS -->
+          <div class="galeria-miniaturas" id="galeria-miniaturas"></div>
+        </div>
+
+        <!-- INFORMAÇÕES -->
+
+        <div class="produto-compra">
+          <p class="produto-categoria">LOLLY CLOSET</p>
+
+          <h1 id="produto-nome">Blusa Feminina</h1>
+
+          <p class="produto-preco" id="produto-preco">R$ 79,90</p>
+
+          <p class="produto-descricao" id="produto-descricao">
+            Blusa feminina confortável e versátil, perfeita para compor
+            diferentes looks.
+          </p>
+
+          <!-- TAMANHO -->
+
+          <div class="escolha-tamanho" id="produto-tamanhos">
+            <p>Tamanho</p>
+
+            <div class="tamanhos">
+              <button type="button">P</button>
+
+              <button type="button">M</button>
+
+              <button type="button">G</button>
+
+              <button type="button">GG</button>
+            </div>
+          </div>
+
+          <!-- COR -->
+
+          <div class="escolha-cor" id="produto-cores">
+            <p>Cor</p>
+
+            <div class="cores">
+            </div>
+          </div>
+
+          <!-- QUANTIDADE -->
+
+          <div class="quantidade">
+            <label for="quantidade"> Quantidade </label>
+
+            <input type="number" id="quantidade" min="1" value="1" />
+          </div>
+
+          <p id="produto-mensagem"></p>
+
+          <!-- ADICIONAR -->
+
+          <button type="button" class="btn-adicionar">
+            Adicionar ao carrinho
+          </button>
+
+          <!-- INFORMAÇÕES -->
+
+          <div class="informacoes-produto">
+            <p>✓ Produto selecionado com cuidado</p>
+
+            <p>✓ Envio para todo o Brasil</p>
+
+            <p>✓ Compra segura</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

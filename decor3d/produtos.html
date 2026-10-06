@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Produtos | Lolly Decor 3D</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="logo">
+        <a href="index.html">
+          <h1>Lolly Decor 3D</h1>
+        </a>
+      </div>
+
+      <nav>
+        <ul>
+          <li><a href="index.html">Início</a></li>
+          <li><a href="produtos.html">Produtos</a></li>
+          <li><a href="index.html#sobre">Sobre</a></li>
+        </ul>
+      </nav>
+
+      <div class="acoes">
+        <a href="#" class="btn">Minha conta</a>
+
+        <a href="#" class="btn btn-outline carrinho" id="abrir-carrinho">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="9" cy="20" r="1"></circle>
+            <circle cx="19" cy="20" r="1"></circle>
+            <path d="M3 4h2l2.5 11h10.5l2-7H7"></path>
+          </svg>
+
+          <span id="contador-carrinho">0</span>
+        </a>
+      </div>
+    </header>
+
+    <div class="painel-carrinho" id="painel-carrinho">
+      <div class="cabecalho-carrinho">
+        <h2>Seu carrinho</h2>
+
+        <button id="fechar-carrinho">✕</button>
+      </div>
+
+      <div class="conteudo-carrinho" id="conteudo-carrinho">
+        <p>Seu carrinho está vazio.</p>
+      </div>
+
+      <!-- CALCULAR FRETE -->
+
+      <div class="calculo-frete">
+        <label for="cep-frete"> Calcule o frete </label>
+
+        <div class="campo-frete">
+          <input
+            type="text"
+            id="cep-frete"
+            placeholder="00000-000"
+            maxlength="9"
+          />
+
+          <button type="button" id="calcular-frete">Calcular</button>
+        </div>
+
+        <div class="resultado-frete" id="resultado-frete"></div>
+
+        <a href="carrinho.html" class="btn-ver-carrinho"> Ver carrinho </a>
+      </div>
+    </div>
+
+    <!-- CATÁLOGO DE PRODUTOS -->
+    <main>
+      <section class="produtos pagina-catalogo">
+        <div class="titulo-secao">
+          <p>LOLLY DECOR 3D</p>
+          <h2>Todos os produtos</h2>
+          <span>Encontre a peça perfeita ou personalize do seu jeito</span>
+        </div>
+
+        <div class="filtros-produtos">
+          <button
+            type="button"
+            class="filtro-produto ativo"
+            data-filtro="todos"
+          >
+            Todos
+          </button>
+
+          <button
+            type="button"
+            class="filtro-produto"
+            data-filtro="pronta-entrega"
+          >
+            Pronta entrega
+          </button>
+
+          <button
+            type="button"
+            class="filtro-produto"
+            data-filtro="personalizados"
+          >
+            Personalizados
+          </button>
+        </div>
+
+        <div class="lista-produtos">
+          <!-- CHAVEIRO GUITARRA -->
+          <div class="produto" data-categoria="pronta-entrega">
+            <div class="produto-imagem">
+              <img
+                src="https://placehold.co/350x350?text=Chaveiro+Guitarra"
+                alt="Chaveiro Guitarra"
+              />
+            </div>
+
+            <div class="produto-info">
+              <h3>Chaveiro Guitarra</h3>
+              <p class="preco">R$ 8,00</p>
+              <p class="estoque" id="estoque-guitarra">20 disponíveis</p>
+
+              <a href="produto.html?id=guitarra" class="btn-ver-produto">
+                Ver Produto
+              </a>
+            </div>
+          </div>
+
+          <!-- CHAVEIRO COPO -->
+          <div class="produto" data-categoria="pronta-entrega">
+            <div class="produto-imagem">
+              <img
+                src="https://placehold.co/350x350?text=Chaveiro+Copo"
+                alt="Chaveiro Copo"
+              />
+            </div>
+
+            <div class="produto-info">
+              <h3>Chaveiro Copo</h3>
+              <p class="preco">R$ 8,00</p>
+              <p class="estoque" id="estoque-copo">15 disponíveis</p>
+
+              <a href="produto.html?id=copo" class="btn-ver-produto">
+                Ver Produto
+              </a>
+            </div>
+          </div>
+
+          <!-- CHAVEIRO NOME -->
+          <div class="produto" data-categoria="personalizados">
+            <div class="produto-imagem">
+              <img
+                src="https://placehold.co/350x350?text=Chaveiro+Nome"
+                alt="Chaveiro Nome Personalizado"
+              />
+            </div>
+
+            <div class="produto-info">
+              <h3>Chaveiro Nome</h3>
+              <p class="preco">R$ 8,00</p>
+              <p class="estoque">Personalizado do seu jeito</p>
+
+              <a href="produto.html?id=nome" class="btn-ver-produto">
+                Ver Produto
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- RODAPÉ -->
+    <footer>
+      <div class="footer-conteudo">
+        <div class="footer-marca">
+          <h2>Lolly Decor 3D</h2>
+          <p>Sua ideia, impressa do seu jeito.</p>
+        </div>
+
+        <div class="footer-links">
+          <h3>Navegação</h3>
+          <a href="index.html">Início</a>
+          <a href="produtos.html">Produtos</a>
+          <a href="index.html#sobre">Sobre</a>
+        </div>
+
+        <div class="footer-contato">
+          <h3>Contato</h3>
+
+          <a
+            href="https://www.instagram.com/lollydecor3d/"
+            target="_blank"
+            class="redes-sociais"
+          >
+            Instagram: @lollydecor3d
+          </a>
+
+          <a
+            href="https://wa.me/554484398216?text=Ol%C3%A1%21%20Vim%20pelo%20site%20da%20Lolly%20Decor%203D%20e%20gostaria%20de%20solicitar%20um%20produto%20personalizado."
+            target="_blank"
+            rel="noopener noreferrer"
+            class="redes-sociais"
+          >
+            WhatsApp: (44) 8439-8216
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-final">
+        <p>© 2026 Lolly Decor 3D. Todos os direitos reservados.</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
