@@ -39,3 +39,36 @@ Thumbs.db
 # Backups
 *.bak
 *.backup
+
+# Credenciais privadas do Firebase
+serviceAccountKey.json
+**/serviceAccountKey.json
+
+# Backups do Firestore
+backups/
+
+# Segredos locais do Cloudinary e Firebase
+functions/.secret.local
+**/.secret.local
+# Backups locais e exportacoes dos emuladores
+backup-*/
+firebase-export-*/
+**/emulator-backup/
+**/firebase-export-*/
+
+# Arquivos temporarios de testes
+cloudinary-resposta.json
+teste-cloudinary.png
+admin/script.backup.js
+
+# Configuracoes locais de agentes
+.agents/
+.claude/
+skills-lock.json
+
+# Segredos e arquivos locais
+**/.env
+**/.env.*
+!**/.env.example
+**/.secret.local
+**/serviceAccountKey.json

@@ -1,0 +1,323 @@
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ==========================================
+    // FUNÇÕES DE SEGURANÇA
+    // ==========================================
+
+    function estaAutenticado() {
+      return request.auth != null;
+    }
+
+    function dadosUsuario() {
+      return get(
+        /databases/$(database)/documents/usuarios/$(request.auth.uid)
+      ).data;
+    }
+
+    function usuarioAtivo() {
+      return estaAutenticado()
+        && dadosUsuario().ativo == true;
+    }
+
+    function temAcessoLoja(loja) {
+      return usuarioAtivo()
+        && dadosUsuario().lojas[loja] == true;
+    }
+
+    // ==========================================
+    // USUÁRIOS
+    // ==========================================
+
+    match /usuarios/{userId} {
+
+      allow read: if usuarioAtivo()
+        && request.auth.uid == userId;
+
+      allow write: if false;
+    }
+
+    // ==========================================
+    // FILA DE EXCLUSÃO DE IMAGENS
+    // ACESSO EXCLUSIVO DO BACKEND
+    // ==========================================
+
+    match /exclusoesImagensPendentes/{exclusaoId} {
+
+      allow read, write: if false;
+    }
+
+    // ==========================================
+    // CATEGORIAS
+    // ==========================================
+
+    match /categorias/{categoriaId} {
+
+      allow create: if
+        temAcessoLoja(request.resource.data.loja);
+
+      allow read: if
+        temAcessoLoja(resource.data.loja);
+
+      allow update: if
+        temAcessoLoja(resource.data.loja)
+        && temAcessoLoja(request.resource.data.loja);
+
+      allow delete: if
+        temAcessoLoja(resource.data.loja);
+    }
+
+    // ==========================================
+    // PRODUTOS
+    // ==========================================
+
+    match /produtos/{produtoId} {
+
+      // Cadastro de novos produtos.
+      allow create: if
+        temAcessoLoja(request.resource.data.loja)
+        && request.resource.data.estoque is int
+        && request.resource.data.estoque >= 0;
+
+      // Consulta de produtos por loja.
+      allow read: if
+        temAcessoLoja(resource.data.loja);
+
+      // Atualizações diretas não podem modificar
+      // a loja nem as imagens do produto.
+      //
+      // Alterações de imagens devem passar
+      // pela Cloud Function autorizada.
+      allow update: if
+        temAcessoLoja(resource.data.loja)
+        && request.resource.data.loja == resource.data.loja
+        && request.resource.data.estoque is int
+        && request.resource.data.estoque >= 0
+        && request.resource.data.get("imagens", []) ==
+           resource.data.get("imagens", []);
+
+      // Exclusão direta temporariamente bloqueada.
+      // A exclusão definitiva precisará de uma
+      // Cloud Function que trate também as imagens.
+      allow delete: if false;
+    }
+
+    // ==========================================
+    // MOVIMENTAÇÕES DE ESTOQUE
+    // ==========================================
+
+    match /movimentacoesEstoque/{movimentacaoId} {
+
+      allow create: if
+        temAcessoLoja(request.resource.data.loja)
+
+        && request.resource.data.keys().hasAll([
+          "produtoId",
+          "produtoNome",
+          "loja",
+          "tipo",
+          "quantidade",
+          "estoqueAnterior",
+          "estoqueNovo",
+          "criadoEm"
+        ])
+
+        && request.resource.data.produtoId is string
+        && request.resource.data.produtoNome is string
+
+        && request.resource.data.loja in [
+          "closet",
+          "3d"
+        ]
+
+        && request.resource.data.tipo in [
+          "entrada",
+          "saida"
+        ]
+
+        && request.resource.data.quantidade is int
+        && request.resource.data.quantidade > 0
+
+        && request.resource.data.estoqueAnterior is int
+        && request.resource.data.estoqueAnterior >= 0
+
+        && request.resource.data.estoqueNovo is int
+        && request.resource.data.estoqueNovo >= 0
+
+        && request.resource.data.estoqueNovo == (
+          request.resource.data.tipo == "entrada"
+            ? request.resource.data.estoqueAnterior
+              + request.resource.data.quantidade
+
+            : request.resource.data.estoqueAnterior
+              - request.resource.data.quantidade
+        )
+
+        && request.resource.data.criadoEm == request.time;
+
+      allow read: if
+        temAcessoLoja(resource.data.loja);
+
+      allow update, delete: if false;
+    }
+
+    // ==========================================
+    // PEDIDOS
+    // ==========================================
+
+    match /pedidos/{pedidoId} {
+
+      allow create: if
+        temAcessoLoja(request.resource.data.loja);
+
+      allow read: if
+        temAcessoLoja(resource.data.loja);
+
+      allow update: if
+        temAcessoLoja(resource.data.loja)
+        && temAcessoLoja(request.resource.data.loja);
+
+      allow delete: if false;
+    }
+
+    // ==========================================
+    // CUSTOS
+    // ==========================================
+
+    match /custos/{custoId} {
+
+      allow create: if
+        temAcessoLoja(request.resource.data.loja);
+
+      allow read: if
+        temAcessoLoja(resource.data.loja);
+
+      allow update: if
+        temAcessoLoja(resource.data.loja)
+        && temAcessoLoja(request.resource.data.loja);
+
+      allow delete: if
+        temAcessoLoja(resource.data.loja);
+    }
+
+    // ==========================================
+    // HISTÓRICO DE PEDIDOS
+    // ==========================================
+
+    match /historicoPedidos/{historicoId} {
+
+      allow create: if
+        temAcessoLoja(request.resource.data.loja)
+
+        && request.resource.data.keys().hasAll([
+          "pedidoId",
+          "loja",
+          "tipo",
+          "descricao",
+          "criadoEm",
+          "usuarioId"
+        ])
+
+        && request.resource.data.usuarioId ==
+           request.auth.uid
+
+        && request.resource.data.pedidoId is string
+
+        && existsAfter(
+          /databases/$(database)/documents/pedidos/$(request.resource.data.pedidoId)
+        )
+
+        && getAfter(
+          /databases/$(database)/documents/pedidos/$(request.resource.data.pedidoId)
+        ).data.loja == request.resource.data.loja;
+
+      allow read: if
+        temAcessoLoja(resource.data.loja);
+
+      allow update, delete: if false;
+    }
+
+    // ==========================================
+    // CLIENTES
+    // ==========================================
+
+    match /clientes/{clienteId} {
+
+      // Consulta de clientes.
+      allow read: if usuarioAtivo();
+
+      // Cadastro de clientes.
+      allow create: if
+        usuarioAtivo()
+
+        && request.resource.data.keys().hasAll([
+          "nome",
+          "email",
+          "telefone",
+          "emailNormalizado",
+          "telefoneNormalizado",
+          "criadoEm",
+          "atualizadoEm"
+        ])
+
+        && request.resource.data.nome is string
+        && request.resource.data.email is string
+        && request.resource.data.telefone is string
+
+        && request.resource.data.emailNormalizado is string
+        && request.resource.data.telefoneNormalizado is string
+
+        && request.resource.data.criadoEm is timestamp
+        && request.resource.data.atualizadoEm is timestamp;
+
+      // Edição de clientes.
+      allow update: if
+        usuarioAtivo()
+
+        && request.resource.data.diff(resource.data)
+          .affectedKeys().hasOnly([
+            "nome",
+            "email",
+            "telefone",
+            "emailNormalizado",
+            "telefoneNormalizado",
+            "atualizadoEm"
+          ])
+
+        && request.resource.data.nome is string
+        && request.resource.data.email is string
+        && request.resource.data.telefone is string
+
+        && request.resource.data.emailNormalizado is string
+        && request.resource.data.telefoneNormalizado is string
+
+        && request.resource.data.atualizadoEm is timestamp
+
+        && request.resource.data.nome.size() > 0
+
+        && request.resource.data.emailNormalizado ==
+           request.resource.data.email.lower()
+
+        && request.resource.data.emailNormalizado ==
+           request.resource.data.emailNormalizado.trim()
+
+        && request.resource.data.telefoneNormalizado.matches(
+          '^[0-9]*$'
+        );
+
+      // Exclusão direta de clientes bloqueada.
+      allow delete: if false;
+    }
+
+    // ==========================================
+    // BLOQUEIO PADRÃO
+    // ==========================================
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Aparência | Painel Administrativo</title>
+
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+
+  <body>
+    <div class="admin-container">
+      <!-- MENU LATERAL -->
+      <aside class="sidebar">
+        <div class="logo">
+          <h2>Admin</h2>
+          <span>Painel Administrativo</span>
+        </div>
+
+        <nav>
+          <ul>
+            <li><a href="./dashboard.html">Dashboard</a></li>
+            <li><a href="./financeiro.html">Financeiro</a></li>
+            <li><a href="./produtos.html">Produtos</a></li>
+            <li><a href="./estoque.html">Estoque</a></li>
+            <li><a href="./pedidos.html">Pedidos</a></li>
+            <li><a href="./clientes.html">Clientes</a></li>
+            <li>
+              <a href="./aparencia.html" class="ativo">Aparência</a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- CONTEÚDO PRINCIPAL -->
+      <main class="conteudo">
+        <!-- CABEÇALHO -->
+        <header class="topo">
+          <div>
+            <h1>Aparência das lojas</h1>
+            <p>Personalize a identidade visual de cada loja.</p>
+          </div>
+        </header>
+
+        <!-- CONFIGURAÇÃO DO TEMA -->
+        <section class="lista-produtos secao-tema">
+          <div class="titulo-secao">
+            <h2>Tema do painel administrativo</h2>
+            <p>Escolha a aparência utilizada em todo o painel.</p>
+          </div>
+
+          <div class="opcoes-tema">
+            <!-- TEMA CLARO -->
+            <button
+              type="button"
+              class="opcao-tema"
+              data-tema="claro"
+              aria-pressed="false"
+            >
+              <div class="preview-tema preview-claro">
+                <div class="preview-sidebar"></div>
+
+                <div class="preview-conteudo">
+                  <div class="preview-cabecalho"></div>
+
+                  <div class="preview-cards">
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="opcao-tema-rodape">
+                <strong>Tema claro</strong>
+                <span class="tema-check"></span>
+              </div>
+            </button>
+
+            <!-- TEMA ESCURO -->
+            <button
+              type="button"
+              class="opcao-tema"
+              data-tema="escuro"
+              aria-pressed="false"
+            >
+              <div class="preview-tema preview-escuro">
+                <div class="preview-sidebar"></div>
+
+                <div class="preview-conteudo">
+                  <div class="preview-cabecalho"></div>
+
+                  <div class="preview-cards">
+                    <span></span>
+                    <span></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="opcao-tema-rodape">
+                <strong>Tema escuro</strong>
+                <span class="tema-check"></span>
+              </div>
+            </button>
+          </div>
+        </section>
+
+        <!-- SELEÇÃO DA LOJA -->
+        <section class="barra-produtos">
+          <div class="campo-filtro">
+            <label for="lojaAparencia">Selecionar loja</label>
+
+            <select id="lojaAparencia">
+              <option value="closet">Closet</option>
+              <option value="3d">Decor 3D</option>
+            </select>
+          </div>
+        </section>
+
+        <!-- CONFIGURAÇÕES VISUAIS -->
+        <section class="lista-produtos">
+          <div class="titulo-secao">
+            <h2>Personalização visual</h2>
+            <p>Configure o banner principal de cada loja.</p>
+          </div>
+
+          <form id="formAparencia">
+            <div class="campo-form">
+              <label for="bannerPrincipal">Banner principal</label>
+
+              <input
+                type="file"
+                id="bannerPrincipal"
+                accept="image/jpeg,image/png,image/webp"
+              />
+
+              <small>
+                Tamanho recomendado: 1920 × 640 pixels (proporção 3:1).
+                Formatos: JPG, PNG ou WebP.
+              </small>
+
+              <img
+                id="previewBanner"
+                alt="Pré-visualização do banner"
+                style="
+                  display: none;
+                  max-width: 100%;
+                  max-height: 240px;
+                  object-fit: contain;
+                  margin-top: 12px;
+                "
+              />
+            </div>
+
+            <div class="acoes-form">
+              <button type="submit" class="btn-salvar">
+                Salvar alterações
+              </button>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script type="module" src="./auth-guard.js"></script>
+    <script type="module" src="./tema.js"></script>
+    <script type="module" src="./aparencia.js"></script>
+  </body>
+</html>

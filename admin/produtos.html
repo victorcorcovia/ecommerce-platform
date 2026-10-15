@@ -29,7 +29,11 @@
             </li>
 
             <li>
-              <a href="produtos.html">Produtos</a>
+              <a href="custos.html">Custos</a>
+            </li>
+
+            <li>
+              <a href="produtos.html" class="ativo">Produtos</a>
             </li>
 
             <li>
@@ -50,7 +54,6 @@
           </ul>
         </nav>
       </aside>
-
       <!-- CONTEÚDO PRINCIPAL -->
       <main class="conteudo">
         <!-- TOPO -->
@@ -60,8 +63,15 @@
             <p>Gerencie os produtos das duas lojas</p>
           </div>
 
-          <div class="usuario">
-            <span>Administrador</span>
+          <div class="acoes-topo">
+            <div class="usuario">
+              <div class="dados-usuario">
+                <span>Administrador</span>
+                <small id="usuarioEmail">Carregando...</small>
+              </div>
+
+              <button type="button" id="btnSair" class="btn-sair">Sair</button>
+            </div>
           </div>
         </header>
 
@@ -73,8 +83,8 @@
 
               <select id="filtroLoja">
                 <option value="todas">Todas as lojas</option>
-                <option value="lolly">Lolly</option>
-                <option value="3d">3D</option>
+                <option value="closet">Closet</option>
+                <option value="3d">Decor 3D</option>
               </select>
             </div>
 
@@ -116,8 +126,8 @@
 
                   <select id="lojaProduto" required>
                     <option value="">Selecione a loja</option>
-                    <option value="lolly">Lolly</option>
-                    <option value="3d">3D</option>
+                    <option value="closet">Closet</option>
+                    <option value="3d">Decor 3D</option>
                   </select>
                 </div>
 
@@ -196,6 +206,12 @@
                 />
 
                 <small>Você poderá selecionar várias fotos.</small>
+
+                <div
+                  id="previewFotosProduto"
+                  class="preview-fotos-produto"
+                  aria-live="polite"
+                ></div>
               </div>
 
               <div class="acoes-form">
@@ -266,8 +282,8 @@
 
                 <select id="lojaCategoria" required>
                   <option value="">Selecione a loja</option>
-                  <option value="lolly">Lolly</option>
-                  <option value="3d">3D</option>
+                  <option value="closet">Closet</option>
+                  <option value="3d">Decor 3D</option>
                 </select>
               </div>
 
@@ -321,7 +337,8 @@
       </main>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="./script.js"></script>
+    <script type="module" src="./tema.js"></script>
     <script type="module" src="./auth-guard.js"></script>
   </body>
 </html>

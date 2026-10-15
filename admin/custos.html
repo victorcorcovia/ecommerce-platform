@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>Custos | Painel Administrativo</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="admin-container">
+
+      <!-- =========================
+           MENU LATERAL
+      ========================== -->
+      <aside class="sidebar">
+        <div class="logo">
+          <h2>Lojas Lolly</h2>
+          <span>Painel Administrativo</span>
+        </div>
+
+        <nav>
+          <ul>
+            <li>
+              <a href="dashboard.html">Dashboard</a>
+            </li>
+
+            <li>
+              <a href="financeiro.html">Financeiro</a>
+            </li>
+
+            <li>
+              <a href="custos.html" class="ativo">Custos</a>
+            </li>
+
+            <li>
+              <a href="produtos.html">Produtos</a>
+            </li>
+
+            <li>
+              <a href="estoque.html">Estoque</a>
+            </li>
+
+            <li>
+              <a href="pedidos.html">Pedidos</a>
+            </li>
+
+            <li>
+              <a href="clientes.html">Clientes</a>
+            </li>
+
+            <li>
+              <a href="aparencia.html">Aparência</a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- =========================
+           CONTEÚDO
+      ========================== -->
+      <main class="conteudo">
+
+        <!-- TOPO -->
+        <header class="topo">
+          <div>
+            <h1>Custos</h1>
+            <p>
+              Cadastre e acompanhe os custos da Closet e da Decor 3D.
+            </p>
+          </div>
+
+          <div class="usuario">
+
+            <span id="usuarioLogado">Administrador</span>
+
+            <button id="btnLogout" type="button">
+              Sair
+            </button>
+          </div>
+        </header>
+
+        <!-- =========================
+             FILTROS
+        ========================== -->
+        <section class="lista-produtos">
+          <div class="barra-produtos">
+            <div>
+              <h2>Controle de custos</h2>
+              <p>
+                Consulte os gastos registrados de cada loja.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              id="btnNovoCusto"
+              class="btn-principal"
+            >
+              + Novo custo
+            </button>
+          </div>
+
+          <div class="filtros-produtos">
+
+            <div class="campo-filtro">
+              <label for="filtroLojaCustos">Loja</label>
+
+              <select id="filtroLojaCustos">
+                <option value="todas">Todas as lojas</option>
+                <option value="closet">Closet</option>
+                <option value="3d">Decor 3D</option>
+              </select>
+            </div>
+
+            <div class="campo-filtro">
+              <label for="filtroPeriodoCustos">Período</label>
+
+              <select id="filtroPeriodoCustos">
+                <option value="todos">Todo o período</option>
+                <option value="hoje">Hoje</option>
+                <option value="7dias">Últimos 7 dias</option>
+                <option value="30dias">Últimos 30 dias</option>
+                <option value="mes">Este mês</option>
+                <option value="ano">Este ano</option>
+              </select>
+            </div>
+
+            <div class="campo-filtro">
+              <label for="buscarCusto">Buscar</label>
+
+              <input
+                type="text"
+                id="buscarCusto"
+                placeholder="Buscar custo..."
+              />
+            </div>
+
+          </div>
+        </section>
+
+        <!-- =========================
+             FORMULÁRIO
+        ========================== -->
+        <section
+          id="formularioCusto"
+          class="lista-produtos"
+          style="display: none"
+        >
+          <div class="barra-produtos">
+            <div>
+              <h2>Novo custo</h2>
+              <p>
+                Informe os dados do gasto realizado.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              id="fecharFormularioCusto"
+              class="btn-secundario"
+            >
+              Fechar
+            </button>
+          </div>
+
+          <form id="formCusto">
+
+            <div class="form-grid">
+
+              <!-- LOJA -->
+              <div class="campo-form">
+                <label for="custoLoja">Loja</label>
+
+                <select id="custoLoja" required>
+                  <option value="">Selecione a loja</option>
+                  <option value="closet">Closet</option>
+                  <option value="3d">Decor 3D</option>
+                </select>
+              </div>
+
+              <!-- DESCRIÇÃO -->
+              <div class="campo-form">
+                <label for="custoDescricao">
+                  Descrição
+                </label>
+
+                <input
+                  type="text"
+                  id="custoDescricao"
+                  placeholder="Ex.: Compra de embalagens"
+                  required
+                />
+              </div>
+
+              <!-- CATEGORIA -->
+              <div class="campo-form">
+                <label for="custoCategoria">
+                  Categoria
+                </label>
+
+                <select id="custoCategoria" required>
+                  <option value="">
+                    Selecione a categoria
+                  </option>
+
+                  <option value="mercadoria">
+                    Produtos / Mercadoria
+                  </option>
+
+                  <option value="embalagens">
+                    Embalagens
+                  </option>
+
+                  <option value="frete">
+                    Frete
+                  </option>
+
+                  <option value="marketing">
+                    Marketing
+                  </option>
+
+                  <option value="taxas">
+                    Taxas
+                  </option>
+
+                  <option value="servicos">
+                    Serviços
+                  </option>
+
+                  <option value="manutencao">
+                    Manutenção
+                  </option>
+
+                  <option value="outros">
+                    Outros
+                  </option>
+                </select>
+              </div>
+
+              <!-- VALOR -->
+              <div class="campo-form">
+                <label for="custoValor">
+                  Valor
+                </label>
+
+                <input
+                  type="number"
+                  id="custoValor"
+                  min="0.01"
+                  step="0.01"
+                  placeholder="0,00"
+                  required
+                />
+              </div>
+
+              <!-- DATA -->
+              <div class="campo-form">
+                <label for="custoData">
+                  Data
+                </label>
+
+                <input
+                  type="date"
+                  id="custoData"
+                  required
+                />
+              </div>
+
+              <!-- OBSERVAÇÃO -->
+              <div class="campo-form">
+                <label for="custoObservacao">
+                  Observação
+                </label>
+
+                <input
+                  type="text"
+                  id="custoObservacao"
+                  placeholder="Opcional"
+                />
+              </div>
+
+            </div>
+
+            <div class="acoes-form">
+
+              <button
+                type="button"
+                id="btnCancelarCusto"
+                class="btn-secundario"
+              >
+                Cancelar
+              </button>
+
+              <button
+                type="submit"
+                class="btn-principal"
+              >
+                Salvar custo
+              </button>
+
+            </div>
+          </form>
+        </section>
+
+        <!-- =========================
+             RESUMO
+        ========================== -->
+        <section class="lista-produtos">
+          <div class="barra-produtos">
+            <div>
+              <h2>Resumo de custos</h2>
+              <p>
+                Total de gastos no período selecionado.
+              </p>
+            </div>
+          </div>
+
+          <div class="cards">
+
+            <div class="card">
+              <h3>Custos totais</h3>
+              <p id="totalCustos">
+                R$ 0,00
+              </p>
+            </div>
+
+            <div class="card">
+              <h3>Quantidade de lançamentos</h3>
+              <p id="quantidadeCustos">
+                0
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- =========================
+             HISTÓRICO
+        ========================== -->
+        <section class="lista-produtos">
+
+          <div class="barra-produtos">
+            <div>
+              <h2>Histórico de custos</h2>
+              <p>
+                Gastos cadastrados para a Closet e Decor 3D.
+              </p>
+            </div>
+          </div>
+
+          <div class="tabela-container">
+            <table>
+
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Loja</th>
+                  <th>Descrição</th>
+                  <th>Categoria</th>
+                  <th>Valor</th>
+                  <th>Observação</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+
+              <tbody id="tabelaCustos">
+                <tr>
+                  <td
+                    colspan="7"
+                    class="sem-dados"
+                  >
+                    Nenhum custo cadastrado.
+                  </td>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+
+        </section>
+
+      </main>
+    </div>
+
+    <!-- =========================
+         SCRIPTS
+    ========================== -->
+
+    <script type="module" src="custos.js"></script>
+    <script type="module" src="auth-guard.js"></script>
+    <script type="module" src="tema.js"></script>
+  </body>
+</html>

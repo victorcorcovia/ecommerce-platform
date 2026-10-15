@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clientes | Lojas Lolly</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+
+  <body>
+    <div class="admin-container">
+      <aside class="sidebar">
+        <div class="logo">
+          <h2>Lojas Lolly</h2>
+          <span>Painel Administrativo</span>
+        </div>
+
+        <nav>
+          <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="financeiro.html">Financeiro</a></li>
+            <li><a href="custos.html">Custos</a></li>
+            <li><a href="produtos.html">Produtos</a></li>
+            <li><a href="estoque.html">Estoque</a></li>
+            <li><a href="pedidos.html">Pedidos</a></li>
+            <li><a href="clientes.html" class="ativo">Clientes</a></li>
+            <li><a href="aparencia.html">Aparência</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main class="conteudo">
+        <header class="topo">
+          <div>
+            <h1>Clientes</h1>
+            <p>Consulte os clientes da Closet e da Decor 3D.</p>
+          </div>
+
+          <div class="acoes-topo">
+            <div class="usuario">
+              <div class="dados-usuario">
+                <span>Administrador</span>
+                <small id="usuarioEmail">Carregando...</small>
+              </div>
+              <button type="button" id="btnSair" class="btn-sair">Sair</button>
+            </div>
+          </div>
+        </header>
+
+        <section class="barra-produtos">
+          <div class="filtros-produtos">
+            <div class="campo-filtro">
+              <label for="filtroLojaClientes">Loja</label>
+              <select id="filtroLojaClientes">
+                <option value="todas">Todas as lojas</option>
+                <option value="closet">Closet</option>
+                <option value="3d">Decor 3D</option>
+              </select>
+            </div>
+
+            <div class="campo-filtro">
+              <label for="buscarCliente">Buscar cliente</label>
+              <input
+                type="text"
+                id="buscarCliente"
+                placeholder="Nome, e-mail ou telefone"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section class="lista-produtos">
+          <div class="titulo-secao">
+            <h2>Clientes</h2>
+          </div>
+
+          <div class="tabela-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>E-mail</th>
+                  <th>Loja</th>
+                  <th>Pedidos</th>
+                  <th>Total gasto</th>
+                  <th>Último pedido</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaClientes">
+                <tr>
+                  <td colspan="7" class="sem-dados">Carregando clientes...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section
+          id="detalhesCliente"
+          class="lista-produtos"
+          style="display: none"
+        >
+          <div class="cabecalho-form">
+            <div>
+              <h2 id="nomeClienteDetalhes">Cliente</h2>
+              <p>Informações e histórico do cliente.</p>
+            </div>
+
+            <div class="acoes-topo">
+              <button
+                type="button"
+                id="btnEditarCliente"
+                class="btn-editar"
+                style="display: none"
+              >
+                Editar cliente
+              </button>
+
+              <button
+                type="button"
+                id="fecharDetalhesCliente"
+                class="btn-cancelar"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+
+          <div class="titulo-secao">
+            <h3>Informações do cliente</h3>
+          </div>
+
+          <div class="grid-form">
+            <div class="campo-form">
+              <label>Nome</label>
+              <p id="detalheClienteNome">—</p>
+            </div>
+            <div class="campo-form">
+              <label>E-mail</label>
+              <p id="detalheClienteEmail">—</p>
+            </div>
+            <div class="campo-form">
+              <label>Telefone</label>
+              <p id="detalheClienteTelefone">—</p>
+            </div>
+            <div class="campo-form">
+              <label>Loja</label>
+              <p id="detalheClienteLoja">—</p>
+            </div>
+            <div class="campo-form">
+              <label>Quantidade de pedidos</label>
+              <p id="detalheClientePedidos">—</p>
+            </div>
+            <div class="campo-form">
+              <label>Total gasto</label>
+              <p id="detalheClienteTotal">—</p>
+            </div>
+            <div class="campo-form">
+              <label>Último pedido</label>
+              <p id="detalheClienteUltimoPedido">—</p>
+            </div>
+          </div>
+
+          <form
+            id="formEditarCliente"
+            class="lista-produtos"
+            style="display: none"
+          >
+            <div class="titulo-secao">
+              <h3>Editar informações</h3>
+            </div>
+
+            <div class="grid-form">
+              <div class="campo-form">
+                <label for="editarClienteNome">Nome</label>
+                <input
+                  id="editarClienteNome"
+                  type="text"
+                  maxlength="150"
+                  required
+                />
+              </div>
+
+              <div class="campo-form">
+                <label for="editarClienteEmail">E-mail</label>
+                <input id="editarClienteEmail" type="email" maxlength="254" />
+              </div>
+
+              <div class="campo-form">
+                <label for="editarClienteTelefone">Telefone</label>
+                <input
+                  id="editarClienteTelefone"
+                  type="tel"
+                  inputmode="tel"
+                  maxlength="20"
+                />
+              </div>
+            </div>
+
+            <p id="mensagemEdicaoCliente" role="status"></p>
+
+            <div class="acoes-topo">
+              <button
+                id="btnSalvarEdicaoCliente"
+                type="submit"
+                class="btn-editar"
+              >
+                Salvar alterações
+              </button>
+
+              <button
+                id="btnCancelarEdicaoCliente"
+                type="button"
+                class="btn-cancelar"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+
+          <div class="titulo-secao">
+            <h3>Último endereço utilizado</h3>
+          </div>
+
+          <div class="grid-form">
+            <div class="campo-form">
+              <label>CEP</label>
+              <p id="detalheClienteCep">—</p>
+            </div>
+            <div class="campo-form">
+              <label>Rua</label>
+              <p id="detalheClienteRua">—</p>
+            </div>
+            <div class="campo-form">
+              <label>Número</label>
+              <p id="detalheClienteNumero">—</p>
+            </div>
+            <div class="campo-form">
+              <label>Complemento</label>
+              <p id="detalheClienteComplemento">—</p>
+            </div>
+            <div class="campo-form">
+              <label>Bairro</label>
+              <p id="detalheClienteBairro">—</p>
+            </div>
+            <div class="campo-form">
+              <label>Cidade</label>
+              <p id="detalheClienteCidade">—</p>
+            </div>
+            <div class="campo-form">
+              <label>Estado</label>
+              <p id="detalheClienteEstado">—</p>
+            </div>
+          </div>
+
+          <div class="titulo-secao">
+            <h3>Histórico de pedidos</h3>
+          </div>
+
+          <div class="tabela-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Pedido</th>
+                  <th>Loja</th>
+                  <th>Data</th>
+                  <th>Pagamento</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Itens</th>
+                </tr>
+              </thead>
+
+              <tbody id="tabelaPedidosCliente">
+                <tr>
+                  <td colspan="7" class="sem-dados">
+                    Nenhum pedido encontrado.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./clientes.js"></script>
+    <script type="module" src="./auth-guard.js"></script>
+    <script type="module" src="./tema.js"></script>
+  </body>
+</html>

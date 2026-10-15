@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Financeiro | Lojas Lolly</title>
+
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+
+  <body>
+    <div class="admin-container">
+      <!-- MENU LATERAL -->
+      <aside class="sidebar">
+        <div class="logo">
+          <h2>Lojas Lolly</h2>
+          <span>Painel Administrativo</span>
+        </div>
+
+        <nav>
+          <ul>
+            <li>
+              <a href="dashboard.html">Dashboard</a>
+            </li>
+
+            <li>
+              <a href="financeiro.html" class="ativo">Financeiro</a>
+            </li>
+
+            <li>
+              <a href="custos.html">Custos</a>
+            </li>
+
+            <li>
+              <a href="produtos.html">Produtos</a>
+            </li>
+
+            <li>
+              <a href="estoque.html">Estoque</a>
+            </li>
+
+            <li>
+              <a href="pedidos.html">Pedidos</a>
+            </li>
+
+            <li>
+              <a href="clientes.html">Clientes</a>
+            </li>
+
+            <li>
+              <a href="aparencia.html">Aparência</a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- CONTEÚDO PRINCIPAL -->
+      <main class="conteudo">
+        <!-- TOPO -->
+        <header class="topo">
+          <div>
+            <h1>Financeiro</h1>
+            <p>Acompanhe os resultados da Closet e da Decor 3D.</p>
+          </div>
+
+          <div class="acoes-topo">
+            <div class="usuario">
+              <div class="dados-usuario">
+                <span>Administrador</span>
+                <small id="usuarioEmail">Carregando...</small>
+              </div>
+
+              <button type="button" id="btnSair" class="btn-sair">Sair</button>
+            </div>
+          </div>
+        </header>
+
+        <!-- FILTROS -->
+        <section class="barra-produtos">
+          <div class="filtros-produtos">
+            <div class="campo-filtro">
+              <label for="filtroLojaFinanceiro">Loja</label>
+
+              <select id="filtroLojaFinanceiro">
+                <option value="todas">Todas as lojas</option>
+                <option value="closet">Closet</option>
+                <option value="3d">Decor 3D</option>
+              </select>
+            </div>
+
+            <div class="campo-filtro">
+              <label for="filtroPeriodoFinanceiro">Período</label>
+
+              <select id="filtroPeriodoFinanceiro">
+                <option value="todos">Todo o período</option>
+                <option value="hoje">Hoje</option>
+                <option value="7dias">Últimos 7 dias</option>
+                <option value="30dias">Últimos 30 dias</option>
+                <option value="mes">Este mês</option>
+                <option value="ano">Este ano</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <!-- RESUMO FINANCEIRO -->
+        <section class="lista-produtos">
+          <div class="titulo-secao">
+            <h2>Resumo financeiro</h2>
+          </div>
+
+          <div class="cards">
+            <div class="card">
+              <h3>Faturamento</h3>
+              <p id="faturamentoFinanceiro">R$ 0,00</p>
+            </div>
+
+            <div class="card">
+              <h3>Lucro</h3>
+              <p id="lucroFinanceiro">R$ 0,00</p>
+            </div>
+
+            <div class="card">
+              <h3>Pedidos pagos</h3>
+              <p id="pedidosPagosFinanceiro">0</p>
+            </div>
+
+            <div class="card">
+              <h3>Ticket médio</h3>
+              <p id="ticketMedioFinanceiro">R$ 0,00</p>
+            </div>
+
+            <div class="card">
+              <h3>Pedidos cancelados</h3>
+              <p id="pedidosCanceladosFinanceiro">0</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- RESULTADOS POR LOJA -->
+        <section class="lista-produtos">
+          <div class="titulo-secao">
+            <h2>Resultados por loja</h2>
+          </div>
+
+          <div class="tabela-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Loja</th>
+                  <th>Pedidos</th>
+                  <th>Pedidos pagos</th>
+                  <th>Faturamento</th>
+                  <th>Custos</th>
+                  <th>Lucro</th>
+                  <th>Ticket médio</th>
+                </tr>
+              </thead>
+
+              <tbody id="tabelaFinanceiro">
+                <tr>
+                  <td colspan="5" class="sem-dados">
+                    Nenhum dado financeiro encontrado.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./financeiro.js"></script>
+    <script type="module" src="./auth-guard.js"></script>
+    <script type="module" src="./tema.js"></script>
+  </body>
+</html>

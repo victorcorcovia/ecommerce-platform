@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Estoque | Lojas Lolly</title>
+
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+
+  <body>
+    <div class="admin-container">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="logo">
+          <h2>Lojas Lolly</h2>
+          <span>Painel Administrativo</span>
+        </div>
+
+        <nav>
+          <ul>
+            <li>
+              <a href="dashboard.html">Dashboard</a>
+            </li>
+
+            <li>
+              <a href="financeiro.html">Financeiro</a>
+            </li>
+
+            <li>
+              <a href="custos.html">Custos</a>
+            </li>
+
+            <li>
+              <a href="produtos.html">Produtos</a>
+            </li>
+
+            <li>
+              <a href="estoque.html" class="ativo">Estoque</a>
+            </li>
+
+            <li>
+              <a href="pedidos.html">Pedidos</a>
+            </li>
+
+            <li>
+              <a href="clientes.html">Clientes</a>
+            </li>
+
+            <li>
+              <a href="aparencia.html">Aparência</a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- CONTEÚDO -->
+      <main class="conteudo">
+        <header class="topo">
+          <div>
+            <h1>Estoque</h1>
+            <p>Controle o estoque dos produtos das suas lojas.</p>
+          </div>
+
+          <div class="acoes-topo">
+
+            <div class="usuario">
+              <div class="dados-usuario">
+                <span>Administrador</span>
+                <small id="usuarioEmail">Carregando...</small>
+              </div>
+
+              <button type="button" id="btnSair" class="btn-sair">Sair</button>
+            </div>
+          </div>
+        </header>
+
+        <!-- FILTROS DO ESTOQUE -->
+        <section class="barra-produtos">
+          <div class="filtros-produtos">
+            <div class="campo-filtro">
+              <label for="filtroLojaEstoque">Loja</label>
+
+              <select id="filtroLojaEstoque">
+                <option value="todas">Todas as lojas</option>
+                <option value="closet">Closet</option>
+                <option value="3d">Decor 3D</option>
+              </select>
+            </div>
+
+            <div class="campo-filtro">
+              <label for="buscarEstoque">Buscar produto</label>
+
+              <input
+                type="text"
+                id="buscarEstoque"
+                placeholder="Digite o nome do produto"
+              />
+            </div>
+          </div>
+        </section>
+
+        <!-- MOVIMENTAÇÃO DE ESTOQUE -->
+        <section class="card" id="movimentacaoEstoque" style="display: none">
+          <div class="card-header">
+            <div>
+              <h2>Movimentar estoque</h2>
+              <p id="produtoMovimentacao"></p>
+            </div>
+          </div>
+
+          <form id="formMovimentacao">
+            <div class="form-grid">
+              <div>
+                <label for="tipoMovimentacao">Movimentação</label>
+
+                <select id="tipoMovimentacao" required>
+                  <option value="entrada">Entrada</option>
+                  <option value="saida">Saída</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="quantidadeMovimentacao">Quantidade</label>
+
+                <input
+                  type="number"
+                  id="quantidadeMovimentacao"
+                  min="1"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit">Confirmar movimentação</button>
+
+              <button type="button" id="btnCancelarMovimentacao">
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <!-- TABELA -->
+        <section class="card">
+          <div class="card-header">
+            <h2>Produtos em estoque</h2>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Loja</th>
+                  <th>Estoque atual</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+
+              <tbody id="tabelaEstoque">
+                <tr>
+                  <td colspan="5">Carregando estoque...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- HISTÓRICO DE MOVIMENTAÇÕES -->
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <h2>Histórico de movimentações</h2>
+              <p>Últimas entradas e saídas de estoque.</p>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Produto</th>
+                  <th>Loja</th>
+                  <th>Tipo</th>
+                  <th>Quantidade</th>
+                  <th>Anterior</th>
+                  <th>Novo estoque</th>
+                </tr>
+              </thead>
+
+              <tbody id="tabelaHistoricoEstoque">
+                <tr>
+                  <td colspan="7">Carregando histórico...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./estoque.js"></script>
+    <script type="module" src="./auth-guard.js"></script>
+    <script type="module" src="./tema.js"></script>
+  </body>
+</html>

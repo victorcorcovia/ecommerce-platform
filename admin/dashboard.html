@@ -21,11 +21,15 @@
         <nav>
           <ul>
             <li>
-              <a href="index.html">Dashboard</a>
+              <a href="dashboard.html" class="ativo">Dashboard</a>
             </li>
 
             <li>
               <a href="financeiro.html">Financeiro</a>
+            </li>
+
+            <li>
+              <a href="custos.html">Custos</a>
             </li>
 
             <li>
@@ -60,73 +64,151 @@
             <p>Visão geral das lojas</p>
           </div>
 
-          <div class="usuario">
-            <div class="dados-usuario">
-              <span>Administrador</span>
-              <small id="usuarioEmail">Carregando...</small>
-            </div>
+          <div class="acoes-topo">
 
-            <button type="button" id="btnSair" class="btn-sair">Sair</button>
+            <div class="usuario">
+              <div class="dados-usuario">
+                <span>Administrador</span>
+                <small id="usuarioEmail">Carregando...</small>
+              </div>
+
+              <button type="button" id="btnSair" class="btn-sair">Sair</button>
+            </div>
           </div>
         </header>
 
-        <!-- FILTRO DE LOJA -->
+        <!-- FILTROS DO DASHBOARD -->
         <section class="filtro-loja">
           <div>
-            <label for="lojaSelecionada">Visualizando:</label>
+            <label for="lojaSelecionada">Loja:</label>
 
             <select id="lojaSelecionada">
               <option value="todas">Todas as lojas</option>
-              <option value="lolly">Lolly</option>
-              <option value="3d">3D</option>
+              <option value="closet">Closet</option>
+              <option value="3d">Decor 3D</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="periodoDashboard">Período:</label>
+
+            <select id="periodoDashboard">
+              <option value="todos">Todo o período</option>
+              <option value="hoje">Hoje</option>
+              <option value="7dias">Últimos 7 dias</option>
+              <option value="30dias">Últimos 30 dias</option>
+              <option value="mes">Este mês</option>
+              <option value="ano">Este ano</option>
             </select>
           </div>
         </section>
 
-        <!-- CARDS PRINCIPAIS -->
-        <section class="cards">
-          <div class="card">
+        <!-- INDICADORES PRINCIPAIS -->
+        <section class="dashboard-indicadores">
+          <div class="dashboard-card">
             <span>Faturamento</span>
             <h2 id="faturamento">R$ 0,00</h2>
-            <p>Total de vendas</p>
+            <p>Total de vendas pagas</p>
           </div>
 
-          <div class="card">
+          <div class="dashboard-card">
+            <span>Lucro</span>
+            <h2 id="lucroDashboard">R$ 0,00</h2>
+            <p>Faturamento menos custos</p>
+          </div>
+
+          <div class="dashboard-card">
+            <span>Custos</span>
+            <h2 id="custosDashboard">R$ 0,00</h2>
+            <p>Total de custos registrados</p>
+          </div>
+
+          <div class="dashboard-card">
             <span>Pedidos</span>
             <h2 id="totalPedidos">0</h2>
             <p>Pedidos realizados</p>
           </div>
 
-          <div class="card">
+
+          <div class="dashboard-card">
+            <span>Pedidos pagos</span>
+            <h2 id="pedidosPagosDashboard">0</h2>
+            <p>Pagamentos aprovados no período</p>
+          </div>
+
+
+          <div class="dashboard-card">
+            <span>Pedidos pendentes</span>
+            <h2 id="pedidosPendentesDashboard">0</h2>
+            <p>Aguardando aprovação do pagamento</p>
+          </div>
+
+
+          <div class="dashboard-card">
+            <span>Pedidos cancelados</span>
+            <h2 id="pedidosCanceladosDashboard">0</h2>
+            <p>Pedidos criados no período e cancelados</p>
+          </div>
+
+          <div class="dashboard-card">
             <span>Produtos</span>
             <h2 id="totalProdutos">0</h2>
             <p>Produtos cadastrados</p>
           </div>
 
-          <div class="card">
+          <div class="dashboard-card">
             <span>Estoque</span>
             <h2 id="totalEstoque">0</h2>
-            <p>Itens disponíveis</p>
+            <p>Unidades disponíveis</p>
           </div>
         </section>
 
-        <!-- FATURAMENTO POR LOJA -->
-        <section class="resumo-lojas">
+        <!-- RESULTADOS POR LOJA -->
+        <section class="resumo-lojas dashboard-resumo-lojas">
           <div class="titulo-secao">
-            <h2>Faturamento por loja</h2>
+            <h2>Resultados por loja</h2>
+            <p>Acompanhe o desempenho financeiro de cada loja.</p>
           </div>
 
           <div class="cards-lojas">
+            <!-- CLOSET -->
             <div class="card-loja">
-              <span>Lolly</span>
-              <h2 id="faturamentoLolly">R$ 0,00</h2>
-              <p>Faturamento da Lolly</p>
+              <h3>Closet</h3>
+
+              <div class="dashboard-metrica">
+                <span>Faturamento</span>
+                <strong id="faturamentoCloset">R$ 0,00</strong>
+              </div>
+
+              <div class="dashboard-metrica">
+                <span>Custos</span>
+                <strong id="custosCloset">R$ 0,00</strong>
+              </div>
+
+              <div class="dashboard-metrica">
+                <span>Lucro</span>
+                <strong id="lucroCloset">R$ 0,00</strong>
+              </div>
             </div>
 
+            <!-- DECOR 3D -->
             <div class="card-loja">
-              <span>3D</span>
-              <h2 id="faturamento3D">R$ 0,00</h2>
-              <p>Faturamento da 3D</p>
+              <h3>Decor 3D</h3>
+
+              <div class="dashboard-metrica">
+                <span>Faturamento</span>
+                <strong id="faturamento3D">R$ 0,00</strong>
+              </div>
+
+              <div class="dashboard-metrica">
+                <span>Custos</span>
+                <strong id="custos3D">R$ 0,00</strong>
+              </div>
+
+              <div class="dashboard-metrica">
+                <span>Lucro</span>
+                <strong id="lucro3D">R$ 0,00</strong>
+              </div>
             </div>
           </div>
         </section>
@@ -160,10 +242,52 @@
             </table>
           </div>
         </section>
+
+        <!-- ALERTAS DE ESTOQUE -->
+        <section class="dashboard-alertas">
+          <div class="titulo-secao">
+            <h2>Alertas de estoque</h2>
+            <p>Produtos que precisam de atenção ou reposição.</p>
+          </div>
+
+          <div class="dashboard-alertas-resumo">
+            <div>
+              <span>Estoque baixo</span>
+              <strong id="quantidadeEstoqueBaixo">0</strong>
+            </div>
+
+            <div>
+              <span>Produtos esgotados</span>
+              <strong id="quantidadeEsgotados">0</strong>
+            </div>
+          </div>
+
+          <div class="tabela-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Loja</th>
+                  <th>Quantidade</th>
+                  <th>Situação</th>
+                </tr>
+              </thead>
+
+              <tbody id="listaAlertasEstoque">
+                <tr>
+                  <td colspan="4" class="sem-dados">
+                    Carregando informações...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
       </main>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="./dashboard.js"></script>
     <script type="module" src="./auth-guard.js"></script>
+    <script type="module" src="./tema.js"></script>
   </body>
 </html>
