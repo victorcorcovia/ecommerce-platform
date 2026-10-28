@@ -2781,3 +2781,329 @@ body.dark-mode .opcao-tema.selecionado {
     grid-template-columns: 1fr;
   }
 }
+
+/* SELETOR DE CORES DOS PRODUTOS */
+
+#codigoCorProduto {
+  width: 56px;
+  height: 44px;
+  padding: 4px;
+  border: 1px solid #555;
+  border-radius: 8px;
+  cursor: pointer;
+  display: block;
+}
+
+#codigoCorProduto::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+#codigoCorProduto::-webkit-color-swatch {
+  border: none;
+  border-radius: 5px;
+}
+
+#btnAdicionarCorProduto {
+  display: inline-block;
+  width: auto;
+  padding: 10px 18px;
+  margin-top: 12px;
+  border: 1px solid #555;
+  border-radius: 8px;
+  cursor: pointer;
+  font: inherit;
+}
+
+
+/* Seletor e botão de adicionar cor */
+#campoCoresProduto .seletor-cores-produto {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+/* Seletor de tonalidade */
+#codigoCorProduto {
+  width: 68px;
+  height: 54px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* Botão adicionar cor */
+#btnAdicionarCorProduto {
+  width: auto;
+  min-width: 150px;
+  height: 46px;
+  padding: 0 18px;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+
+
+/* Botão adicionar cor - modo claro */
+#btnAdicionarCorProduto {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: 1px solid #2563eb;
+  transition: background-color 0.2s ease;
+}
+
+#btnAdicionarCorProduto:hover {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+/* Botão adicionar cor - modo escuro */
+body.dark-mode #btnAdicionarCorProduto {
+  background-color: #eeeeee;
+  color: #111214;
+  border: 1px solid #eeeeee;
+}
+
+body.dark-mode #btnAdicionarCorProduto:hover {
+  background-color: #d8d8d8;
+  border-color: #d8d8d8;
+}
+
+/* Botão adicionar cor - tamanho compacto */
+#btnAdicionarCorProduto {
+  width: fit-content;
+  min-width: 0;
+  height: 36px;
+  padding: 0 12px;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 6px;
+  flex: 0 0 auto;
+}
+
+/* TAMANHOS E CORES LADO A LADO */
+
+.variacoes-produto {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.variacoes-produto .campo-form {
+  min-width: 0;
+  margin-top: 0;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 700px) {
+  .variacoes-produto {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* LISTA DE TAMANHOS */
+
+#listaTamanhosProduto {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.item-tamanho-produto {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  background: #f3f4f6;
+  color: #111827;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.item-tamanho-produto button {
+  border: none;
+  background: transparent;
+  color: #dc2626;
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* TEMA ESCURO */
+
+body.dark-mode .item-tamanho-produto {
+  background: #25262a;
+  border-color: #404146;
+  color: #eeeeee;
+}
+
+body.dark-mode .item-tamanho-produto button {
+  color: #f87171;
+}
+
+/* ==========================================
+   APARÊNCIA - TIPO DE BANNER
+========================================== */
+
+#formAparencia .opcoes-banner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 12px;
+  margin-bottom: 24px;
+}
+
+#formAparencia .opcoes-banner label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  width: auto;
+  margin: 0;
+  cursor: pointer;
+}
+
+#formAparencia .opcoes-banner input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  flex-shrink: 0;
+  accent-color: #b76e87;
+}
+
+/* Botão Novo custo - modo escuro */
+
+body.dark-mode #btnNovoCusto {
+  background: #eeeeee;
+  color: #111214;
+  border: 1px solid #eeeeee;
+}
+
+body.dark-mode #btnNovoCusto:hover {
+  background: #d8d8d8;
+  border-color: #d8d8d8;
+}
+
+
+/* ==========================================
+   APARÊNCIA - PRODUTOS EM NOVIDADES
+========================================== */
+
+.secao-novidades #listaProdutosNovidades {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.secao-novidades .produto-novidade-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid #383838;
+  border-radius: 10px;
+  background: #242424;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.secao-novidades .produto-novidade-item:hover {
+  border-color: #a9a9a9;
+  background: #2d2d2d;
+}
+
+.secao-novidades .produto-novidade-item:has(input:checked) {
+  border-color: #d88cab;
+  background: #35252e;
+}
+
+.secao-novidades .produto-novidade-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  flex-shrink: 0;
+  accent-color: #d88cab;
+  cursor: pointer;
+}
+
+.secao-novidades .produto-novidade-nome {
+  flex: 1;
+  min-width: 0;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.secao-novidades .contador-novidades {
+  color: #a9a9a9;
+  font-size: 13px;
+  margin-top: 12px;
+}
+
+
+/* ==========================================
+   CARDS DE PRODUTOS - NOVIDADES
+========================================== */
+
+.secao-novidades .produto-novidade-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 112px;
+  padding: 14px;
+}
+
+.secao-novidades .produto-novidade-imagem {
+  width: 76px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #eeeeee;
+  flex-shrink: 0;
+}
+
+.secao-novidades .produto-novidade-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.secao-novidades .produto-novidade-nome {
+  font-size: 15px;
+  font-weight: 600;
+  color: #f5f5f5;
+}
+
+.secao-novidades .produto-novidade-preco {
+  font-size: 14px;
+  font-weight: 500;
+  color: #e2a3bc;
+}
+
+.secao-novidades .produto-novidade-item input[type="checkbox"] {
+  margin-left: auto;
+}
+
+/* Nome da loja nos cards de Novidades */
+
+.secao-novidades .produto-novidade-loja {
+  font-size: 12px;
+  font-weight: 400;
+  color: #a9a9a9;
+}

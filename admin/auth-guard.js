@@ -84,15 +84,22 @@ onAuthStateChanged(auth, async (usuario) => {
     }
 
 
-  } catch (erro) {
+} catch (erro) {
+  console.error("Erro ao verificar usuário:", erro);
 
-    console.error("Erro ao verificar usuário:", erro);
+  // TEMPORÁRIO: manter a sessão para investigar o problema.
+  const aviso = document.createElement("pre");
+  aviso.style.cssText =
+    "margin:20px;padding:16px;background:#fee;color:#900;white-space:pre-wrap;";
 
-    await signOut(auth);
+  aviso.textContent =
+    "Falha ao verificar o administrador:\n" +
+    (erro?.code || "") +
+    "\n" +
+    (erro?.message || String(erro));
 
-    window.location.replace("./index.html");
-
-  }
+  document.body.prepend(aviso);
+}
 
 });
 

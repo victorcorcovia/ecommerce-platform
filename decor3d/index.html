@@ -79,58 +79,21 @@
       </div>
     </div>
     <main>
-      <div class="banner">
+      <div class="banner" id="banner-principal">
         <h1>Lolly Decor 3D</h1>
         <p>Chaveiros e produtos personalizados</p>
         <a href="produtos.html" class="btn">Ver produtos</a>
       </div>
 
+      <!-- ========================================
+     PRODUTOS EM PRONTA ENTREGA
+     ======================================== -->
+
       <div class="produtos" id="produtos">
         <h2>Pronta entrega</h2>
 
-        <div class="lista-produtos">
-          <div class="produto" data-nome="Chaveiro Guitarra" data-preco="8.00">
-            <img
-              src="https://placehold.co/250x200?text=Chaveiro+Guitarra"
-              alt="Chaveiro Guitarra"
-            />
-            <h3>Chaveiro Guitarra</h3>
-            <p class="preco">R$ 8,00</p>
-
-            <p class="estoque" id="estoque-guitarra">20 unidades em estoque</p>
-            <a href="produto.html?id=guitarra" class="btn-ver-produto"
-              >Ver Produto</a
-            >
-          </div>
-
-          <div class="produto" data-nome="Chaveiro Copo" data-preco="8.00">
-            <img
-              src="https://placehold.co/250x200?text=Chaveiro+Copo"
-              alt="Chaveiro Copo"
-            />
-            <h3>Chaveiro Copo</h3>
-            <p class="preco">R$ 8,00</p>
-
-            <p class="estoque" id="estoque-copo">15 unidades em estoque</p>
-            <a href="produto.html?id=copo" class="btn-ver-produto"
-              >Ver Produto</a
-            >
-          </div>
-
-          <div class="produto" data-nome="Chaveiro Nome" data-preco="8.00">
-            <img
-              src="https://placehold.co/250x200?text=Chaveiro+Nome"
-              alt="Chaveiro Nome"
-            />
-            <h3>Chaveiro Nome</h3>
-
-            <p class="preco">R$ 8,00</p>
-
-            <p class="estoque" id="estoque-nome">Personalizado do seu jeito</p>
-            <a href="produto.html?id=nome" class="btn-ver-produto"
-              >Ver Produto</a
-            >
-          </div>
+        <div class="lista-produtos" id="lista-novidades">
+          <p>Carregando produtos...</p>
         </div>
       </div>
 
@@ -232,5 +195,6 @@
     </footer>
 
     <script src="script.js"></script>
+    <script type="module" src="./banner.js"></script>
   </body>
 </html>

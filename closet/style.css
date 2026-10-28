@@ -2272,3 +2272,18 @@ body {
     margin-top: 4px;
     display: block;
 }
+
+/* Espaçamento entre as variações e a quantidade */
+
+#produto-cores {
+  margin-top: 24px;
+  margin-bottom: 28px;
+}
+
+#produto-cores .cores {
+  margin-top: 12px;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}

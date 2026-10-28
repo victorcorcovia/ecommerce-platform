@@ -3,10 +3,7 @@
   <head>
     <meta charset="UTF-8" />
 
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Custos | Painel Administrativo</title>
 
@@ -15,7 +12,6 @@
 
   <body>
     <div class="admin-container">
-
       <!-- =========================
            MENU LATERAL
       ========================== -->
@@ -66,23 +62,20 @@
            CONTEÚDO
       ========================== -->
       <main class="conteudo">
-
         <!-- TOPO -->
         <header class="topo">
           <div>
             <h1>Custos</h1>
-            <p>
-              Cadastre e acompanhe os custos da Closet e da Decor 3D.
-            </p>
+            <p>Cadastre e acompanhe os custos da Closet e da Decor 3D.</p>
           </div>
 
           <div class="usuario">
+            <div class="dados-usuario">
+              <span>Administrador</span>
+              <small id="usuarioEmail"></small>
+            </div>
 
-            <span id="usuarioLogado">Administrador</span>
-
-            <button id="btnLogout" type="button">
-              Sair
-            </button>
+            <button id="btnSair" class="btn-sair" type="button">Sair</button>
           </div>
         </header>
 
@@ -93,22 +86,15 @@
           <div class="barra-produtos">
             <div>
               <h2>Controle de custos</h2>
-              <p>
-                Consulte os gastos registrados de cada loja.
-              </p>
+              <p>Consulte os gastos registrados de cada loja.</p>
             </div>
 
-            <button
-              type="button"
-              id="btnNovoCusto"
-              class="btn-principal"
-            >
+            <button type="button" id="btnNovoCusto" class="btn-principal">
               + Novo custo
             </button>
           </div>
 
           <div class="filtros-produtos">
-
             <div class="campo-filtro">
               <label for="filtroLojaCustos">Loja</label>
 
@@ -141,7 +127,6 @@
                 placeholder="Buscar custo..."
               />
             </div>
-
           </div>
         </section>
 
@@ -156,9 +141,7 @@
           <div class="barra-produtos">
             <div>
               <h2>Novo custo</h2>
-              <p>
-                Informe os dados do gasto realizado.
-              </p>
+              <p>Informe os dados do gasto realizado.</p>
             </div>
 
             <button
@@ -171,9 +154,7 @@
           </div>
 
           <form id="formCusto">
-
             <div class="form-grid">
-
               <!-- LOJA -->
               <div class="campo-form">
                 <label for="custoLoja">Loja</label>
@@ -187,9 +168,7 @@
 
               <!-- DESCRIÇÃO -->
               <div class="campo-form">
-                <label for="custoDescricao">
-                  Descrição
-                </label>
+                <label for="custoDescricao"> Descrição </label>
 
                 <input
                   type="text"
@@ -201,54 +180,32 @@
 
               <!-- CATEGORIA -->
               <div class="campo-form">
-                <label for="custoCategoria">
-                  Categoria
-                </label>
+                <label for="custoCategoria"> Categoria </label>
 
                 <select id="custoCategoria" required>
-                  <option value="">
-                    Selecione a categoria
-                  </option>
+                  <option value="">Selecione a categoria</option>
 
-                  <option value="mercadoria">
-                    Produtos / Mercadoria
-                  </option>
+                  <option value="mercadoria">Produtos / Mercadoria</option>
 
-                  <option value="embalagens">
-                    Embalagens
-                  </option>
+                  <option value="embalagens">Embalagens</option>
 
-                  <option value="frete">
-                    Frete
-                  </option>
+                  <option value="frete">Frete</option>
 
-                  <option value="marketing">
-                    Marketing
-                  </option>
+                  <option value="marketing">Marketing</option>
 
-                  <option value="taxas">
-                    Taxas
-                  </option>
+                  <option value="taxas">Taxas</option>
 
-                  <option value="servicos">
-                    Serviços
-                  </option>
+                  <option value="servicos">Serviços</option>
 
-                  <option value="manutencao">
-                    Manutenção
-                  </option>
+                  <option value="manutencao">Manutenção</option>
 
-                  <option value="outros">
-                    Outros
-                  </option>
+                  <option value="outros">Outros</option>
                 </select>
               </div>
 
               <!-- VALOR -->
               <div class="campo-form">
-                <label for="custoValor">
-                  Valor
-                </label>
+                <label for="custoValor"> Valor </label>
 
                 <input
                   type="number"
@@ -262,22 +219,14 @@
 
               <!-- DATA -->
               <div class="campo-form">
-                <label for="custoData">
-                  Data
-                </label>
+                <label for="custoData"> Data </label>
 
-                <input
-                  type="date"
-                  id="custoData"
-                  required
-                />
+                <input type="date" id="custoData" required />
               </div>
 
               <!-- OBSERVAÇÃO -->
               <div class="campo-form">
-                <label for="custoObservacao">
-                  Observação
-                </label>
+                <label for="custoObservacao"> Observação </label>
 
                 <input
                   type="text"
@@ -285,11 +234,9 @@
                   placeholder="Opcional"
                 />
               </div>
-
             </div>
 
             <div class="acoes-form">
-
               <button
                 type="button"
                 id="btnCancelarCusto"
@@ -298,13 +245,7 @@
                 Cancelar
               </button>
 
-              <button
-                type="submit"
-                class="btn-principal"
-              >
-                Salvar custo
-              </button>
-
+              <button type="submit" class="btn-principal">Salvar custo</button>
             </div>
           </form>
         </section>
@@ -316,28 +257,20 @@
           <div class="barra-produtos">
             <div>
               <h2>Resumo de custos</h2>
-              <p>
-                Total de gastos no período selecionado.
-              </p>
+              <p>Total de gastos no período selecionado.</p>
             </div>
           </div>
 
           <div class="cards">
-
             <div class="card">
               <h3>Custos totais</h3>
-              <p id="totalCustos">
-                R$ 0,00
-              </p>
+              <p id="totalCustos">R$ 0,00</p>
             </div>
 
             <div class="card">
               <h3>Quantidade de lançamentos</h3>
-              <p id="quantidadeCustos">
-                0
-              </p>
+              <p id="quantidadeCustos">0</p>
             </div>
-
           </div>
         </section>
 
@@ -345,19 +278,15 @@
              HISTÓRICO
         ========================== -->
         <section class="lista-produtos">
-
           <div class="barra-produtos">
             <div>
               <h2>Histórico de custos</h2>
-              <p>
-                Gastos cadastrados para a Closet e Decor 3D.
-              </p>
+              <p>Gastos cadastrados para a Closet e Decor 3D.</p>
             </div>
           </div>
 
           <div class="tabela-container">
             <table>
-
               <thead>
                 <tr>
                   <th>Data</th>
@@ -372,20 +301,14 @@
 
               <tbody id="tabelaCustos">
                 <tr>
-                  <td
-                    colspan="7"
-                    class="sem-dados"
-                  >
+                  <td colspan="7" class="sem-dados">
                     Nenhum custo cadastrado.
                   </td>
                 </tr>
               </tbody>
-
             </table>
           </div>
-
         </section>
-
       </main>
     </div>
 

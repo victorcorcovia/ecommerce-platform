@@ -64,9 +64,27 @@ botoesTamanho.forEach(function (botao) {
 
 if (botaoAdicionar) {
   botaoAdicionar.addEventListener("click", function () {
+    // Utiliza o produto real carregado do Firebase
+    const produtoFirebase = window.produtoAtualFirebase;
+    produtoAtual = produtoFirebase;
+    corSelecionada = window.corSelecionadaFirebase || null;
+    tamanhoSelecionado = window.tamanhoSelecionadoFirebase || null;
+
+    if (!produtoFirebase) {
+      mensagemProduto.textContent = "Aguarde o carregamento do produto.";
+      return;
+    }
+
+    produtoAtual = produtoFirebase;
+    corSelecionada = window.corSelecionadaFirebase || null;
+
     // Verifica o tamanho
 
-    if (tamanhoSelecionado === null) {
+    if (
+      Array.isArray(produtoAtual.tamanhos) &&
+      produtoAtual.tamanhos.length > 0 &&
+      tamanhoSelecionado === null
+    ) {
       mensagemProduto.textContent =
         "Selecione um tamanho antes de adicionar ao carrinho.";
       return;
@@ -405,36 +423,6 @@ if (botaoCalcularFrete) {
 // FILTRO DE PRODUTOS
 // ========================================
 
-const botoesFiltro = document.querySelectorAll(".filtro-produto");
-const produtosCatalogo = document.querySelectorAll(".produto[data-categoria]");
-
-if (botoesFiltro.length > 0 && produtosCatalogo.length > 0) {
-  botoesFiltro.forEach((botao) => {
-    botao.addEventListener("click", () => {
-      const filtro = botao.dataset.filtro;
-
-      // Remove o ativo de todos os botões
-      botoesFiltro.forEach((item) => {
-        item.classList.remove("ativo");
-      });
-
-      // Deixa o botão clicado ativo
-      botao.classList.add("ativo");
-
-      // Filtra os produtos
-      produtosCatalogo.forEach((produto) => {
-        const categoria = produto.dataset.categoria;
-
-        if (filtro === "todos" || categoria === filtro) {
-          produto.style.display = "";
-        } else {
-          produto.style.display = "none";
-        }
-      });
-    });
-  });
-}
-
 const produtos = {
   blusa: {
     nome: "Blusa Feminina",
@@ -503,7 +491,7 @@ const produtos = {
 const parametros = new URLSearchParams(window.location.search);
 const idProduto = parametros.get("id");
 
-const produtoAtual = produtos[idProduto];
+let produtoAtual = null;
 
 if (produtoAtual) {
   const imagemProduto = document.querySelector("#produto-imagem");
@@ -672,23 +660,6 @@ if (produtoAtual) {
   }
 
   document.title = produtoAtual.nome + " | Lolly Closet";
-}
-
-// ========================================
-// FILTRO PELA CATEGORIA DA URL
-// ========================================
-
-const parametrosURL = new URLSearchParams(window.location.search);
-const categoriaURL = parametrosURL.get("categoria");
-
-if (categoriaURL && botoesFiltro.length > 0) {
-  const botaoCategoria = document.querySelector(
-    `.filtro-produto[data-filtro="${categoriaURL}"]`,
-  );
-
-  if (botaoCategoria) {
-    botaoCategoria.click();
-  }
 }
 
 // ========================================

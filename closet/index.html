@@ -106,10 +106,10 @@
 
     <main>
       <!-- ========================================
-             BANNER
-             ======================================== -->
+           BANNER
+           ======================================== -->
 
-      <section class="banner">
+      <section class="banner" id="banner-principal">
         <div class="banner-conteudo">
           <p class="subtitulo">LOLLY CLOSET</p>
 
@@ -124,8 +124,8 @@
       </section>
 
       <!-- ========================================
-             PRODUTOS
-             ======================================== -->
+           PRODUTOS
+           ======================================== -->
 
       <section class="produtos" id="produtos">
         <div class="titulo-secao">
@@ -133,78 +133,17 @@
 
           <h2>Novidades</h2>
 
-          <span> Conheça as peças que acabaram de chegar </span>
+          <span>Conheça as peças que acabaram de chegar</span>
         </div>
 
-        <div class="lista-produtos">
-          <!-- BLUSA -->
-
-          <div class="produto">
-            <div class="produto-imagem">
-              <img
-                src="https://placehold.co/350x450?text=Blusa"
-                alt="Blusa Feminina"
-              />
-            </div>
-
-            <div class="produto-info">
-              <h3>Blusa Feminina</h3>
-
-              <p class="preco">R$ 79,90</p>
-
-              <a href="produto.html?id=blusa" class="btn-carrinho">
-                Ver produto
-              </a>
-            </div>
-          </div>
-
-          <!-- VESTIDO -->
-
-          <div class="produto">
-            <div class="produto-imagem">
-              <img
-                src="https://placehold.co/350x450?text=Vestido"
-                alt="Vestido Feminino"
-              />
-            </div>
-
-            <div class="produto-info">
-              <h3>Vestido Feminino</h3>
-
-              <p class="preco">R$ 129,90</p>
-
-              <a href="produto.html?id=vestido" class="btn-carrinho">
-                Ver produto
-              </a>
-            </div>
-          </div>
-
-          <!-- CALÇA  -->
-
-          <div class="produto">
-            <div class="produto-imagem">
-              <img
-                src="https://placehold.co/350x450?text=Calça"
-                alt="Calça Feminina"
-              />
-            </div>
-
-            <div class="produto-info">
-              <h3>Calça Feminina</h3>
-
-              <p class="preco">R$ 149,90</p>
-
-              <a href="produto.html?id=calca" class="btn-carrinho">
-                Ver produto
-              </a>
-            </div>
-          </div>
+        <div class="lista-produtos" id="lista-novidades">
+          <p>Carregando novidades...</p>
         </div>
       </section>
 
       <!-- ========================================
-             CATEGORIAS
-             ======================================== -->
+           CATEGORIAS
+           ======================================== -->
 
       <section class="categorias" id="categorias">
         <!-- TÍTULO -->
@@ -226,7 +165,10 @@
         <div class="lista-categorias">
           <!-- VESTIDOS -->
 
-          <a href="produtos.html?categoria=vestidos" class="categoria categoria-vestidos">
+          <a
+            href="produtos.html?categoria=vestidos"
+            class="categoria categoria-vestidos"
+          >
             <div class="categoria-visual">
               <div class="icone-categoria">👗</div>
             </div>
@@ -243,7 +185,10 @@
 
           <!-- BLUSAS -->
 
-          <a href="produtos.html?categoria=blusas" class="categoria categoria-blusas">
+          <a
+            href="produtos.html?categoria=blusas"
+            class="categoria categoria-blusas"
+          >
             <div class="categoria-visual">
               <div class="icone-categoria">👚</div>
             </div>
@@ -258,9 +203,12 @@
             </div>
           </a>
 
-          <!-- CONJUNTOS -->
+          <!-- CALÇAS -->
 
-          <a href="produtos.html?categoria=calcas" class="categoria categoria-calcas">
+          <a
+            href="produtos.html?categoria=calcas"
+            class="categoria categoria-calcas"
+          >
             <div class="categoria-visual">
               <div class="icone-categoria">👖</div>
             </div>
@@ -285,8 +233,8 @@
       </section>
 
       <!-- ========================================
-             SOBRE
-             ======================================== -->
+           SOBRE
+           ======================================== -->
 
       <section class="sobre" id="sobre">
         <div class="sobre-conteudo">
@@ -304,7 +252,7 @@
             conforto e qualidade.
           </p>
 
-          <p class="sobre-destaque">Vista-se do seu jeito. </p>
+          <p class="sobre-destaque">Vista-se do seu jeito.</p>
         </div>
       </section>
     </main>
@@ -334,11 +282,15 @@
         <div class="footer-contato">
           <h3>Contato</h3>
 
-          <a href="https://www.instagram.com/lolly.closet/" target="_blank" class="footer-link">
+          <a
+            href="https://www.instagram.com/lolly.closet/"
+            target="_blank"
+            class="footer-link"
+          >
             Instagram: @lolly.closet
           </a>
 
-          <p>WhatsApp: (00) 00000-0000</p>
+          <p>WhatsApp: (44) 9180-8404</p>
         </div>
       </div>
 
@@ -346,7 +298,8 @@
         <p>© 2026 Lolly Closet. Todos os direitos reservados.</p>
       </div>
     </footer>
-
     <script src="script.js"></script>
+    <script type="module" src="./banner.js"></script>
+    <script type="module" src="./novidades.js"></script>
   </body>
 </html>

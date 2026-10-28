@@ -20,9 +20,18 @@ import {
 
 const atualizarImagensProdutoCallable = httpsCallable(
   functions,
-  "atualizarImagensProduto"
+  "atualizarImagensProduto",
 );
 
+const excluirProdutoSeguroCallable = httpsCallable(
+  functions,
+  "excluirProdutoSeguro",
+);
+
+const cadastrarProdutoSeguroCallable = httpsCallable(
+  functions,
+  "cadastrarProdutoSeguro",
+);
 // ==========================================
 // PRODUTOS - CARREGAR DO FIRESTORE
 // ==========================================
@@ -63,19 +72,7 @@ export async function buscarProdutos() {
   return produtos;
 }
 
-// ==========================================
-// PRODUTOS - EDITAR NO FIRESTORE
-// ==========================================
-
-// ==========================================
-// PRODUTOS - EDITAR VIA CLOUD FUNCTION
-// ==========================================
-
-export async function editarProduto(
-  id,
-  dadosProduto,
-  imagensOriginaisIds
-) {
+export async function editarProduto(id, dadosProduto, imagensOriginaisIds) {
   if (!id || typeof id !== "string") {
     throw new Error("ID do produto não informado.");
   }
@@ -108,6 +105,9 @@ export async function editarProduto(
       preco: outrosDados.preco,
       status: outrosDados.status,
       descricao: outrosDados.descricao,
+      cores: outrosDados.cores,
+      tamanhos: outrosDados.tamanhos,
+      permitePersonalizacao: outrosDados.permitePersonalizacao,
     },
     imagensOriginaisIds,
   });
@@ -124,54 +124,42 @@ export async function editarProduto(
 // ==========================================
 
 export async function cadastrarProduto(dadosProduto) {
-  if (!dadosProduto || typeof dadosProduto !== "object") {
+  if (
+    !dadosProduto ||
+    typeof dadosProduto !== "object" ||
+    Array.isArray(dadosProduto)
+  ) {
     throw new Error("Dados do produto inválidos.");
   }
 
-  const estoque = Number(dadosProduto.estoque);
+  const resultado = await cadastrarProdutoSeguroCallable({
+    dadosProduto,
+  });
 
-  if (!Number.isSafeInteger(estoque) || estoque < 0) {
-    throw new Error("Estoque inicial inválido.");
+  if (!resultado.data?.sucesso || !resultado.data?.produtoId) {
+    throw new Error("Não foi possível confirmar o cadastro do produto.");
   }
 
-  const lote = writeBatch(db);
-
-  const referenciaProduto = doc(collection(db, "produtos"));
-
-  lote.set(referenciaProduto, dadosProduto);
-
-  // Registrar a entrada inicial no histórico de estoque
-  if (estoque > 0) {
-    const referenciaMovimentacao = doc(collection(db, "movimentacoesEstoque"));
-
-    lote.set(referenciaMovimentacao, {
-      produtoId: referenciaProduto.id,
-      produtoNome: dadosProduto.nome,
-      loja: dadosProduto.loja,
-      tipo: "entrada",
-      quantidade: estoque,
-      estoqueAnterior: 0,
-      estoqueNovo: estoque,
-      criadoEm: serverTimestamp(),
-    });
-  }
-
-  // Salvar produto e movimentação na mesma operação
-  await lote.commit();
-
-  return referenciaProduto.id;
+  return resultado.data.produtoId;
 }
 
 // ==========================================
 // PRODUTOS - EXCLUIR DO FIRESTORE
 // ==========================================
 
-export async function excluirProduto(id) {
-  if (!id) {
+export async function excluirProduto(id, loja) {
+  if (typeof id !== "string" || !id.trim()) {
     throw new Error("ID do produto não informado.");
   }
 
-  const referencia = doc(db, "produtos", id);
+  if (!["closet", "3d"].includes(loja)) {
+    throw new Error("Loja do produto inválida.");
+  }
 
-  await deleteDoc(referencia);
+  const resultado = await excluirProdutoSeguroCallable({
+    produtoId: id,
+    loja,
+  });
+
+  return resultado.data;
 }

@@ -32,13 +32,15 @@ service cloud.firestore {
     // USUÁRIOS
     // ==========================================
 
-    match /usuarios/{userId} {
+match /usuarios/{userId} {
 
-      allow read: if usuarioAtivo()
-        && request.auth.uid == userId;
+  // Cada usuário autenticado pode ler apenas o próprio documento.
+  allow read: if estaAutenticado()
+    && request.auth.uid == userId;
 
-      allow write: if false;
-    }
+  // Alterações continuam bloqueadas pelo cliente.
+  allow write: if false;
+}
 
     // ==========================================
     // FILA DE EXCLUSÃO DE IMAGENS
@@ -49,6 +51,15 @@ service cloud.firestore {
 
       allow read, write: if false;
     }
+
+    // ==========================================
+// CONTROLE DE IMAGENS DOS PRODUTOS
+// ACESSO EXCLUSIVO DO BACKEND
+// ==========================================
+
+match /controleImagensProdutos/{imagemId} {
+  allow read, write: if false;
+}
 
     // ==========================================
     // CATEGORIAS
@@ -311,6 +322,56 @@ service cloud.firestore {
       // Exclusão direta de clientes bloqueada.
       allow delete: if false;
     }
+
+    // ==========================================
+    // CATALOGO PUBLICO DAS LOJAS
+    // ==========================================
+
+    match /catalogoPublico/{produtoId} {
+
+      // Visitantes podem consultar produtos publicados.
+      allow read: if resource.data.loja in ["closet", "3d"];
+
+      // Somente o backend pode modificar o catalogo.
+      allow write: if false;
+    }
+
+
+    // ==========================================
+// CATEGORIAS PUBLICAS DAS LOJAS
+// ==========================================
+
+match /categoriasPublicas/{categoriaId} {
+
+  // Visitantes podem consultar categorias das lojas.
+  allow read: if resource.data.loja in ["closet", "3d"];
+
+  // Somente o backend pode modificar categorias publicas.
+  allow write: if false;
+}
+
+// ==========================================
+// APARÊNCIA PÚBLICA DAS LOJAS
+// ==========================================
+
+match /aparenciaLojas/{loja} {
+
+  // Somente as configurações das duas lojas são públicas.
+  allow get: if loja in ["closet", "3d"];
+
+  // Não permite listar documentos nem alterar pelo navegador.
+  allow list, create, update, delete: if false;
+}
+
+// ==========================================
+// HISTÓRICO DE BANNERS
+// ==========================================
+
+match /historicoBanners/{historicoId} {
+
+  // Histórico acessível somente pelo backend.
+  allow read, write: if false;
+}
 
     // ==========================================
     // BLOQUEIO PADRÃO

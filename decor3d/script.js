@@ -179,6 +179,25 @@ function atualizarCarrinho() {
 
 function aumentarQuantidade(index) {
   const item = carrinho[index];
+  // Controle de estoque para produtos do Firebase
+  if (item.id) {
+    const quantidadeTotal = carrinho.reduce(function (total, produto) {
+      return produto.id === item.id
+        ? total + Number(produto.quantidade || 0)
+        : total;
+    }, 0);
+
+    if (
+      !Number.isInteger(Number(item.estoque)) ||
+      quantidadeTotal >= Number(item.estoque)
+    ) {
+      return;
+    }
+
+    item.quantidade++;
+    salvarCarrinho();
+    return;
+  }
 
   const produtoCorrespondente = Object.values(produtos).find(
     function (produto) {
@@ -232,6 +251,96 @@ function removerProduto(index) {
 
   salvarCarrinho();
 }
+
+// ==========================================
+// INTEGRAÇÃO DO CARRINHO COM O FIREBASE
+// ==========================================
+
+window.adicionarProdutoFirebaseAoCarrinho = function (item) {
+  if (!item || typeof item.id !== "string" || !item.id.trim()) {
+    return false;
+  }
+
+  const preco = Number(item.preco);
+  const quantidade = Number(item.quantidade);
+  const estoque = Number(item.estoque);
+
+  if (
+    !Number.isFinite(preco) ||
+    preco <= 0 ||
+    !Number.isInteger(quantidade) ||
+    quantidade < 1 ||
+    !Number.isInteger(estoque) ||
+    estoque < 0
+  ) {
+    return false;
+  }
+
+  if (
+    typeof item.nome !== "string" ||
+    !item.nome.trim() ||
+    typeof item.imagem !== "string" ||
+    !item.imagem.trim()
+  ) {
+    return false;
+  }
+
+  const cor = item.cor ?? null;
+  const personalizacao = item.personalizacao ?? null;
+
+  if (cor !== null && (typeof cor !== "string" || !cor.trim())) {
+    return false;
+  }
+
+  if (
+    personalizacao !== null &&
+    (typeof personalizacao !== "string" ||
+      !personalizacao.trim() ||
+      personalizacao.length > 60)
+  ) {
+    return false;
+  }
+
+  // Verifica todas as unidades desse produto no carrinho.
+  const quantidadeNoCarrinho = carrinho.reduce(function (total, produto) {
+    return produto.id === item.id
+      ? total + Number(produto.quantidade || 0)
+      : total;
+  }, 0);
+
+  if (quantidadeNoCarrinho + quantidade > estoque) {
+    return false;
+  }
+
+  // Mesmo ID, mesma cor e mesma personalização.
+  const itemExistente = carrinho.find(function (produtoCarrinho) {
+    return (
+      produtoCarrinho.id === item.id &&
+      (produtoCarrinho.cor ?? null) === cor &&
+      (produtoCarrinho.personalizacao ?? null) === personalizacao
+    );
+  });
+
+  if (itemExistente) {
+    itemExistente.quantidade += quantidade;
+    itemExistente.estoque = estoque;
+  } else {
+    carrinho.push({
+      id: item.id,
+      nome: item.nome.trim(),
+      preco,
+      imagem: item.imagem,
+      cor,
+      personalizacao,
+      quantidade,
+      estoque,
+    });
+  }
+
+  salvarCarrinho();
+
+  return true;
+};
 
 // ==========================================
 // SALVAR CARRINHO
@@ -440,7 +549,7 @@ atualizarEstoqueHome();
 const parametrosURL = new URLSearchParams(window.location.search);
 const idProduto = parametrosURL.get("id");
 
-const produtoAtual = produtos[idProduto];
+let produtoAtual = produtos[idProduto] || null;
 
 const produtoNome = document.querySelector("#produto-nome");
 const produtoPreco = document.querySelector("#produto-preco");
@@ -464,7 +573,7 @@ const mensagemPersonalizacao = document.querySelector(
 
 let nomeConfirmado = "";
 let corSelecionada = null;
-
+window.nomePersonalizadoConfirmadoFirebase = "";
 if (
   botaoConfirmarPersonalizacao &&
   nomePersonalizado &&
@@ -481,6 +590,7 @@ if (
     }
 
     nomeConfirmado = nome;
+    window.nomePersonalizadoConfirmadoFirebase = nome;
 
     mensagemPersonalizacao.textContent = `Nome confirmado: ${nome}`;
 
@@ -491,6 +601,7 @@ if (
 if (nomePersonalizado) {
   nomePersonalizado.addEventListener("input", function () {
     nomeConfirmado = "";
+    window.nomePersonalizadoConfirmadoFirebase = "";
 
     if (mensagemPersonalizacao) {
       mensagemPersonalizacao.textContent = "";
@@ -745,6 +856,7 @@ if (botaoAdicionarProduto && campoQuantidadeProduto && produtoAtual) {
       const item = {
         nome: produtoAtual.nome,
         preco: produtoAtual.preco,
+        estoque: Number(produto.estoque) || 0,
         imagem: produtoAtual.imagens[0],
         cor: corSelecionada,
         quantidade: quantidade,

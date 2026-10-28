@@ -1,0 +1,1 @@
+export { app, db } from "../admin/firebase-config.js";

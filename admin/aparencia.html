@@ -22,6 +22,7 @@
           <ul>
             <li><a href="./dashboard.html">Dashboard</a></li>
             <li><a href="./financeiro.html">Financeiro</a></li>
+            <li><a href="./custos.html">Custos</a></li>
             <li><a href="./produtos.html">Produtos</a></li>
             <li><a href="./estoque.html">Estoque</a></li>
             <li><a href="./pedidos.html">Pedidos</a></li>
@@ -125,7 +126,29 @@
           </div>
 
           <form id="formAparencia">
+            <!-- TIPO DE BANNER -->
             <div class="campo-form">
+              <label>Tipo de banner</label>
+
+              <div class="opcoes-banner">
+                <label>
+                  <input
+                    type="radio"
+                    name="tipoBanner"
+                    value="imagem"
+                    checked
+                  />
+                  Imagem
+                </label>
+
+                <label>
+                  <input type="radio" name="tipoBanner" value="cor" />
+                  Cor de fundo
+                </label>
+              </div>
+            </div>
+
+            <div class="campo-form" id="campoImagemBanner">
               <label for="bannerPrincipal">Banner principal</label>
 
               <input
@@ -152,12 +175,60 @@
               />
             </div>
 
+            <!-- COR DE FUNDO DO BANNER -->
+            <div class="campo-form" id="campoCorBanner">
+              <label for="corFundoBanner">Cor de fundo do banner</label>
+
+              <input type="color" id="corFundoBanner" value="#f5e6eb" />
+
+              <small>
+                Escolha uma cor de fundo para o banner. Ela poderá ser utilizada
+                quando não houver imagem.
+              </small>
+            </div>
+
             <div class="acoes-form">
               <button type="submit" class="btn-salvar">
                 Salvar alterações
               </button>
             </div>
           </form>
+        </section>
+
+        <!-- ==========================================
+     PRODUTOS EM DESTAQUE - NOVIDADES
+========================================== -->
+        <section class="lista-produtos secao-novidades">
+          <div class="titulo-secao">
+            <h2>Produtos em Novidades</h2>
+            <p>
+              Escolha quais produtos aparecerão na página inicial da loja
+              selecionada.
+            </p>
+          </div>
+
+          <div class="campo-form">
+            <label>Selecionar produtos</label>
+
+            <p>
+              Selecione até 3 produtos para destacar na seção Novidades da loja.
+            </p>
+
+            <div id="listaProdutosNovidades">
+              <p>Os produtos disponíveis aparecerão aqui.</p>
+            </div>
+          </div>
+
+          <div class="acoes-form">
+            <button
+              type="button"
+              class="btn-salvar"
+              id="salvarNovidades"
+              disabled
+            >
+              Salvar Novidades
+            </button>
+          </div>
         </section>
       </main>
     </div>
@@ -166,5 +237,6 @@
     <script type="module" src="./auth-guard.js"></script>
     <script type="module" src="./tema.js"></script>
     <script type="module" src="./aparencia.js"></script>
+    <script type="module" src="./novidades.js"></script>
   </body>
 </html>

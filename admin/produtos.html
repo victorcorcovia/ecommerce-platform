@@ -195,6 +195,75 @@
                 ></textarea>
               </div>
 
+              <!-- PERSONALIZAÇÃO COM NOME - DECOR 3D -->
+              <div
+                class="campo-form campo-completo"
+                id="campoPersonalizacaoProduto"
+                style="display: none"
+              >
+                <label for="permitePersonalizacaoProduto">
+                  <input type="checkbox" id="permitePersonalizacaoProduto" />
+                  Permitir personalização com nome
+                </label>
+
+                <small>
+                  Quando ativado, o cliente poderá informar um nome para
+                  personalizar este produto.
+                </small>
+              </div>
+
+              <div class="variacoes-produto">
+                <!-- TAMANHOS DISPONÍVEIS -->
+                <div
+                  class="campo-form campo-completo"
+                  id="campoTamanhosProduto"
+                >
+                  <label for="novoTamanhoProduto">Tamanhos disponíveis</label>
+
+                  <div class="seletor-tamanhos-produto">
+                    <input
+                      type="text"
+                      id="novoTamanhoProduto"
+                      placeholder="Ex: P, M, G, GG ou 38"
+                      maxlength="15"
+                    />
+
+                    <button type="button" id="btnAdicionarTamanhoProduto">
+                      + Adicionar tamanho
+                    </button>
+                  </div>
+
+                  <div id="listaTamanhosProduto" aria-live="polite"></div>
+
+                  <small>
+                    Adicione os tamanhos disponíveis para este produto.
+                  </small>
+                </div>
+
+                <!-- CORES DISPONÍVEIS -->
+                <div class="campo-form campo-completo" id="campoCoresProduto">
+                  <label>Cores disponíveis</label>
+
+                  <div class="seletor-cores-produto">
+                    <input
+                      type="color"
+                      id="codigoCorProduto"
+                      value="#e9a8b5"
+                      aria-label="Selecionar tonalidade"
+                    />
+
+                    <button type="button" id="btnAdicionarCorProduto">
+                      + Adicionar cor
+                    </button>
+                  </div>
+
+                  <div id="listaCoresProduto" aria-live="polite"></div>
+
+                  <small>
+                    Selecione uma tonalidade e adicione as cores disponíveis.
+                  </small>
+                </div>
+              </div>
               <div class="campo-form campo-completo">
                 <label for="fotosProduto">Fotos do produto</label>
 
