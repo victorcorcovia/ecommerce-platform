@@ -14,7 +14,6 @@ import {
 
 const btnNovoCusto = document.getElementById("btnNovoCusto");
 const formularioCusto = document.getElementById("formularioCusto");
-const fecharFormularioCusto = document.getElementById("fecharFormularioCusto");
 const btnCancelarCusto = document.getElementById("btnCancelarCusto");
 const formCusto = document.getElementById("formCusto");
 
@@ -32,6 +31,8 @@ const buscarCusto = document.getElementById("buscarCusto");
 
 const totalCustos = document.getElementById("totalCustos");
 const quantidadeCustos = document.getElementById("quantidadeCustos");
+let custos = [];
+let custoEmEdicao = null;
 
 function abrirFormularioCusto() {
   custoEmEdicao = null;
@@ -50,8 +51,6 @@ function fecharFormulario() {
 }
 
 btnNovoCusto.addEventListener("click", abrirFormularioCusto);
-
-fecharFormularioCusto.addEventListener("click", fecharFormulario);
 
 btnCancelarCusto.addEventListener("click", fecharFormulario);
 
@@ -94,9 +93,6 @@ formCusto.addEventListener("submit", async (event) => {
     alert("Não foi possível salvar o custo.");
   }
 });
-
-let custos = [];
-let custoEmEdicao = null;
 
 async function carregarCustos() {
   try {

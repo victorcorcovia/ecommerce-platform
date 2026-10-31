@@ -72,3 +72,27 @@ skills-lock.json
 !**/.env.example
 **/.secret.local
 **/serviceAccountKey.json
+
+# Backups e arquivos locais de desenvolvimento Lolly
+firebase-teste-backup.json
+firebase.backup-test.json
+firebase.recuperacao.json
+firebase.validacao.json
+firestore.rules.antes-correcao-bom
+functions/alterar-senha-local.cjs
+functions/catalogo-publico.backup.js
+functions/catalogo-publico.js.backup-export
+functions/index.backup.js
+functions/restaurar-backup.cjs
+functions/verificar-emulador.cjs
+functions/verificar-restauracao.cjs
+limpar-dados-teste.cjs
+package.antes-correcao-emulador.json
+teste-copia-exportacao/
+verificar-emulador.cjs
+verificar-estrutura-backup.cjs
+
+# Ferramentas locais de desenvolvimento
+/comandos/
+/scripts/
+/iniciar-emuladores.ps1

@@ -3107,3 +3107,1602 @@ body.dark-mode #btnNovoCusto:hover {
   font-weight: 400;
   color: #a9a9a9;
 }
+
+
+/* ==========================================
+   PRODUTOS - PERSONALIZACAO E CORES
+   ========================================== */
+
+/* Personalizacao com nome */
+#campoPersonalizacaoProduto {
+  padding: 16px 18px;
+  border: 1px solid #d9dce3;
+  border-radius: 12px;
+  margin-top: 18px;
+  margin-bottom: 12px;
+}
+
+/* Respeita o display:none controlado pelo JavaScript */
+#campoPersonalizacaoProduto label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#campoPersonalizacaoProduto input[type="checkbox"] {
+  appearance: auto;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  padding: 0;
+  margin: 0;
+  accent-color: #2563eb;
+  cursor: pointer;
+}
+
+#campoPersonalizacaoProduto small {
+  display: block;
+  margin-top: 8px;
+  margin-left: 30px;
+  line-height: 1.5;
+}
+
+/* Cores disponiveis */
+#campoCoresProduto {
+  min-width: 0;
+}
+
+#campoCoresProduto .seletor-cores-produto {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+#campoCoresProduto #codigoCorProduto {
+  width: 58px;
+  height: 44px;
+  min-width: 58px;
+  padding: 4px;
+  margin: 0;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+#campoCoresProduto #btnAdicionarCorProduto {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 135px;
+  height: 44px;
+  padding: 0 16px;
+  margin: 0;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+#listaCoresProduto {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+#campoCoresProduto > small {
+  display: block;
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+/* Modo escuro */
+body.dark-mode #campoPersonalizacaoProduto {
+  background-color: #202329;
+  border-color: #363b44;
+}
+
+body.dark-mode #campoPersonalizacaoProduto small {
+  color: #a4acba;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+  #campoPersonalizacaoProduto {
+    padding: 14px;
+  }
+
+  #campoPersonalizacaoProduto small {
+    margin-left: 0;
+  }
+
+  #campoCoresProduto .seletor-cores-produto {
+    gap: 10px;
+  }
+}
+
+/* ==========================================
+   LOLLY - RESPONSIVIDADE MOBILE
+========================================== */
+
+@media (max-width: 700px) {
+
+  html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .admin-container,
+  .admin-layout {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Menu superior compacto */
+  .sidebar {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 10px;
+    overflow: hidden;
+    border-right: 0;
+    border-bottom: 1px solid #343539;
+  }
+
+  .sidebar .logo {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .sidebar .logo h2 {
+    font-size: 16px;
+    margin-bottom: 2px;
+  }
+
+  .sidebar .logo span {
+    font-size: 10px;
+  }
+
+  .sidebar nav ul {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+  }
+
+  .sidebar nav li {
+    flex: 0 0 auto;
+    margin: 0;
+  }
+
+  .sidebar nav a {
+    padding: 8px 10px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  /* Conteúdo ocupa toda a largura */
+  .admin-container > .conteudo,
+  .main-content {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    margin-left: 0;
+    padding: 12px 10px;
+  }
+
+  .admin-container .topo {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .admin-container .topo h1 {
+    font-size: 20px;
+  }
+
+  .topo p {
+    font-size: 12px;
+  }
+
+  .usuario {
+    padding: 8px;
+    gap: 8px;
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  .dados-usuario {
+    min-width: 0;
+  }
+
+  .dados-usuario span {
+    font-size: 12px;
+  }
+
+  .dados-usuario small {
+    font-size: 10px;
+    overflow-wrap: anywhere;
+  }
+
+  /* Filtros */
+  .barra-produtos,
+  .lista-produtos,
+  .form-produto {
+    width: 100%;
+    min-width: 0;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .barra-produtos,
+  .filtros-produtos {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .campo-filtro input,
+  .campo-filtro select,
+  .btn-novo-produto {
+    width: 100%;
+    min-width: 0;
+    height: 38px;
+    font-size: 12px;
+  }
+
+  /* Formulário */
+  .cabecalho-form {
+    margin-bottom: 12px;
+  }
+
+  .cabecalho-form h2 {
+    font-size: 18px;
+  }
+
+  .cabecalho-form p {
+    font-size: 12px;
+  }
+
+  .grid-form {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .campo-form {
+    min-width: 0;
+    gap: 5px;
+  }
+
+  .campo-form label {
+    font-size: 12px;
+  }
+
+  .campo-form input,
+  .campo-form select,
+  .campo-form textarea {
+    width: 100%;
+    min-width: 0;
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+
+  .campo-completo {
+    margin-top: 12px;
+  }
+
+  .acoes-form {
+    flex-direction: column;
+    margin-top: 14px;
+  }
+
+  .acoes-form button {
+    width: 100%;
+  }
+
+  /* Tabelas */
+  .tabela-container {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .tabela-container table {
+    min-width: 550px;
+  }
+
+  .tabela-container th,
+  .tabela-container td {
+    padding: 8px;
+    font-size: 11px;
+  }
+
+  .lista-produtos .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .variacoes-produto {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+/* ==========================================
+   LOLLY - DASHBOARD MOBILE
+========================================== */
+
+@media (max-width: 700px) {
+
+  /* Título à esquerda, usuário/sair à direita */
+  .admin-container:has(.dashboard-indicadores) .topo {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .admin-container:has(.dashboard-indicadores) .topo > div:first-child {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .admin-container:has(.dashboard-indicadores) .topo h1 {
+    font-size: 19px;
+  }
+
+  .admin-container:has(.dashboard-indicadores) .acoes-topo {
+    flex: 0 0 auto;
+  }
+
+  .admin-container:has(.dashboard-indicadores) .usuario {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+  }
+
+  .admin-container:has(.dashboard-indicadores) .dados-usuario {
+    display: none;
+  }
+
+  .admin-container:has(.dashboard-indicadores) .btn-sair {
+    padding: 7px 10px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  /* Indicadores lado a lado */
+  .dashboard-indicadores {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .dashboard-indicadores .dashboard-card {
+    min-width: 0;
+    padding: 14px 12px;
+    border-radius: 10px;
+  }
+
+  .dashboard-indicadores .dashboard-card span {
+    font-size: 12px;
+  }
+
+  .dashboard-indicadores .dashboard-card h2 {
+    font-size: 21px;
+    margin: 10px 0 6px;
+    overflow-wrap: anywhere;
+  }
+
+  .dashboard-indicadores .dashboard-card p {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  /* Filtros compactos lado a lado */
+  .filtro-loja {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .filtro-loja > div {
+    width: 100%;
+    min-width: 0;
+    flex: initial;
+  }
+
+  .filtro-loja label {
+    font-size: 12px;
+  }
+
+  .filtro-loja select {
+    width: 100%;
+    min-width: 0;
+    height: 38px;
+    padding: 0 7px;
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 701px) {
+  .cabecalho-mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .cabecalho-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .sidebar > .logo {
+    display: none;
+  }
+
+  .logo-mobile h2 {
+    font-size: 16px;
+    margin-bottom: 3px;
+  }
+
+  .logo-mobile span {
+    font-size: 10px;
+  }
+
+  .cabecalho-mobile .usuario {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px;
+  }
+
+  .cabecalho-mobile .dados-usuario {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .cabecalho-mobile .dados-usuario span {
+    font-size: 11px;
+  }
+
+  .cabecalho-mobile .dados-usuario small {
+    font-size: 9px;
+    overflow-wrap: anywhere;
+  }
+
+  .cabecalho-mobile .btn-sair {
+    font-size: 11px;
+    padding: 7px 9px;
+  }
+
+  .topo .usuario {
+    display: none !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .cabecalho-mobile .usuario {
+    display: flex !important;
+    align-items: center;
+  }
+
+  .cabecalho-mobile .dados-usuario {
+    display: flex !important;
+    flex-direction: column;
+  }
+
+  .cabecalho-mobile .dados-usuario small {
+    display: block;
+    font-size: 9px;
+    overflow-wrap: anywhere;
+  }
+
+  .topo .usuario {
+    display: none !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .cabecalho-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .cabecalho-mobile .logo-mobile {
+    flex: 0 0 auto;
+    text-align: left;
+  }
+
+  .cabecalho-mobile .usuario {
+    display: flex !important;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    padding: 5px;
+  }
+
+  .cabecalho-mobile .dados-usuario {
+    display: flex !important;
+    flex-direction: column;
+    min-width: 0;
+    text-align: right;
+  }
+
+  .cabecalho-mobile .dados-usuario span {
+    font-size: 11px;
+  }
+
+  .cabecalho-mobile .dados-usuario small {
+    display: block !important;
+    font-size: 9px;
+    overflow-wrap: anywhere;
+  }
+
+  .cabecalho-mobile .btn-sair {
+    flex-shrink: 0;
+    padding: 7px 9px;
+    font-size: 11px;
+  }
+}
+
+/* ==========================================
+   DASHBOARD - CARDS COMPACTOS NO CELULAR
+========================================== */
+
+@media (max-width: 700px) {
+
+  /* RESULTADOS POR LOJA */
+
+  .dashboard-resumo-lojas {
+    padding: 12px;
+    margin-bottom: 14px;
+  }
+
+  .dashboard-resumo-lojas .titulo-secao {
+    margin-bottom: 14px;
+  }
+
+  .dashboard-resumo-lojas .titulo-secao h2 {
+    font-size: 17px;
+  }
+
+  .dashboard-resumo-lojas .titulo-secao p {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .dashboard-resumo-lojas .cards-lojas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .dashboard-resumo-lojas .card-loja {
+    min-width: 0;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .dashboard-resumo-lojas .card-loja h3 {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .dashboard-metrica {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 8px 0;
+  }
+
+  .dashboard-metrica span {
+    font-size: 11px;
+  }
+
+  .dashboard-metrica strong {
+    font-size: 13px;
+    text-align: left;
+  }
+
+  /* ALERTAS DE ESTOQUE */
+
+  .dashboard-alertas {
+    padding: 12px;
+    margin-top: 0;
+    margin-bottom: 14px;
+  }
+
+  .dashboard-alertas .titulo-secao {
+    margin-bottom: 14px;
+  }
+
+  .dashboard-alertas .titulo-secao h2 {
+    font-size: 17px;
+  }
+
+  .dashboard-alertas .titulo-secao p {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .dashboard-alertas-resumo {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .dashboard-alertas-resumo > div {
+    min-width: 0;
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .dashboard-alertas-resumo span {
+    font-size: 11px;
+    line-height: 1.3;
+    margin-bottom: 6px;
+  }
+
+  .dashboard-alertas-resumo strong {
+    font-size: 20px;
+  }
+
+  /* TABELA DE ALERTAS */
+
+  .dashboard-alertas .tabela-container {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .dashboard-alertas table th,
+  .dashboard-alertas table td {
+    padding: 8px 6px;
+    font-size: 10px;
+  }
+}
+
+/* ==========================================
+   LOLLY - FINANCEIRO MOBILE
+========================================== */
+
+@media (max-width: 700px) {
+
+  /* Apenas os cards do resumo financeiro */
+  .lista-produtos:has(#faturamentoFinanceiro) {
+    padding: 12px;
+    margin-bottom: 14px;
+  }
+
+  .lista-produtos:has(#faturamentoFinanceiro) .titulo-secao {
+    margin-bottom: 14px;
+  }
+
+  .lista-produtos:has(#faturamentoFinanceiro) .titulo-secao h2 {
+    font-size: 17px;
+  }
+
+  .lista-produtos:has(#faturamentoFinanceiro) .cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 0;
+  }
+
+  .lista-produtos:has(#faturamentoFinanceiro) .card {
+    min-width: 0;
+    padding: 12px;
+    border-radius: 10px;
+  }
+
+  .lista-produtos:has(#faturamentoFinanceiro) .card h3 {
+    font-size: 12px;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .lista-produtos:has(#faturamentoFinanceiro) .card p {
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* ==========================================
+   LOLLY - CUSTOS MOBILE
+========================================== */
+
+@media (max-width: 700px) {
+
+  /* Seções da página Custos */
+  body:has(#btnNovoCusto) .lista-produtos {
+    padding: 12px;
+    margin-bottom: 14px;
+    border-radius: 12px;
+  }
+
+  /* Títulos e descrições */
+  body:has(#btnNovoCusto) .barra-produtos {
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  body:has(#btnNovoCusto) .barra-produtos h2 {
+    font-size: 18px;
+    line-height: 1.2;
+  }
+
+  body:has(#btnNovoCusto) .barra-produtos p {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  /* Botão Novo custo */
+  #btnNovoCusto {
+    padding: 10px 14px;
+    font-size: 13px;
+    min-height: 40px;
+  }
+
+  /* Filtros */
+  body:has(#btnNovoCusto) .filtros-produtos {
+    gap: 10px;
+  }
+
+  body:has(#btnNovoCusto) .campo-filtro {
+    gap: 5px;
+  }
+
+  body:has(#btnNovoCusto) .campo-filtro label {
+    font-size: 12px;
+  }
+
+  body:has(#btnNovoCusto) .campo-filtro select,
+  body:has(#btnNovoCusto) .campo-filtro input {
+    min-height: 40px;
+    padding: 9px 12px;
+    font-size: 12px;
+  }
+
+  /* Resumo de custos: dois cards lado a lado */
+  body:has(#btnNovoCusto) .lista-produtos:has(#totalCustos) .cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  body:has(#btnNovoCusto) .lista-produtos:has(#totalCustos) .card {
+    min-width: 0;
+    padding: 12px;
+    border-radius: 9px;
+  }
+
+  body:has(#btnNovoCusto) .lista-produtos:has(#totalCustos) .card h3 {
+    font-size: 12px;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  body:has(#btnNovoCusto) .lista-produtos:has(#totalCustos) .card p {
+    font-size: 19px;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+
+  /* Formulário de novo custo */
+  #formularioCusto {
+    padding: 12px;
+  }
+
+  #formularioCusto .form-grid {
+    gap: 12px;
+  }
+
+  #formularioCusto .campo-form {
+    min-width: 0;
+    gap: 5px;
+  }
+
+  #formularioCusto .campo-form label {
+    font-size: 12px;
+  }
+
+  #formularioCusto input,
+  #formularioCusto select,
+  #formularioCusto textarea {
+    width: 100%;
+    min-height: 40px;
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+
+  #formularioCusto textarea {
+    min-height: 65px;
+  }
+
+  #fecharFormularioCusto,
+  #formularioCusto .acoes-form button {
+    padding: 10px 12px;
+    font-size: 13px;
+    min-height: 40px;
+  }
+
+  #formularioCusto .acoes-form {
+    gap: 8px;
+  }
+
+  /* Histórico de custos */
+  body:has(#btnNovoCusto) .tabela-container {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  body:has(#btnNovoCusto) .tabela-container th,
+  body:has(#btnNovoCusto) .tabela-container td {
+    padding: 8px;
+    font-size: 11px;
+  }
+}
+
+/* CONTROLE DE CUSTOS - DESKTOP E MOBILE */
+
+.lista-produtos:has(#btnNovoCusto) .barra-produtos {
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.lista-produtos:has(#btnNovoCusto) .barra-produtos h2 {
+  margin: 0;
+  line-height: 1.2;
+}
+
+.lista-produtos:has(#btnNovoCusto) .barra-produtos p {
+  margin: 3px 0 0;
+  line-height: 1.3;
+}
+
+/* Ajuste adicional para celular */
+
+@media (max-width: 700px) {
+  .lista-produtos:has(#btnNovoCusto) .barra-produtos {
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    gap: 8px;
+  }
+}
+
+/* NOVO CUSTO - CABEÇALHO COMPACTO */
+
+#formularioCusto .barra-produtos {
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  gap: 8px;
+}
+
+#formularioCusto .barra-produtos h2 {
+  margin: 0;
+  line-height: 1.2;
+}
+
+#formularioCusto .barra-produtos p {
+  margin: 3px 0 0;
+  line-height: 1.3;
+}
+
+@media (max-width: 700px) {
+  #formularioCusto .barra-produtos {
+    padding: 10px 12px;
+    margin-bottom: 12px;
+  }
+}
+
+/* ==========================================
+   LOLLY - PRODUTOS MOBILE
+========================================== */
+
+@media (max-width: 700px) {
+
+  /* PRODUTOS CADASTRADOS */
+
+  body:has(#tabelaProdutos) .lista-produtos {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  body:has(#tabelaProdutos) .titulo-secao {
+    margin-bottom: 12px;
+  }
+
+  body:has(#tabelaProdutos) .titulo-secao h2 {
+    font-size: 18px;
+    line-height: 1.3;
+  }
+
+  /* CATEGORIAS */
+
+  .gerenciar-categorias {
+    padding: 12px;
+    margin-top: 14px;
+    border-radius: 12px;
+  }
+
+  .cabecalho-categorias {
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .cabecalho-categorias h2 {
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  .cabecalho-categorias p {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  #btnNovaCategoria {
+    width: 100%;
+    min-height: 40px;
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+
+  /* TABELAS DE PRODUTOS E CATEGORIAS */
+
+  body:has(#tabelaProdutos) .tabela-container {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body:has(#tabelaProdutos) .tabela-container table {
+    width: max-content;
+    min-width: 100%;
+  }
+
+  body:has(#tabelaProdutos) .tabela-container th,
+  body:has(#tabelaProdutos) .tabela-container td {
+    padding: 8px 6px;
+    font-size: 11px;
+    vertical-align: middle;
+  }
+
+  /* BOTÕES EDITAR E EXCLUIR */
+
+  body:has(#tabelaProdutos) .tabela-container .btn-editar,
+  body:has(#tabelaProdutos) .tabela-container .btn-excluir {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 0;
+    min-height: 34px;
+    padding: 7px 9px;
+    margin: 2px;
+    font-size: 11px;
+    line-height: 1.2;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  /* Espaço suficiente para os dois botões */
+  body:has(#tabelaProdutos) .tabela-container td:last-child {
+    min-width: 132px;
+    white-space: nowrap;
+  }
+
+  /* FORMULÁRIO DE CATEGORIAS */
+
+  .form-categoria-produto {
+    padding: 12px;
+    margin-bottom: 14px;
+  }
+
+  .form-categoria-produto .grid-form {
+    gap: 10px;
+  }
+
+  .form-categoria-produto .campo-form label {
+    font-size: 12px;
+  }
+
+  .form-categoria-produto input,
+  .form-categoria-produto select {
+    min-height: 40px;
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+}
+
+
+/* ==========================================
+   LOLLY - ESTOQUE MOBILE
+========================================== */
+
+@media (max-width: 700px) {
+
+  /* Caixas da página Estoque */
+  body:has(#tabelaEstoque) section.card {
+    min-width: 0;
+    padding: 12px;
+    margin-bottom: 14px;
+    border-radius: 12px;
+  }
+
+  /* Cabeçalhos */
+  body:has(#tabelaEstoque) .card-header {
+    margin-bottom: 12px;
+    padding: 0;
+  }
+
+  body:has(#tabelaEstoque) .card-header h2 {
+    font-size: 18px;
+    line-height: 1.3;
+    margin: 0;
+  }
+
+  body:has(#tabelaEstoque) .card-header p {
+    font-size: 12px;
+    line-height: 1.4;
+    margin-top: 4px;
+  }
+
+  /* Rolagem horizontal das tabelas */
+  body:has(#tabelaEstoque) .table-container {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Impede que as colunas fiquem espremidas */
+  body:has(#tabelaEstoque) .table-container table {
+    width: max-content;
+    min-width: 100%;
+    table-layout: auto;
+  }
+
+  /* Células compactas */
+  body:has(#tabelaEstoque) .table-container th,
+  body:has(#tabelaEstoque) .table-container td {
+    padding: 10px 12px;
+    font-size: 12px;
+    line-height: 1.35;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  /* Produtos em estoque */
+  body:has(#tabelaEstoque) .table-container:has(#tabelaEstoque) table {
+    min-width: 570px;
+  }
+
+  /* Histórico de movimentações */
+  body:has(#tabelaEstoque) .table-container:has(#tabelaHistoricoEstoque) table {
+    min-width: 760px;
+  }
+
+  /* Botão Movimentar */
+  body:has(#tabelaEstoque) #tabelaEstoque button {
+    width: auto;
+    min-width: 0;
+    min-height: 34px;
+    padding: 7px 10px;
+    font-size: 11px;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  /* Formulário de movimentação */
+  body:has(#tabelaEstoque) #formMovimentacao .form-grid {
+    gap: 10px;
+  }
+
+  body:has(#tabelaEstoque) #formMovimentacao label {
+    font-size: 12px;
+  }
+
+  body:has(#tabelaEstoque) #formMovimentacao input,
+  body:has(#tabelaEstoque) #formMovimentacao select {
+    min-height: 40px;
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+
+  body:has(#tabelaEstoque) #formMovimentacao .form-actions button {
+    min-height: 40px;
+    padding: 9px 12px;
+    font-size: 12px;
+  }
+}
+
+/* ==========================================
+   LOLLY - PEDIDOS MOBILE
+========================================== */
+
+@media (max-width: 700px) {
+
+  /* Barra de filtros */
+  .barra-produtos:has(#btnNovoPedido) {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 14px;
+    border-radius: 12px;
+  }
+
+  /* Filtros ocupando toda a largura */
+  .barra-produtos:has(#btnNovoPedido) .filtros-produtos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .barra-produtos:has(#btnNovoPedido) .campo-filtro {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+  }
+
+  /* Campo Buscar ocupa a linha inteira */
+  .barra-produtos:has(#btnNovoPedido) .campo-filtro:has(#buscarPedido) {
+    grid-column: 1 / -1;
+  }
+
+  .barra-produtos:has(#btnNovoPedido) .campo-filtro label {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
+
+  .barra-produtos:has(#btnNovoPedido) select,
+  .barra-produtos:has(#btnNovoPedido) input {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 40px;
+    padding: 9px 10px;
+    font-size: 12px;
+    box-sizing: border-box;
+  }
+
+  /* Botão Novo pedido */
+  #btnNovoPedido {
+    width: 100%;
+    min-height: 40px;
+    padding: 10px 12px;
+    font-size: 13px;
+    margin: 0;
+  }
+
+  /* Tabela de pedidos */
+  body:has(#btnNovoPedido) .tabela-container {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body:has(#btnNovoPedido) .tabela-container table {
+    width: max-content;
+    min-width: 100%;
+    table-layout: auto;
+  }
+
+  body:has(#btnNovoPedido) .tabela-container th,
+  body:has(#btnNovoPedido) .tabela-container td {
+    padding: 9px 10px;
+    font-size: 11px;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  /* Formulário de novo pedido */
+  #formNovoPedido {
+    padding: 12px;
+    margin-bottom: 14px;
+  }
+
+  #formNovoPedido .cabecalho-form h2 {
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  #formNovoPedido .cabecalho-form p {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  #formNovoPedido .grid-form {
+    gap: 10px;
+  }
+
+  #formNovoPedido .campo-form {
+    min-width: 0;
+  }
+
+  #formNovoPedido .campo-form label {
+    font-size: 12px;
+  }
+
+  #formNovoPedido .campo-form input,
+  #formNovoPedido .campo-form select,
+  #formNovoPedido .campo-form textarea {
+    width: 100%;
+    min-height: 40px;
+    padding: 9px 12px;
+    font-size: 13px;
+    box-sizing: border-box;
+  }
+}
+
+/* ==========================================
+   LOLLY - APARÊNCIA MOBILE
+========================================== */
+
+@media (max-width: 700px) {
+
+  /* SEÇÕES GERAIS */
+
+  body:has(#lojaAparencia) .lista-produtos {
+    padding: 12px;
+    margin-bottom: 14px;
+    border-radius: 12px;
+    min-width: 0;
+  }
+
+  body:has(#lojaAparencia) .titulo-secao {
+    margin-bottom: 14px;
+  }
+
+  body:has(#lojaAparencia) .titulo-secao h2 {
+    font-size: 18px;
+    line-height: 1.25;
+    margin-bottom: 4px;
+  }
+
+  body:has(#lojaAparencia) .titulo-secao p {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  /* SELEÇÃO DE TEMA */
+
+  body:has(#lojaAparencia) .opcoes-tema {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  body:has(#lojaAparencia) .opcao-tema {
+    min-width: 0;
+    padding: 8px;
+    border-radius: 10px;
+  }
+
+  body:has(#lojaAparencia) .preview-tema {
+    width: 100%;
+    height: 105px;
+    min-height: 0;
+    padding: 7px;
+    border-radius: 7px;
+    gap: 6px;
+    box-sizing: border-box;
+  }
+
+  body:has(#lojaAparencia) .preview-sidebar {
+    min-width: 0;
+  }
+
+  body:has(#lojaAparencia) .preview-conteudo {
+    min-width: 0;
+  }
+
+  body:has(#lojaAparencia) .opcao-tema-rodape {
+    margin-top: 8px;
+    gap: 5px;
+    font-size: 11px;
+  }
+
+  body:has(#lojaAparencia) .tema-check {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+  }
+
+  /* SELECIONAR LOJA */
+
+  body:has(#lojaAparencia) .barra-produtos {
+    padding: 12px;
+    margin-bottom: 14px;
+    border-radius: 12px;
+  }
+
+  body:has(#lojaAparencia) .campo-filtro {
+    width: 100%;
+    min-width: 0;
+  }
+
+  #lojaAparencia {
+    width: 100%;
+    min-height: 40px;
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+
+  /* PERSONALIZAÇÃO VISUAL */
+
+  #formAparencia {
+    min-width: 0;
+  }
+
+  #formAparencia .campo-form {
+    margin-bottom: 12px;
+  }
+
+  #formAparencia .campo-form label {
+    font-size: 12px;
+  }
+
+  #formAparencia .opcoes-banner {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  #formAparencia input,
+  #formAparencia select {
+    max-width: 100%;
+    font-size: 13px;
+  }
+
+  /* PRÉVIA DO BANNER */
+
+  #previewBanner {
+    display: block;
+    max-width: 100%;
+    max-height: 160px;
+    height: auto;
+    object-fit: contain;
+  }
+
+  #campoImagemBanner,
+  #campoCorBanner {
+    min-width: 0;
+  }
+
+  #corFundoBanner {
+    width: 100%;
+    height: 40px;
+    padding: 5px;
+  }
+
+  /* BOTÃO SALVAR */
+
+  #formAparencia .acoes-form {
+    margin-top: 12px;
+  }
+
+  #formAparencia .btn-salvar,
+  #salvarNovidades {
+    width: 100%;
+    min-height: 40px;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  /* PRODUTOS EM NOVIDADES */
+
+  .secao-novidades .campo-form {
+    margin-bottom: 12px;
+  }
+
+  .secao-novidades .campo-form label {
+    font-size: 12px;
+  }
+
+  #listaProdutosNovidades {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  #listaProdutosNovidades > * {
+    min-width: 0;
+  }
+
+  .secao-novidades .acoes-form {
+    margin-top: 12px;
+  }
+}/* =========================================
+   LOLLY ADMIN — PADRONIZAÇÃO AZUL
+   ========================================= */
+
+:root {
+    --admin-primary: #2563eb;
+    --admin-primary-hover: #1d4ed8;
+    --admin-primary-soft: #eff6ff;
+}
+
+body.dark-mode {
+    --admin-primary: #3b82f6;
+    --admin-primary-hover: #2563eb;
+    --admin-primary-soft: #172554;
+}
+
+/* MENU LATERAL */
+
+.sidebar nav a.ativo,
+.sidebar-menu a.active,
+body.dark-mode .sidebar nav a.ativo,
+body.dark-mode .sidebar-menu a.active {
+    background: var(--admin-primary) !important;
+    color: #ffffff !important;
+}
+
+/* BOTÃO SAIR */
+
+.btn-sair,
+body.dark-mode .btn-sair {
+    background: transparent !important;
+    border: 1px solid var(--admin-primary) !important;
+    color: var(--admin-primary) !important;
+}
+
+.btn-sair:hover,
+body.dark-mode .btn-sair:hover {
+    background: var(--admin-primary-soft) !important;
+}
+
+/* BOTÕES PRINCIPAIS */
+
+.btn-novo-produto,
+.btn-salvar,
+.btn-entrar,
+.btn-novo-custo,
+.btn-reintegrar-estoque,
+#btnNovoCusto,
+#btnAdicionarCorProduto,
+#salvarNovidades,
+body.dark-mode .btn-novo-produto,
+body.dark-mode .btn-salvar,
+body.dark-mode .btn-entrar,
+body.dark-mode .btn-novo-custo,
+body.dark-mode .btn-reintegrar-estoque,
+body.dark-mode #btnNovoCusto,
+body.dark-mode #btnAdicionarCorProduto,
+body.dark-mode #salvarNovidades,
+body.dark-mode #movimentacaoEstoque .form-actions button[type="submit"] {
+    background: var(--admin-primary) !important;
+    border-color: var(--admin-primary) !important;
+    color: #ffffff !important;
+}
+
+.btn-novo-produto:hover,
+.btn-salvar:hover,
+.btn-entrar:hover,
+.btn-novo-custo:hover,
+.btn-reintegrar-estoque:hover,
+#btnNovoCusto:hover,
+#btnAdicionarCorProduto:hover,
+#salvarNovidades:hover {
+    background: var(--admin-primary-hover) !important;
+    border-color: var(--admin-primary-hover) !important;
+}
+
+/* CHECKBOXES E RADIOS */
+
+input[type="checkbox"],
+input[type="radio"],
+#formAparencia .opcoes-banner input[type="radio"],
+.secao-novidades .produto-novidade-item input[type="checkbox"] {
+    accent-color: var(--admin-primary) !important;
+}
+
+/* CARDS DE NOVIDADES — MODO CLARO */
+
+body:not(.dark-mode) .secao-novidades .produto-novidade-item {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    color: #111827 !important;
+}
+
+body:not(.dark-mode) .secao-novidades .produto-novidade-item:hover {
+    background: #f8fafc !important;
+    border-color: #93c5fd !important;
+}
+
+body:not(.dark-mode) .secao-novidades .produto-novidade-item:has(input:checked) {
+    background: #eff6ff !important;
+    border-color: #2563eb !important;
+}
+
+body:not(.dark-mode) .secao-novidades .produto-novidade-nome {
+    color: #111827 !important;
+}
+
+body:not(.dark-mode) .secao-novidades .produto-novidade-loja,
+body:not(.dark-mode) .secao-novidades .contador-novidades {
+    color: #64748b !important;
+}
+
+/* CARDS DE NOVIDADES — MODO ESCURO */
+
+body.dark-mode .secao-novidades .produto-novidade-item {
+    background: #242424 !important;
+    border-color: #383838 !important;
+    color: #f5f5f5 !important;
+}
+
+body.dark-mode .secao-novidades .produto-novidade-item:hover {
+    background: #2d2d2d !important;
+    border-color: #60a5fa !important;
+}
+
+body.dark-mode .secao-novidades .produto-novidade-item:has(input:checked) {
+    background: #172554 !important;
+    border-color: #3b82f6 !important;
+}
+
+body.dark-mode .secao-novidades .produto-novidade-nome {
+    color: #f5f5f5 !important;
+}
+
+body.dark-mode .secao-novidades .produto-novidade-loja,
+body.dark-mode .secao-novidades .contador-novidades {
+    color: #a9a9a9 !important;
+}
+
+/* PREÇOS DAS NOVIDADES */
+
+.secao-novidades .produto-novidade-preco {
+    color: var(--admin-primary) !important;
+}
+
+/* FOCO NOS CAMPOS */
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--admin-primary);
+}
+
+/* PRESERVAR BOTÕES DESABILITADOS */
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}

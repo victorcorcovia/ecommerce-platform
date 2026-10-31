@@ -88,10 +88,7 @@ match /controleImagensProdutos/{imagemId} {
     match /produtos/{produtoId} {
 
       // Cadastro de novos produtos.
-      allow create: if
-        temAcessoLoja(request.resource.data.loja)
-        && request.resource.data.estoque is int
-        && request.resource.data.estoque >= 0;
+      allow create: if false;
 
       // Consulta de produtos por loja.
       allow read: if

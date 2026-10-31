@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 const { setGlobalOptions } = require("firebase-functions/v2");
 const { onCall, HttpsError } = require("firebase-functions/v2/https");
@@ -19,7 +19,7 @@ function obterIdControleImagem(publicId) {
   if (typeof publicId !== "string" || !publicId.trim()) {
     throw new HttpsError(
       "invalid-argument",
-      "Identificador da imagem inválido.",
+      "Identificador da imagem invÃ¡lido.",
     );
   }
 
@@ -46,7 +46,7 @@ function verificarControleImagemDisponivel(documento, publicId) {
   if (controle.publicId !== publicId || controle.status !== "ativa") {
     throw new HttpsError(
       "failed-precondition",
-      "Esta imagem está bloqueada ou reservada para exclusão.",
+      "Esta imagem estÃ¡ bloqueada ou reservada para exclusÃ£o.",
     );
   }
 }
@@ -66,7 +66,7 @@ const db = getFirestore();
 const cloudinaryApiSecret = defineSecret("CLOUDINARY_API_SECRET");
 
 // ==========================================
-// CONFIGURAÇÕES GERAIS
+// CONFIGURAÃ‡Ã•ES GERAIS
 // ==========================================
 
 setGlobalOptions({
@@ -76,7 +76,7 @@ setGlobalOptions({
 });
 
 // ==========================================
-// CONFIGURAÇÕES DAS LOJAS
+// CONFIGURAÃ‡Ã•ES DAS LOJAS
 // ==========================================
 
 const PASTAS_PRODUTOS = Object.freeze({
@@ -89,18 +89,18 @@ const PASTAS_BANNERS = Object.freeze({
   "3d": "Lojas-Lolly/Decor3D/banners",
 });
 // ==========================================
-// FUNÇÃO AUXILIAR: VALIDAR ADMINISTRADOR
+// FUNÃ‡ÃƒO AUXILIAR: VALIDAR ADMINISTRADOR
 // ==========================================
 
 async function validarAdministrador(request, loja) {
   if (!request.auth) {
-    throw new HttpsError("unauthenticated", "Você precisa estar autenticado.");
+    throw new HttpsError("unauthenticated", "VocÃª precisa estar autenticado.");
   }
 
   if (typeof loja !== "string" || !Object.hasOwn(PASTAS_PRODUTOS, loja)) {
     throw new HttpsError(
       "invalid-argument",
-      "Loja inválida. Utilize closet ou 3d.",
+      "Loja invÃ¡lida. Utilize closet ou 3d.",
     );
   }
 
@@ -109,22 +109,25 @@ async function validarAdministrador(request, loja) {
   try {
     usuarioDoc = await db.collection("usuarios").doc(request.auth.uid).get();
   } catch (erro) {
-    console.error("Erro ao consultar usuário:", erro);
+    console.error("Erro ao consultar usuÃ¡rio:", erro);
 
-    throw new HttpsError("internal", "Não foi possível validar as permissões.");
+    throw new HttpsError(
+      "internal",
+      "NÃ£o foi possÃ­vel validar as permissÃµes.",
+    );
   }
 
   if (!usuarioDoc.exists) {
     throw new HttpsError(
       "permission-denied",
-      "Usuário não cadastrado no sistema.",
+      "UsuÃ¡rio nÃ£o cadastrado no sistema.",
     );
   }
 
   const usuario = usuarioDoc.data();
 
   if (usuario.ativo !== true) {
-    throw new HttpsError("permission-denied", "Usuário desativado.");
+    throw new HttpsError("permission-denied", "UsuÃ¡rio desativado.");
   }
 
   if (usuario.funcao !== "administrador") {
@@ -137,24 +140,27 @@ async function validarAdministrador(request, loja) {
   if (usuario.lojas?.[loja] !== true) {
     throw new HttpsError(
       "permission-denied",
-      "Você não possui acesso a esta loja.",
+      "VocÃª nÃ£o possui acesso a esta loja.",
     );
   }
 }
 
 // ==========================================
-// FUNÇÃO AUXILIAR: CONFIGURAR CLOUDINARY
+// FUNÃ‡ÃƒO AUXILIAR: CONFIGURAR CLOUDINARY
 // ==========================================
 
 function configurarCloudinary() {
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
   const apiKey = process.env.CLOUDINARY_API_KEY;
-  const apiSecret = cloudinaryApiSecret.value();
+  const apiSecret =
+    process.env.FUNCTIONS_EMULATOR === "true"
+      ? process.env.CLOUDINARY_API_SECRET
+      : cloudinaryApiSecret.value();
 
   if (!cloudName || !apiKey || !apiSecret) {
-    console.error("Configuração do Cloudinary incompleta.");
+    console.error("ConfiguraÃ§Ã£o do Cloudinary incompleta.");
 
-    throw new HttpsError("internal", "Serviço de imagens indisponível.");
+    throw new HttpsError("internal", "ServiÃ§o de imagens indisponÃ­vel.");
   }
 
   cloudinary.config({
@@ -168,7 +174,7 @@ function configurarCloudinary() {
 }
 
 // ==========================================
-// FUNÇÃO: AUTORIZAR UPLOAD DE PRODUTO
+// FUNÃ‡ÃƒO: AUTORIZAR UPLOAD DE PRODUTO
 // ==========================================
 
 exports.autorizarUploadProduto = onCall(
@@ -180,7 +186,7 @@ exports.autorizarUploadProduto = onCall(
   async (request) => {
     const loja = request.data?.loja;
 
-    // 1. Validar usuário e loja
+    // 1. Validar usuÃ¡rio e loja
     await validarAdministrador(request, loja);
 
     // 2. Configurar Cloudinary
@@ -205,7 +211,7 @@ exports.autorizarUploadProduto = onCall(
       apiSecret,
     );
 
-    // 5. Retornar autorização
+    // 5. Retornar autorizaÃ§Ã£o
     return {
       autorizado: true,
       cloudName,
@@ -232,13 +238,13 @@ exports.autorizarUploadBanner = onCall(
   async (request) => {
     const loja = request.data?.loja;
 
-    // Validar administrador e acesso à loja
+    // Validar administrador e acesso Ã  loja
     await validarAdministrador(request, loja);
 
     // Configurar Cloudinary
     const { cloudName, apiKey, apiSecret } = configurarCloudinary();
 
-    // Pasta específica dos banners
+    // Pasta especÃ­fica dos banners
     const pastaDestino = PASTAS_BANNERS[loja];
 
     const timestamp = Math.floor(Date.now() / 1000);
@@ -270,7 +276,7 @@ exports.autorizarUploadBanner = onCall(
 );
 
 // ==========================================
-// SALVAR BANNER COM HISTÓRICO
+// SALVAR BANNER COM HISTÃ“RICO
 // ==========================================
 
 exports.salvarBannerLoja = onCall(
@@ -285,14 +291,14 @@ exports.salvarBannerLoja = onCall(
     await validarAdministrador(request, loja);
 
     if (!["imagem", "cor"].includes(tipo)) {
-      throw new HttpsError("invalid-argument", "Tipo de banner inválido.");
+      throw new HttpsError("invalid-argument", "Tipo de banner invÃ¡lido.");
     }
 
     let novoBanner;
 
     if (tipo === "cor") {
       if (typeof cor !== "string" || !/^#[0-9a-fA-F]{6}$/.test(cor)) {
-        throw new HttpsError("invalid-argument", "Cor inválida.");
+        throw new HttpsError("invalid-argument", "Cor invÃ¡lida.");
       }
 
       novoBanner = { tipo: "cor", cor: cor.toLowerCase() };
@@ -303,7 +309,7 @@ exports.salvarBannerLoja = onCall(
         typeof imagem.publicId !== "string" ||
         !imagem.publicId.startsWith(PASTAS_BANNERS[loja] + "/")
       ) {
-        throw new HttpsError("invalid-argument", "Imagem inválida.");
+        throw new HttpsError("invalid-argument", "Imagem invÃ¡lida.");
       }
 
       const { cloudName } = configurarCloudinary();
@@ -318,7 +324,7 @@ exports.salvarBannerLoja = onCall(
         console.error("Erro ao verificar banner:", erro);
         throw new HttpsError(
           "failed-precondition",
-          "Não foi possível verificar a imagem no Cloudinary.",
+          "NÃ£o foi possÃ­vel verificar a imagem no Cloudinary.",
         );
       }
 
@@ -329,7 +335,30 @@ exports.salvarBannerLoja = onCall(
           `https://res.cloudinary.com/${cloudName}/image/upload/`,
         )
       ) {
-        throw new HttpsError("invalid-argument", "Imagem não autorizada.");
+        throw new HttpsError("invalid-argument", "Imagem nÃ£o autorizada.");
+      }
+
+      // Validar tamanho real da imagem no Cloudinary
+      const TAMANHO_MAXIMO_BANNER = 5 * 1024 * 1024;
+
+      if (
+        !Number.isFinite(recurso.bytes) ||
+        recurso.bytes > TAMANHO_MAXIMO_BANNER
+      ) {
+        throw new HttpsError(
+          "invalid-argument",
+          "A imagem deve ter no máximo 5 MB.",
+        );
+      }
+
+      // Validar formato real da imagem
+      const formatosPermitidos = ["jpg", "png", "webp"];
+
+      if (!formatosPermitidos.includes(recurso.format)) {
+        throw new HttpsError(
+          "invalid-argument",
+          "Formato de imagem não permitido.",
+        );
       }
 
       novoBanner = {
@@ -382,7 +411,7 @@ exports.salvarBannerLoja = onCall(
 );
 
 // ==========================================
-// FUNÇÃO: EXCLUIR IMAGEM DE PRODUTO
+// FUNÃ‡ÃƒO: EXCLUIR IMAGEM DE PRODUTO
 // BLOQUEADA TEMPORARIAMENTE
 // ==========================================
 
@@ -397,14 +426,14 @@ exports.excluirImagemProduto = onCall(
 
     throw new HttpsError(
       "failed-precondition",
-      "Exclusão direta desativada. Utilize o processo seguro de exclusão.",
+      "ExclusÃ£o direta desativada. Utilize o processo seguro de exclusÃ£o.",
     );
   },
 );
 
 // ==========================================
-// FUNÇÃO AUXILIAR:
-// REGISTRAR EXCLUSÃO PENDENTE
+// FUNÃ‡ÃƒO AUXILIAR:
+// REGISTRAR EXCLUSÃƒO PENDENTE
 // ==========================================
 
 function registrarExclusaoPendente(transacao, { loja, produtoId, publicId }) {
@@ -423,7 +452,7 @@ function registrarExclusaoPendente(transacao, { loja, produtoId, publicId }) {
 }
 
 // ==========================================
-// FUNÇÃO: ATUALIZAR PRODUTO E IMAGENS
+// FUNÃ‡ÃƒO: ATUALIZAR PRODUTO E IMAGENS
 // ==========================================
 
 exports.atualizarImagensProduto = onCall(
@@ -453,13 +482,18 @@ exports.atualizarImagensProduto = onCall(
     ) {
       throw new HttpsError(
         "invalid-argument",
-        "Os dados do produto são inválidos.",
+        "Os dados do produto sÃ£o invÃ¡lidos.",
       );
     }
 
     const { nome, categoriaId, preco, status, descricao } = dadosProduto;
     const cores = validarCoresProduto(dadosProduto.cores);
     const tamanhos = validarTamanhosProduto(dadosProduto.tamanhos);
+
+    const permitePersonalizacao = validarPersonalizacaoProduto(
+      dadosProduto.permitePersonalizacao,
+      loja,
+    );
 
     if (
       typeof nome !== "string" ||
@@ -491,7 +525,7 @@ exports.atualizarImagensProduto = onCall(
     ) {
       throw new HttpsError(
         "invalid-argument",
-        "Identificador do produto inválido.",
+        "Identificador do produto invÃ¡lido.",
       );
     }
 
@@ -500,7 +534,7 @@ exports.atualizarImagensProduto = onCall(
     // --------------------------------------
 
     if (!Array.isArray(imagens) || imagens.length > 30) {
-      throw new HttpsError("invalid-argument", "Lista de imagens inválida.");
+      throw new HttpsError("invalid-argument", "Lista de imagens invÃ¡lida.");
     }
 
     const { cloudName } = configurarCloudinary();
@@ -520,7 +554,7 @@ exports.atualizarImagensProduto = onCall(
       ) {
         throw new HttpsError(
           "invalid-argument",
-          "Uma das imagens é inválida ou está duplicada.",
+          "Uma das imagens Ã© invÃ¡lida ou estÃ¡ duplicada.",
         );
       }
 
@@ -542,7 +576,7 @@ exports.atualizarImagensProduto = onCall(
         if (erro.http_code === 404) {
           throw new HttpsError(
             "invalid-argument",
-            "Uma das imagens informadas não existe no Cloudinary.",
+            "Uma das imagens informadas nÃ£o existe no Cloudinary.",
           );
         }
 
@@ -550,7 +584,7 @@ exports.atualizarImagensProduto = onCall(
 
         throw new HttpsError(
           "internal",
-          "Não foi possível verificar as imagens no Cloudinary.",
+          "NÃ£o foi possÃ­vel verificar as imagens no Cloudinary.",
         );
       }
 
@@ -560,7 +594,7 @@ exports.atualizarImagensProduto = onCall(
       ) {
         throw new HttpsError(
           "invalid-argument",
-          "Os dados de uma imagem não correspondem ao arquivo no Cloudinary.",
+          "Os dados de uma imagem nÃ£o correspondem ao arquivo no Cloudinary.",
         );
       }
 
@@ -571,13 +605,13 @@ exports.atualizarImagensProduto = onCall(
       ) {
         throw new HttpsError(
           "invalid-argument",
-          "Uma das imagens pertence a uma conta inválida.",
+          "Uma das imagens pertence a uma conta invÃ¡lida.",
         );
       }
     }
 
     // --------------------------------------
-    // 6. Preparar referências Firestore
+    // 6. Preparar referÃªncias Firestore
     // --------------------------------------
 
     const referenciaProduto = db.collection("produtos").doc(produtoId);
@@ -587,7 +621,7 @@ exports.atualizarImagensProduto = onCall(
       .doc(categoriaId.trim());
 
     // --------------------------------------
-    // 7. Atualizar produto em transação
+    // 7. Atualizar produto em transaÃ§Ã£o
     // --------------------------------------
 
     const resultado = await db.runTransaction(async (transacao) => {
@@ -598,19 +632,19 @@ exports.atualizarImagensProduto = onCall(
       if (!documentoCategoria.exists) {
         throw new HttpsError(
           "failed-precondition",
-          "A categoria selecionada não existe.",
+          "A categoria selecionada nÃ£o existe.",
         );
       }
 
       if (documentoCategoria.data().loja !== loja) {
         throw new HttpsError(
           "permission-denied",
-          "A categoria não pertence a esta loja.",
+          "A categoria nÃ£o pertence a esta loja.",
         );
       }
 
       if (!documento.exists) {
-        throw new HttpsError("not-found", "Produto não encontrado.");
+        throw new HttpsError("not-found", "Produto nÃ£o encontrado.");
       }
 
       const produto = documento.data();
@@ -618,7 +652,7 @@ exports.atualizarImagensProduto = onCall(
       if (produto.loja !== loja) {
         throw new HttpsError(
           "permission-denied",
-          "Produto não pertence à loja informada.",
+          "Produto nÃ£o pertence Ã  loja informada.",
         );
       }
 
@@ -638,7 +672,7 @@ exports.atualizarImagensProduto = onCall(
       ) {
         throw new HttpsError(
           "aborted",
-          "As imagens deste produto foram alteradas. Atualize a página.",
+          "As imagens deste produto foram alteradas. Atualize a pÃ¡gina.",
         );
       }
 
@@ -658,7 +692,7 @@ exports.atualizarImagensProduto = onCall(
         ) {
           throw new HttpsError(
             "failed-precondition",
-            "O produto contém uma imagem com identificador inválido.",
+            "O produto contÃ©m uma imagem com identificador invÃ¡lido.",
           );
         }
       }
@@ -681,7 +715,7 @@ exports.atualizarImagensProduto = onCall(
         });
       }
 
-      // 6. Validar vínculos existentes
+      // 6. Validar vÃ­nculos existentes
       for (const publicId of idsParaConsultar) {
         const controle = controles.get(publicId);
 
@@ -699,7 +733,7 @@ exports.atualizarImagensProduto = onCall(
         ) {
           throw new HttpsError(
             "failed-precondition",
-            "Uma imagem está vinculada a outro produto ou bloqueada.",
+            "Uma imagem estÃ¡ vinculada a outro produto ou bloqueada.",
           );
         }
       }
@@ -757,6 +791,7 @@ exports.atualizarImagensProduto = onCall(
         imagens,
         cores,
         tamanhos,
+        permitePersonalizacao,
         atualizadoEm: FieldValue.serverTimestamp(),
       });
       return {
@@ -782,7 +817,7 @@ exports.sincronizarCategoriasPublicas =
   require("./categorias-publicas.js").sincronizarCategoriasPublicas;
 
 // ==========================================
-// FUNÇÃO: EXCLUIR PRODUTO COM SEGURANÇA
+// FUNÃ‡ÃƒO: EXCLUIR PRODUTO COM SEGURANÃ‡A
 // ==========================================
 
 exports.excluirProdutoSeguro = onCall(
@@ -793,7 +828,7 @@ exports.excluirProdutoSeguro = onCall(
   async (request) => {
     const { loja, produtoId } = request.data || {};
 
-    // 1. Validar administrador e acesso à loja
+    // 1. Validar administrador e acesso Ã  loja
     await validarAdministrador(request, loja);
 
     // 2. Validar identificador
@@ -804,7 +839,7 @@ exports.excluirProdutoSeguro = onCall(
     ) {
       throw new HttpsError(
         "invalid-argument",
-        "Identificador do produto inválido.",
+        "Identificador do produto invÃ¡lido.",
       );
     }
 
@@ -812,12 +847,12 @@ exports.excluirProdutoSeguro = onCall(
 
     const pastaAutorizada = PASTAS_PRODUTOS[loja] + "/";
 
-    // 3. Excluir produto e reservar suas imagens em uma transação
+    // 3. Excluir produto e reservar suas imagens em uma transaÃ§Ã£o
     const resultado = await db.runTransaction(async (transacao) => {
       const documento = await transacao.get(referenciaProduto);
 
       if (!documento.exists) {
-        throw new HttpsError("not-found", "Produto não encontrado.");
+        throw new HttpsError("not-found", "Produto nÃ£o encontrado.");
       }
 
       const produto = documento.data();
@@ -825,7 +860,7 @@ exports.excluirProdutoSeguro = onCall(
       if (produto.loja !== loja) {
         throw new HttpsError(
           "permission-denied",
-          "O produto não pertence à loja informada.",
+          "O produto nÃ£o pertence Ã  loja informada.",
         );
       }
 
@@ -845,7 +880,7 @@ exports.excluirProdutoSeguro = onCall(
         ) {
           throw new HttpsError(
             "failed-precondition",
-            "O produto possui imagens inválidas ou duplicadas.",
+            "O produto possui imagens invÃ¡lidas ou duplicadas.",
           );
         }
 
@@ -867,7 +902,7 @@ exports.excluirProdutoSeguro = onCall(
       }
 
       // Validar que nenhum controle pertence a outro produto
-      // ou está reservado para exclusão
+      // ou estÃ¡ reservado para exclusÃ£o
       for (const controle of controles) {
         if (!controle.documento.exists) {
           continue;
@@ -883,7 +918,7 @@ exports.excluirProdutoSeguro = onCall(
         ) {
           throw new HttpsError(
             "failed-precondition",
-            "Uma imagem está vinculada a outro produto ou bloqueada.",
+            "Uma imagem estÃ¡ vinculada a outro produto ou bloqueada.",
           );
         }
       }
@@ -912,7 +947,7 @@ exports.excluirProdutoSeguro = onCall(
         });
       }
 
-      // Excluir o documento do produto na mesma transação
+      // Excluir o documento do produto na mesma transaÃ§Ã£o
       transacao.delete(referenciaProduto);
 
       return {
@@ -928,7 +963,7 @@ exports.excluirProdutoSeguro = onCall(
 );
 
 // ==========================================
-// FUNÇÃO: PROCESSAR EXCLUSÕES PENDENTES
+// FUNÃ‡ÃƒO: PROCESSAR EXCLUSÃ•ES PENDENTES
 // ==========================================
 
 exports.processarExclusaoImagemPendente = onDocumentCreated(
@@ -951,7 +986,7 @@ exports.processarExclusaoImagemPendente = onDocumentCreated(
     let dados;
 
     // ======================================
-    // 1. VALIDAR E RESERVAR A EXCLUSÃO
+    // 1. VALIDAR E RESERVAR A EXCLUSÃƒO
     // ======================================
 
     const reservaConfirmada = await db.runTransaction(async (transacao) => {
@@ -982,7 +1017,7 @@ exports.processarExclusaoImagemPendente = onDocumentCreated(
       if (!dadosValidos) {
         transacao.update(referenciaExclusao, {
           status: "invalida",
-          motivo: "Dados da exclusão inválidos.",
+          motivo: "Dados da exclusÃ£o invÃ¡lidos.",
           finalizadoEm: FieldValue.serverTimestamp(),
         });
 
@@ -1006,21 +1041,21 @@ exports.processarExclusaoImagemPendente = onDocumentCreated(
     });
 
     if (!reservaConfirmada) {
-      console.log("Exclusão indisponível ou já reservada:", exclusaoId);
+      console.log("ExclusÃ£o indisponÃ­vel ou jÃ¡ reservada:", exclusaoId);
 
       return;
     }
 
     await referenciaExclusao.update({
       status: "aguardando_revisao",
-      motivo: "Exclusão automática temporariamente desativada.",
+      motivo: "ExclusÃ£o automÃ¡tica temporariamente desativada.",
       finalizadoEm: FieldValue.serverTimestamp(),
     });
 
-    console.warn("Exclusão automática suspensa para revisão:", exclusaoId);
+    console.warn("ExclusÃ£o automÃ¡tica suspensa para revisÃ£o:", exclusaoId);
 
     return;
-    console.log("Exclusão reservada:", exclusaoId);
+    console.log("ExclusÃ£o reservada:", exclusaoId);
 
     // ======================================
     // 2. PROCESSAR COM TRATAMENTO DE ERROS
@@ -1034,7 +1069,7 @@ exports.processarExclusaoImagemPendente = onDocumentCreated(
       // ====================================
 
       // Consulta produtos das duas lojas.
-      // Se a consulta falhar, não exclui a imagem.
+      // Se a consulta falhar, nÃ£o exclui a imagem.
 
       const produtos = await db.collection("produtos").get();
 
@@ -1064,7 +1099,7 @@ exports.processarExclusaoImagemPendente = onDocumentCreated(
           }
         });
 
-        console.warn("Exclusão bloqueada: imagem em uso.", exclusaoId);
+        console.warn("ExclusÃ£o bloqueada: imagem em uso.", exclusaoId);
 
         return;
       }
@@ -1080,7 +1115,7 @@ exports.processarExclusaoImagemPendente = onDocumentCreated(
         estadoAtual.data().status !== "processando" ||
         estadoAtual.data().processamentoId !== processamentoId
       ) {
-        console.warn("A exclusão não está mais reservada:", exclusaoId);
+        console.warn("A exclusÃ£o nÃ£o estÃ¡ mais reservada:", exclusaoId);
 
         return;
       }
@@ -1097,7 +1132,7 @@ exports.processarExclusaoImagemPendente = onDocumentCreated(
       });
 
       if (!resultado || !["ok", "not found"].includes(resultado.result)) {
-        throw new Error("Cloudinary não confirmou a exclusão.");
+        throw new Error("Cloudinary nÃ£o confirmou a exclusÃ£o.");
       }
 
       // ====================================
@@ -1121,13 +1156,13 @@ exports.processarExclusaoImagemPendente = onDocumentCreated(
         }
       });
 
-      console.log("Exclusão de imagem concluída:", exclusaoId);
+      console.log("ExclusÃ£o de imagem concluÃ­da:", exclusaoId);
     } catch (erro) {
       // ====================================
       // 7. REGISTRAR FALHAS
       // ====================================
 
-      console.error("Erro ao processar exclusão:", exclusaoId, erro);
+      console.error("Erro ao processar exclusÃ£o:", exclusaoId, erro);
 
       try {
         await db.runTransaction(async (transacao) => {
@@ -1140,7 +1175,7 @@ exports.processarExclusaoImagemPendente = onDocumentCreated(
           ) {
             transacao.update(referenciaExclusao, {
               status: "erro",
-              motivo: "Falha no processamento. Requer revisão.",
+              motivo: "Falha no processamento. Requer revisÃ£o.",
               finalizadoEm: FieldValue.serverTimestamp(),
             });
           }
@@ -1162,7 +1197,7 @@ function validarTamanhosProduto(tamanhos) {
   if (!Array.isArray(tamanhos) || tamanhos.length > 30) {
     throw new HttpsError(
       "invalid-argument",
-      "A lista de tamanhos do produto é inválida.",
+      "A lista de tamanhos do produto Ã© invÃ¡lida.",
     );
   }
 
@@ -1176,7 +1211,7 @@ function validarTamanhosProduto(tamanhos) {
     ) {
       throw new HttpsError(
         "invalid-argument",
-        "Um dos tamanhos do produto é inválido.",
+        "Um dos tamanhos do produto Ã© invÃ¡lido.",
       );
     }
 
@@ -1200,7 +1235,7 @@ function validarTamanhosProduto(tamanhos) {
 // ==========================================
 
 // ==========================================
-// VALIDAR PERSONALIZAÇÃO DO PRODUTO
+// VALIDAR PERSONALIZAÃ‡ÃƒO DO PRODUTO
 // ==========================================
 
 function validarPersonalizacaoProduto(valor, loja) {
@@ -1211,15 +1246,15 @@ function validarPersonalizacaoProduto(valor, loja) {
   if (typeof valor !== "boolean") {
     throw new HttpsError(
       "invalid-argument",
-      "A configuração de personalização é inválida.",
+      "A configuraÃ§Ã£o de personalizaÃ§Ã£o Ã© invÃ¡lida.",
     );
   }
 
-  // Personalização com nome é exclusiva da Decor 3D.
+  // PersonalizaÃ§Ã£o com nome Ã© exclusiva da Decor 3D.
   if (loja !== "3d" && valor === true) {
     throw new HttpsError(
       "invalid-argument",
-      "Personalização com nome disponível apenas na Decor 3D.",
+      "PersonalizaÃ§Ã£o com nome disponÃ­vel apenas na Decor 3D.",
     );
   }
 
@@ -1232,7 +1267,7 @@ function validarCoresProduto(cores) {
   if (!Array.isArray(cores) || cores.length > 30) {
     throw new HttpsError(
       "invalid-argument",
-      "A lista de cores do produto é inválida.",
+      "A lista de cores do produto Ã© invÃ¡lida.",
     );
   }
 
@@ -1248,7 +1283,7 @@ function validarCoresProduto(cores) {
     ) {
       throw new HttpsError(
         "invalid-argument",
-        "Uma das cores do produto é inválida.",
+        "Uma das cores do produto Ã© invÃ¡lida.",
       );
     }
 
@@ -1271,10 +1306,10 @@ function validarCoresProduto(cores) {
 }
 
 // ==========================================
-// FUNÇÃO: CADASTRAR PRODUTO COM SEGURANÇA
+// FUNÃ‡ÃƒO: CADASTRAR PRODUTO COM SEGURANÃ‡A
 // ==========================================
 
-exports.dutoSeguro = onCall(
+exports.cadastrarProdutoSeguro = onCall(
   {
     secrets: [cloudinaryApiSecret],
     enforceAppCheck: false,
@@ -1289,7 +1324,7 @@ exports.dutoSeguro = onCall(
       typeof dadosProduto !== "object" ||
       Array.isArray(dadosProduto)
     ) {
-      throw new HttpsError("invalid-argument", "Dados do produto inválidos.");
+      throw new HttpsError("invalid-argument", "Dados do produto invÃ¡lidos.");
     }
 
     const {
@@ -1352,7 +1387,7 @@ exports.dutoSeguro = onCall(
       ) {
         throw new HttpsError(
           "invalid-argument",
-          "Uma das imagens é inválida ou está duplicada.",
+          "Uma das imagens Ã© invÃ¡lida ou estÃ¡ duplicada.",
         );
       }
 
@@ -1373,7 +1408,7 @@ exports.dutoSeguro = onCall(
         if (erro.http_code === 404) {
           throw new HttpsError(
             "invalid-argument",
-            "Uma das imagens não existe no Cloudinary.",
+            "Uma das imagens nÃ£o existe no Cloudinary.",
           );
         }
 
@@ -1381,7 +1416,7 @@ exports.dutoSeguro = onCall(
 
         throw new HttpsError(
           "internal",
-          "Não foi possível verificar as imagens.",
+          "NÃ£o foi possÃ­vel verificar as imagens.",
         );
       }
 
@@ -1394,12 +1429,12 @@ exports.dutoSeguro = onCall(
       ) {
         throw new HttpsError(
           "invalid-argument",
-          "Uma das imagens não corresponde ao arquivo autorizado.",
+          "Uma das imagens nÃ£o corresponde ao arquivo autorizado.",
         );
       }
     }
 
-    // 6. Preparar referências
+    // 6. Preparar referÃªncias
     const referenciaProduto = db.collection("produtos").doc();
 
     const referenciaCategoria = db
@@ -1407,7 +1442,7 @@ exports.dutoSeguro = onCall(
       .doc(categoriaId.trim());
 
     // 7. Cadastrar produto, controlar imagens
-    // e registrar estoque na mesma transação
+    // e registrar estoque na mesma transaÃ§Ã£o
     await db.runTransaction(async (transacao) => {
       // Todas as leituras devem acontecer antes das escritas.
       const documentoCategoria = await transacao.get(referenciaCategoria);
@@ -1430,18 +1465,18 @@ exports.dutoSeguro = onCall(
       if (!documentoCategoria.exists) {
         throw new HttpsError(
           "failed-precondition",
-          "A categoria selecionada não existe.",
+          "A categoria selecionada nÃ£o existe.",
         );
       }
 
       if (documentoCategoria.data().loja !== loja) {
         throw new HttpsError(
           "permission-denied",
-          "A categoria não pertence à loja informada.",
+          "A categoria nÃ£o pertence Ã  loja informada.",
         );
       }
 
-      // Validar controles e impedir reutilização indevida
+      // Validar controles e impedir reutilizaÃ§Ã£o indevida
       for (const controle of controles) {
         verificarControleImagemDisponivel(
           controle.documento,
@@ -1451,7 +1486,7 @@ exports.dutoSeguro = onCall(
         if (controle.documento.exists) {
           throw new HttpsError(
             "failed-precondition",
-            "Esta imagem já possui um registro de controle. Atualize a página e tente novamente.",
+            "Esta imagem jÃ¡ possui um registro de controle. Atualize a pÃ¡gina e tente novamente.",
           );
         }
       }
@@ -1476,9 +1511,6 @@ exports.dutoSeguro = onCall(
         estoque,
         status: status.trim(),
         descricao: descricao.trim(),
-        imagens,
-        cores,
-        tamanhos,
         imagens,
         cores,
         tamanhos,
@@ -1524,10 +1556,10 @@ exports.salvarNovidadesLoja = onCall(
   async (request) => {
     const { loja, produtosIds } = request.data || {};
 
-    // Validar administrador e acesso à loja
+    // Validar administrador e acesso Ã  loja
     await validarAdministrador(request, loja);
 
-    // Validar a seleção
+    // Validar a seleÃ§Ã£o
     if (
       !Array.isArray(produtosIds) ||
       produtosIds.length > 3 ||
@@ -1538,12 +1570,12 @@ exports.salvarNovidadesLoja = onCall(
     ) {
       throw new HttpsError(
         "invalid-argument",
-        "Selecione até 3 produtos válidos, sem duplicações.",
+        "Selecione atÃ© 3 produtos vÃ¡lidos, sem duplicaÃ§Ãµes.",
       );
     }
 
-    // Confirmar que os produtos pertencem à loja
-    // e estão disponíveis no catálogo público.
+    // Confirmar que os produtos pertencem Ã  loja
+    // e estÃ£o disponÃ­veis no catÃ¡logo pÃºblico.
     for (const produtoId of produtosIds) {
       const documento = await db
         .collection("catalogoPublico")
@@ -1553,7 +1585,7 @@ exports.salvarNovidadesLoja = onCall(
       if (!documento.exists || documento.data().loja !== loja) {
         throw new HttpsError(
           "failed-precondition",
-          "Um dos produtos não está publicado nesta loja.",
+          "Um dos produtos nÃ£o estÃ¡ publicado nesta loja.",
         );
       }
     }
