@@ -10,44 +10,141 @@
   </head>
 
   <body>
-    <header>
-      <div class="logo">
-        <a href="index.html">
-          <h1>Lolly Closet</h1>
-        </a>
-      </div>
 
-      <nav>
-        <ul>
-          <li><a href="index.html"  >Início</a></li>
-          <li><a href="produtos.html">Produtos</a></li>
-          <li><a href="index.html#sobre">Sobre</a></li>
-        </ul>
-      </nav>
+<header>
+  <div class="logo">
+    <a href="index.html">
+      <h1>Lolly Closet</h1>
+    </a>
+  </div>
 
-      <div class="acoes">
-        <a href="#" class="minha-conta"> Minha conta </a>
+  <!-- MENU DE NAVEGAÇÃO -->
+  <nav id="menu-principal" aria-label="Navegação principal">
 
-        <a href="#" class="carrinho" id="abrir-carrinho">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="9" cy="20" r="1"></circle>
-            <circle cx="19" cy="20" r="1"></circle>
-            <path d="M3 4h2l2.5 11h10.5l2-7H7"></path>
-          </svg>
+    <div class="titulo-menu-mobile">
+      <h2>Menu</h2>
 
-          <span id="contador-carrinho">0</span>
-        </a>
-      </div>
-    </header>
+      <button
+        type="button"
+        id="fechar-menu-mobile"
+        aria-label="Fechar menu"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M5 5L19 19M19 5L5 19"></path>
+        </svg>
+      </button>
+    </div>
+
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="produtos.html">Produtos</a></li>
+      <li><a href="index.html#sobre">Sobre</a></li>
+    </ul>
+
+    <!-- AÇÕES DO MENU LATERAL -->
+    <div class="acoes-menu-mobile">
+      <a href="#" class="conta-menu">
+        Minha conta
+      </a>
+
+      <a
+        href="#"
+        id="abrir-carrinho-mobile"
+        class="carrinho-menu"
+      >
+        Carrinho (<span id="contador-carrinho-mobile">0</span>)
+      </a>
+    </div>
+  </nav>
+
+  <!-- AÇÕES DO CABEÇALHO -->
+  <div class="acoes">
+
+    <a
+      href="#"
+      class="minha-conta"
+      aria-label="Minha conta"
+      title="Minha conta"
+    >
+      <span class="texto-conta">Minha conta</span>
+
+      <svg
+        class="icone-conta"
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
+      </svg>
+    </a>
+
+    <a
+      href="#"
+      class="carrinho"
+      id="abrir-carrinho"
+      aria-label="Abrir carrinho"
+    >
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="9" cy="20" r="1"></circle>
+        <circle cx="19" cy="20" r="1"></circle>
+        <path d="M3 4h2l2.5 11h10.5l2-7H7"></path>
+      </svg>
+
+      <span id="contador-carrinho">0</span>
+    </a>
+
+    <!-- BOTÃO HAMBÚRGUER -->
+    <button
+      type="button"
+      class="menu-mobile-botao"
+      id="alternar-menu-mobile"
+      aria-label="Abrir menu de navegação"
+      aria-controls="menu-principal"
+      aria-expanded="false"
+    >
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+  </div>
+</header>
+
 
     <div class="fundo-carrinho" id="fundo-carrinho"></div>
 
@@ -186,6 +283,7 @@
     </main>
 
 <script src="script.js"></script>
+<script src="./menu-mobile.js"></script>
 <script type="module" src="./produto-detalhes-firebase.js"></script>
 </body>
   </body>

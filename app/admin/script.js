@@ -14,6 +14,8 @@ import {
 
 import { enviarImagemProduto } from "./cloudinary-upload.js";
 
+import { abrirEditorImagem } from "./componentes/editor-imagem.js";
+
 // ==========================================
 // ELEMENTOS - PRODUTOS
 // ==========================================
@@ -77,6 +79,9 @@ let categorias = [];
 let produtoEmEdicao = null;
 let categoriaEmEdicao = null;
 let salvandoProduto = false;
+let editandoFotosProduto = false;
+let fotosEditadasProduto = [];
+let lojaEdicaoFotosProduto = null;
 let coresProduto = [];
 
 // ==========================================
@@ -155,22 +160,26 @@ function obterNomeLoja(loja) {
 }
 
 function limparFotosProduto() {
+  // Limpar as fotografias editadas
+  fotosEditadasProduto = [];
+
+  // Limpar o campo de seleção
   if (fotosProduto) {
     fotosProduto.value = "";
   }
 
+  // Limpar as prévias
   if (previewFotosProduto) {
     previewFotosProduto.innerHTML = "";
   }
 }
-
 function limparEstadoImagens() {
   imagensMantidasProduto = [];
   imagensOriginaisProduto = [];
 }
 
 function fecharFormularioProduto() {
-  if (salvandoProduto) return;
+  if (salvandoProduto || editandoFotosProduto) return;
 
   produtoEmEdicao = null;
   limparEstadoImagens();
@@ -202,7 +211,7 @@ function fecharFormularioProduto() {
 
 if (btnNovoProduto && formProduto) {
   btnNovoProduto.addEventListener("click", () => {
-    if (salvandoProduto) return;
+    if (salvandoProduto || editandoFotosProduto) return;
 
     produtoEmEdicao = null;
     limparEstadoImagens();
@@ -257,6 +266,12 @@ if (cadastroProduto) {
 
     if (salvandoProduto) return;
 
+    if (editandoFotosProduto) {
+      alert(
+        "Aguarde a conclusão da edição das fotografias antes de salvar o produto.",
+      );
+      return;
+    }
     const loja = lojaProduto.value;
     const nome = nomeProduto.value.trim();
     const categoriaId = categoriaProduto.value;
@@ -449,11 +464,11 @@ if (cadastroProduto) {
 
       await carregarProdutos();
     } catch (erro) {
-      console.error("Erro ao excluir produto:", erro);
+      console.error("Erro ao salvar produto:", erro);
       console.error("Código Firebase:", erro?.code);
       console.error("Mensagem Firebase:", erro?.message);
 
-      alert("Não foi possível excluir o produto.");
+      alert("Não foi possível salvar o produto.");
     } finally {
       salvandoProduto = false;
 
@@ -617,20 +632,13 @@ if (tabelaProdutos) {
     // ======================================
 
     if (botaoEditar) {
-      if (salvandoProduto) return;
+      if (salvandoProduto || editandoFotosProduto) return;
 
       const id = botaoEditar.dataset.id;
 
       const produto = produtos.find((produto) => produto.id === id);
 
       if (!produto) return;
-
-      produtoEmEdicao = id;
-
-      lojaProduto.value = produto.loja;
-
-      atualizarCategoriasProduto();
-
       produtoEmEdicao = id;
 
       lojaProduto.value = produto.loja;
@@ -1083,6 +1091,19 @@ function atualizarVisibilidadeTamanhos() {
 
 if (lojaProduto) {
   lojaProduto.addEventListener("change", () => {
+    if (editandoFotosProduto) {
+      alert("Aguarde a conclusão da edição das fotografias.");
+      return;
+    }
+
+    if (fotosEditadasProduto.length > 0) {
+      limparFotosProduto();
+
+      alert(
+        "As fotografias selecionadas foram removidas porque a loja foi alterada. Adicione-as novamente para utilizar o recorte correto.",
+      );
+    }
+
     atualizarCategoriasProduto();
     atualizarVisibilidadeTamanhos();
     atualizarVisibilidadePersonalizacao();
@@ -1154,9 +1175,7 @@ function atualizarPreviewFotos() {
     botaoRemover.style.cursor = "pointer";
 
     botaoRemover.addEventListener("click", () => {
-      if (salvandoProduto) {
-        return;
-      }
+      if (salvandoProduto || editandoFotosProduto) return;
 
       const transferencia = new DataTransfer();
 
@@ -1166,6 +1185,7 @@ function atualizarPreviewFotos() {
         }
       });
 
+      fotosEditadasProduto = Array.from(transferencia.files);
       fotosProduto.files = transferencia.files;
 
       atualizarPreviewFotos();
@@ -1179,7 +1199,77 @@ function atualizarPreviewFotos() {
 }
 
 if (fotosProduto) {
-  fotosProduto.addEventListener("change", atualizarPreviewFotos);
+  fotosProduto.addEventListener("change", async () => {
+    if (editandoFotosProduto || salvandoProduto) return;
+
+    const arquivos = Array.from(fotosProduto.files || []);
+    if (arquivos.length === 0) return;
+
+    const loja = lojaProduto.value;
+
+    if (!["closet", "3d"].includes(loja)) {
+      alert("Selecione a loja antes de adicionar fotografias.");
+      fotosProduto.value = "";
+      return;
+    }
+
+    editandoFotosProduto = true;
+    lojaEdicaoFotosProduto = loja;
+    lojaProduto.disabled = true;
+    fotosProduto.disabled = true;
+
+    const transferencia = new DataTransfer();
+
+    try {
+      // Preservar somente as fotografias editadas anteriormente
+      for (const arquivoAnterior of fotosEditadasProduto) {
+        transferencia.items.add(arquivoAnterior);
+      }
+      for (const arquivo of arquivos) {
+        if (!arquivo.type.startsWith("image/")) {
+          alert(`O arquivo "${arquivo.name}" não é uma imagem válida.`);
+          continue;
+        }
+
+        if (arquivo.size > 10 * 1024 * 1024) {
+          alert(`A imagem "${arquivo.name}" ultrapassa 10 MB.`);
+          continue;
+        }
+
+        const proporcao = loja === "closet" ? 3 / 4 : 1;
+
+        const imagemEditada = await abrirEditorImagem(arquivo, {
+          loja,
+          proporcao,
+          largura: loja === "closet" ? 900 : 1200,
+          altura: 1200,
+        });
+
+        if (imagemEditada) {
+          transferencia.items.add(imagemEditada);
+        }
+      }
+
+      fotosEditadasProduto = Array.from(transferencia.files);
+
+      fotosProduto.files = transferencia.files;
+      atualizarPreviewFotos();
+    } catch (erro) {
+      console.error("Erro ao editar fotografias:", erro);
+      alert("Não foi possível editar uma das fotografias.");
+
+      // Preservar todas as fotografias editadas até o momento
+      fotosEditadasProduto = Array.from(transferencia.files);
+      fotosProduto.files = transferencia.files;
+
+      atualizarPreviewFotos();
+    } finally {
+      editandoFotosProduto = false;
+      lojaEdicaoFotosProduto = null;
+      lojaProduto.disabled = false;
+      fotosProduto.disabled = false;
+    }
+  });
 }
 
 // ==========================================

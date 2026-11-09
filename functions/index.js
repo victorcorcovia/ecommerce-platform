@@ -6,7 +6,11 @@ const { onDocumentCreated } = require("firebase-functions/v2/firestore");
 const { defineSecret } = require("firebase-functions/params");
 
 const { initializeApp } = require("firebase-admin/app");
-const { getFirestore, FieldValue } = require("firebase-admin/firestore");
+const {
+  getFirestore,
+  FieldValue,
+  FieldPath,
+} = require("firebase-admin/firestore");
 
 const { v2: cloudinary } = require("cloudinary");
 const crypto = require("node:crypto");
@@ -87,6 +91,14 @@ const PASTAS_PRODUTOS = Object.freeze({
 const PASTAS_BANNERS = Object.freeze({
   closet: "Lojas-Lolly/Closet/banners",
   "3d": "Lojas-Lolly/Decor3D/banners",
+});
+
+// ==========================================
+// PASTAS DAS IMAGENS DE CATEGORIAS
+// ==========================================
+
+const PASTAS_CATEGORIAS = Object.freeze({
+  closet: "Lojas-Lolly/Closet/categorias",
 });
 // ==========================================
 // FUNÃ‡ÃƒO AUXILIAR: VALIDAR ADMINISTRADOR
@@ -276,6 +288,181 @@ exports.autorizarUploadBanner = onCall(
 );
 
 // ==========================================
+// AUTORIZAR UPLOAD DE IMAGEM DE CATEGORIA
+// ==========================================
+
+exports.autorizarUploadImagemCategoria = onCall(
+  {
+    secrets: [cloudinaryApiSecret],
+    enforceAppCheck: false,
+    maxInstances: 5,
+  },
+  async (request) => {
+    const loja = request.data?.loja;
+
+    await validarAdministrador(request, loja);
+
+    if (loja !== "closet") {
+      throw new HttpsError(
+        "invalid-argument",
+        "Imagens de categorias disponíveis apenas para a Closet.",
+      );
+    }
+
+    const { cloudName, apiKey, apiSecret } = configurarCloudinary();
+
+    const pastaDestino = PASTAS_CATEGORIAS[loja];
+    const timestamp = Math.floor(Date.now() / 1000);
+    const publicId = crypto.randomUUID();
+
+    const parametrosUpload = {
+      timestamp,
+      folder: pastaDestino,
+      public_id: publicId,
+      overwrite: false,
+    };
+
+    const signature = cloudinary.utils.api_sign_request(
+      parametrosUpload,
+      apiSecret,
+    );
+
+    return {
+      autorizado: true,
+      cloudName,
+      apiKey,
+      timestamp,
+      signature,
+      folder: pastaDestino,
+      publicId,
+      overwrite: false,
+    };
+  },
+);
+
+// ==========================================
+// SALVAR IMAGEM DE CATEGORIA
+// ==========================================
+
+exports.salvarImagemCategoria = onCall(
+  {
+    secrets: [cloudinaryApiSecret],
+    enforceAppCheck: false,
+    maxInstances: 5,
+  },
+  async (request) => {
+    const { loja, categoriaId, imagem } = request.data || {};
+
+    await validarAdministrador(request, loja);
+
+    if (loja !== "closet") {
+      throw new HttpsError(
+        "invalid-argument",
+        "Configuração disponível apenas para a Closet.",
+      );
+    }
+
+    if (
+      typeof categoriaId !== "string" ||
+      !categoriaId.trim() ||
+      categoriaId.includes("/")
+    ) {
+      throw new HttpsError("invalid-argument", "Categoria inválida.");
+    }
+
+    const id = categoriaId.trim();
+
+    if (
+      !imagem ||
+      typeof imagem.url !== "string" ||
+      typeof imagem.publicId !== "string" ||
+      !imagem.publicId.startsWith(PASTAS_CATEGORIAS.closet + "/")
+    ) {
+      throw new HttpsError("invalid-argument", "Imagem inválida.");
+    }
+
+    const referenciaCategoria = db.collection("categorias").doc(id);
+    const categoria = await referenciaCategoria.get();
+
+    if (!categoria.exists || categoria.data().loja !== loja) {
+      throw new HttpsError(
+        "failed-precondition",
+        "Categoria não encontrada nesta loja.",
+      );
+    }
+
+    const { cloudName } = configurarCloudinary();
+
+    let recurso;
+
+    try {
+      recurso = await cloudinary.api.resource(imagem.publicId, {
+        resource_type: "image",
+      });
+    } catch (erro) {
+      console.error("Erro ao verificar imagem da categoria:", erro);
+
+      throw new HttpsError(
+        "failed-precondition",
+        "Não foi possível verificar a imagem no Cloudinary.",
+      );
+    }
+
+    if (
+      recurso.public_id !== imagem.publicId ||
+      recurso.secure_url !== imagem.url ||
+      !recurso.secure_url.startsWith(
+        `https://res.cloudinary.com/${cloudName}/image/upload/`,
+      )
+    ) {
+      throw new HttpsError("invalid-argument", "Imagem não autorizada.");
+    }
+
+    const TAMANHO_MAXIMO = 5 * 1024 * 1024;
+
+    if (
+      !Number.isFinite(recurso.bytes) ||
+      recurso.bytes > TAMANHO_MAXIMO ||
+      !["jpg", "png", "webp"].includes(recurso.format)
+    ) {
+      throw new HttpsError(
+        "invalid-argument",
+        "A imagem deve ser JPG, PNG ou WebP e ter no máximo 5 MB.",
+      );
+    }
+
+    const referenciaAparencia = db.collection("aparenciaLojas").doc(loja);
+
+    await db.runTransaction(async (transacao) => {
+      const categoriaAtual = await transacao.get(referenciaCategoria);
+
+      if (!categoriaAtual.exists || categoriaAtual.data().loja !== loja) {
+        throw new HttpsError(
+          "failed-precondition",
+          "A categoria foi alterada ou removida.",
+        );
+      }
+
+      transacao.set(
+        referenciaAparencia,
+        {
+          imagensCategorias: {
+            [id]: {
+              url: imagem.url,
+              publicId: imagem.publicId,
+            },
+          },
+          categoriasAtualizadasPor: request.auth.uid,
+          categoriasAtualizadasEm: FieldValue.serverTimestamp(),
+        },
+        { merge: true },
+      );
+    });
+
+    return { sucesso: true };
+  },
+);
+// ==========================================
 // SALVAR BANNER COM HISTÃ“RICO
 // ==========================================
 
@@ -384,9 +571,9 @@ exports.salvarBannerLoja = onCall(
         loja,
         anterior: bannerAnterior
           ? {
-              tipo: bannerAnterior.tipo,
-              cor: bannerAnterior.cor || null,
-              imagem: bannerAnterior.imagem || null,
+              tipo: bannerAnterior.tipo ?? null,
+              cor: bannerAnterior.cor ?? null,
+              imagem: bannerAnterior.imagem ?? null,
             }
           : null,
         novo: novoBanner,
@@ -410,10 +597,145 @@ exports.salvarBannerLoja = onCall(
   },
 );
 
-// ==========================================
-// FUNÃ‡ÃƒO: EXCLUIR IMAGEM DE PRODUTO
-// BLOQUEADA TEMPORARIAMENTE
-// ==========================================
+exports.removerImagemCategoria = onCall(
+  {
+    enforceAppCheck: false,
+    maxInstances: 5,
+  },
+  async (request) => {
+    const { loja, categoriaId, publicId } = request.data || {};
+
+    await validarAdministrador(request, loja);
+
+    if (loja !== "closet") {
+      throw new HttpsError(
+        "invalid-argument",
+        "Esta operação está disponível apenas para a Closet.",
+      );
+    }
+
+    if (
+      typeof categoriaId !== "string" ||
+      !categoriaId.trim() ||
+      categoriaId.includes("/") ||
+      typeof publicId !== "string" ||
+      !publicId.startsWith(PASTAS_CATEGORIAS.closet + "/")
+    ) {
+      throw new HttpsError("invalid-argument", "Dados da imagem inválidos.");
+    }
+
+    const id = categoriaId.trim();
+    const referenciaCategoria = db.collection("categorias").doc(id);
+    const referenciaAparencia = db.collection("aparenciaLojas").doc(loja);
+
+    await db.runTransaction(async (transacao) => {
+      const categoria = await transacao.get(referenciaCategoria);
+      const aparencia = await transacao.get(referenciaAparencia);
+
+      if (!categoria.exists || categoria.data().loja !== loja) {
+        throw new HttpsError(
+          "failed-precondition",
+          "Categoria não encontrada nesta loja.",
+        );
+      }
+
+      const imagemAtual = aparencia.exists
+        ? aparencia.data().imagensCategorias?.[id]
+        : null;
+
+      if (!imagemAtual) {
+        throw new HttpsError(
+          "not-found",
+          "Esta categoria não possui imagem cadastrada.",
+        );
+      }
+
+      if (imagemAtual.publicId !== publicId) {
+        throw new HttpsError(
+          "aborted",
+          "A imagem foi alterada. Atualize a página.",
+        );
+      }
+
+      transacao.update(
+        referenciaAparencia,
+        new FieldPath("imagensCategorias", id),
+        FieldValue.delete(),
+        "categoriasAtualizadasPor",
+        request.auth.uid,
+        "categoriasAtualizadasEm",
+        FieldValue.serverTimestamp(),
+      );
+    });
+
+    return { sucesso: true };
+  },
+);
+
+exports.removerBannerLoja = onCall(
+  {
+    enforceAppCheck: false,
+    maxInstances: 5,
+  },
+  async (request) => {
+    const { loja, publicId } = request.data || {};
+
+    await validarAdministrador(request, loja);
+
+    if (
+      typeof publicId !== "string" ||
+      !publicId.startsWith(PASTAS_BANNERS[loja] + "/")
+    ) {
+      throw new HttpsError(
+        "invalid-argument",
+        "Identificador do banner inválido.",
+      );
+    }
+
+    const referenciaAparencia = db.collection("aparenciaLojas").doc(loja);
+    const referenciaHistorico = db.collection("historicoBanners").doc();
+
+    await db.runTransaction(async (transacao) => {
+      const documento = await transacao.get(referenciaAparencia);
+
+      const atual = documento.exists ? documento.data() : null;
+
+      if (atual?.tipo !== "imagem" || atual.imagem?.publicId !== publicId) {
+        throw new HttpsError(
+          "aborted",
+          "O banner foi alterado ou não existe. Atualize a página.",
+        );
+      }
+
+      const novoBanner = {
+        tipo: "cor",
+        cor: "#ffffff",
+      };
+
+      transacao.set(referenciaHistorico, {
+        loja,
+        anterior: {
+          tipo: atual.tipo,
+          cor: atual.cor || null,
+          imagem: atual.imagem || null,
+        },
+        novo: novoBanner,
+        administradorUid: request.auth.uid,
+        dataHora: FieldValue.serverTimestamp(),
+        acao: "remocao",
+      });
+
+      transacao.update(referenciaAparencia, {
+        ...novoBanner,
+        imagem: FieldValue.delete(),
+        atualizadoPor: request.auth.uid,
+        atualizadoEm: FieldValue.serverTimestamp(),
+      });
+    });
+
+    return { sucesso: true };
+  },
+);
 
 exports.excluirImagemProduto = onCall(
   {
@@ -1034,6 +1356,7 @@ exports.processarExclusaoImagemPendente = onDocumentCreated(
         status: "processando",
         processamentoId,
         iniciadoEm: FieldValue.serverTimestamp(),
+        ultimaTentativaEm: FieldValue.serverTimestamp(),
         tentativas: FieldValue.increment(1),
       });
 
@@ -1045,17 +1368,22 @@ exports.processarExclusaoImagemPendente = onDocumentCreated(
 
       return;
     }
+    // Bloquear exclusões reais enquanto não forem autorizadas.
+    if (
+      process.env.FUNCTIONS_EMULATOR === "true" ||
+      process.env.CLOUDINARY_DELETE_ENABLED !== "true"
+    ) {
+      await referenciaExclusao.update({
+        status: "aguardando_revisao",
+        motivo: "Exclusão automática desativada por segurança.",
+        finalizadoEm: FieldValue.serverTimestamp(),
+      });
 
-    await referenciaExclusao.update({
-      status: "aguardando_revisao",
-      motivo: "ExclusÃ£o automÃ¡tica temporariamente desativada.",
-      finalizadoEm: FieldValue.serverTimestamp(),
-    });
+      console.warn("Exclusão suspensa por segurança:", exclusaoId);
+      return;
+    }
 
-    console.warn("ExclusÃ£o automÃ¡tica suspensa para revisÃ£o:", exclusaoId);
-
-    return;
-    console.log("ExclusÃ£o reservada:", exclusaoId);
+    console.log("Exclusão reservada:", exclusaoId);
 
     // ======================================
     // 2. PROCESSAR COM TRATAMENTO DE ERROS
@@ -1105,21 +1433,45 @@ exports.processarExclusaoImagemPendente = onDocumentCreated(
       }
 
       // ====================================
-      // 4. CONFERIR A RESERVA
+      // 4. CONFERIR RESERVA E CONTROLE
       // ====================================
 
-      const estadoAtual = await referenciaExclusao.get();
+      const referenciaControle = referenciaControleImagem(dados.publicId);
 
-      if (
-        !estadoAtual.exists ||
-        estadoAtual.data().status !== "processando" ||
-        estadoAtual.data().processamentoId !== processamentoId
-      ) {
-        console.warn("A exclusÃ£o nÃ£o estÃ¡ mais reservada:", exclusaoId);
+      const exclusaoAutorizada = await db.runTransaction(async (transacao) => {
+        const documentoExclusao = await transacao.get(referenciaExclusao);
+        const documentoControle = await transacao.get(referenciaControle);
+
+        if (
+          !documentoExclusao.exists ||
+          documentoExclusao.data().status !== "processando" ||
+          documentoExclusao.data().processamentoId !== processamentoId
+        ) {
+          return false;
+        }
+
+        if (!documentoControle.exists) {
+          return false;
+        }
+
+        const controle = documentoControle.data();
+
+        return (
+          controle.publicId === dados.publicId &&
+          controle.loja === dados.loja &&
+          controle.produtoId === dados.produtoId &&
+          controle.status === "excluindo"
+        );
+      });
+
+      if (!exclusaoAutorizada) {
+        console.warn(
+          "Exclusão bloqueada: reserva ou controle inconsistente.",
+          exclusaoId,
+        );
 
         return;
       }
-
       // ====================================
       // 5. EXCLUIR NO CLOUDINARY
       // ====================================
@@ -1140,20 +1492,43 @@ exports.processarExclusaoImagemPendente = onDocumentCreated(
       // ====================================
 
       await db.runTransaction(async (transacao) => {
-        const documento = await transacao.get(referenciaExclusao);
+        const referenciaControle = referenciaControleImagem(dados.publicId);
+
+        // Todas as leituras antes das escritas
+        const documentoExclusao = await transacao.get(referenciaExclusao);
+        const documentoControle = await transacao.get(referenciaControle);
 
         if (
-          documento.exists &&
-          documento.data().status === "processando" &&
-          documento.data().processamentoId === processamentoId
+          !documentoExclusao.exists ||
+          documentoExclusao.data().status !== "processando" ||
+          documentoExclusao.data().processamentoId !== processamentoId
         ) {
-          transacao.update(referenciaExclusao, {
-            status: "concluida",
-            resultadoCloudinary: resultado.result,
-            finalizadoEm: FieldValue.serverTimestamp(),
-            motivo: FieldValue.delete(),
-          });
+          throw new Error(
+            "Reserva da exclusão não corresponde ao processamento.",
+          );
         }
+
+        if (
+          !documentoControle.exists ||
+          documentoControle.data().publicId !== dados.publicId ||
+          documentoControle.data().loja !== dados.loja ||
+          documentoControle.data().produtoId !== dados.produtoId ||
+          documentoControle.data().status !== "excluindo"
+        ) {
+          throw new Error("Controle da imagem inconsistente.");
+        }
+
+        transacao.update(referenciaControle, {
+          status: "excluida",
+          atualizadoEm: FieldValue.serverTimestamp(),
+        });
+
+        transacao.update(referenciaExclusao, {
+          status: "concluida",
+          resultadoCloudinary: resultado.result,
+          finalizadoEm: FieldValue.serverTimestamp(),
+          motivo: FieldValue.delete(),
+        });
       });
 
       console.log("ExclusÃ£o de imagem concluÃ­da:", exclusaoId);
@@ -1184,6 +1559,148 @@ exports.processarExclusaoImagemPendente = onDocumentCreated(
         console.error("Erro ao registrar falha:", exclusaoId, erroRegistro);
       }
     }
+  },
+);
+
+// ======================================
+// CONSULTAR EXCLUSÕES PARA RECUPERAÇÃO
+// ======================================
+
+exports.consultarExclusoesImagensPendentes = onCall(
+  {
+    region: "us-central1",
+    maxInstances: 2,
+  },
+  async (request) => {
+    const loja = request.data?.loja;
+
+    // Reutilizar a validação administrativa existente da Lolly
+    await validarAdministrador(request, loja);
+
+    const estados = ["aguardando_revisao", "processando", "erro"];
+
+    const resultados = [];
+
+    for (const status of estados) {
+      const consulta = await db
+        .collection("exclusoesImagensPendentes")
+        .where("status", "==", status)
+        .where("loja", "==", loja)
+        .limit(50)
+        .get();
+
+      for (const documento of consulta.docs) {
+        const dados = documento.data();
+
+        resultados.push({
+          id: documento.id,
+          status: dados.status,
+          loja: dados.loja,
+          produtoId: dados.produtoId,
+          publicId: dados.publicId,
+          tentativas: dados.tentativas ?? 0,
+        });
+      }
+    }
+
+    return {
+      total: resultados.length,
+      exclusoes: resultados,
+    };
+  },
+);
+
+exports.consultarExclusaoImagem = onCall(
+  {
+    region: "us-central1",
+    maxInstances: 2,
+  },
+  async (request) => {
+    const loja = request.data?.loja;
+    const exclusaoId = request.data?.exclusaoId;
+
+    await validarAdministrador(request, loja);
+
+    if (
+      typeof exclusaoId !== "string" ||
+      !exclusaoId.trim() ||
+      exclusaoId.includes("/")
+    ) {
+      throw new HttpsError(
+        "invalid-argument",
+        "Identificador da exclusão inválido.",
+      );
+    }
+
+    const referenciaExclusao = db
+      .collection("exclusoesImagensPendentes")
+      .doc(exclusaoId);
+
+    const documentoExclusao = await referenciaExclusao.get();
+
+    if (!documentoExclusao.exists) {
+      throw new HttpsError("not-found", "Exclusão não encontrada.");
+    }
+
+    const exclusao = documentoExclusao.data();
+
+    if (exclusao.loja !== loja) {
+      throw new HttpsError(
+        "permission-denied",
+        "Exclusão não pertence à loja informada.",
+      );
+    }
+
+    const publicId = exclusao.publicId;
+
+    if (
+      typeof publicId !== "string" ||
+      !publicId.startsWith(PASTAS_PRODUTOS[loja] + "/") ||
+      !/^[a-zA-Z0-9/_-]+$/.test(publicId)
+    ) {
+      throw new HttpsError(
+        "failed-precondition",
+        "Identificador da imagem inconsistente.",
+      );
+    }
+
+    const referenciaControle = referenciaControleImagem(publicId);
+
+    const [documentoControle, produtos] = await Promise.all([
+      referenciaControle.get(),
+      db.collection("produtos").get(),
+    ]);
+
+    const controle = documentoControle.exists ? documentoControle.data() : null;
+
+    const imagemEmUso = produtos.docs.some((documento) => {
+      const imagens = documento.data().imagens;
+
+      return (
+        Array.isArray(imagens) &&
+        imagens.some((imagem) => imagem?.publicId === publicId)
+      );
+    });
+
+    const controleValido =
+      controle !== null &&
+      controle.publicId === publicId &&
+      controle.loja === loja &&
+      controle.produtoId === exclusao.produtoId &&
+      controle.status === "excluindo";
+
+    return {
+      exclusaoId,
+      loja,
+      produtoId: exclusao.produtoId,
+      publicId,
+      statusExclusao: exclusao.status,
+      statusControle: controle?.status ?? "inexistente",
+      controleValido,
+      imagemEmUso,
+      requerRevisao: true,
+      exclusaoExecutada: false,
+    };
   },
 );
 

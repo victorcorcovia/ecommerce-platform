@@ -7,7 +7,11 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { connectAuthEmulator } from "firebase/auth";
 import { connectFirestoreEmulator } from "firebase/firestore";
-import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
+import {
+  getFunctions,
+  connectFunctionsEmulator,
+  httpsCallable,
+} from "firebase/functions";
 
 // Configuração do projeto Firebase
 const firebaseConfig = {
@@ -17,17 +21,14 @@ const firebaseConfig = {
   storageBucket: "lojas-lolly.firebasestorage.app",
   messagingSenderId: "839120440809",
   appId: "1:839120440809:web:dd484410d70212318b0f78",
-  measurementId: "G-6QHYSPZJ19"
+  measurementId: "G-6QHYSPZJ19",
 };
-
 
 // Inicializar Firebase
 const app = initializeApp(firebaseConfig);
 
-
 // Inicializar Authentication
 const auth = getAuth(app);
-
 
 // Inicializar Cloud Firestore
 const db = getFirestore(app);
@@ -47,4 +48,4 @@ if (import.meta.env.DEV) {
 }
 
 // Exportar para outros arquivos
-export { app, auth, db, functions };
+export { app, auth, db, functions, httpsCallable };

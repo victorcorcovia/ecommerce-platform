@@ -162,17 +162,24 @@
                 Formatos: JPG, PNG ou WebP.
               </small>
 
-              <img
-                id="previewBanner"
-                alt="Pré-visualização do banner"
-                style="
-                  display: none;
-                  max-width: 100%;
-                  max-height: 240px;
-                  object-fit: contain;
-                  margin-top: 12px;
-                "
-              />
+              <div
+                id="containerPreviewBanner"
+                class="preview-imagem-container"
+                style="display: none"
+              >
+                <img id="previewBanner" alt="Pré-visualização do banner" />
+
+                <button
+                  type="button"
+                  id="removerPreviewBanner"
+                  class="btn-remover-imagem"
+                  aria-label="Cancelar seleção da imagem do banner"
+                  title="Cancelar seleção"
+                  style="display: none"
+                >
+                  &times;
+                </button>
+              </div>
             </div>
 
             <!-- COR DE FUNDO DO BANNER -->
@@ -230,6 +237,82 @@
             </button>
           </div>
         </section>
+
+        <!-- ==========================================
+     IMAGENS DAS CATEGORIAS - LOLLY CLOSET
+========================================== -->
+        <section
+          class="lista-produtos secao-imagens-categorias"
+          id="secaoImagensCategorias"
+        >
+          <div class="titulo-secao">
+            <h2>Imagens das categorias</h2>
+            <p>
+              Personalize as fotografias das categorias exibidas na página
+              inicial da Lolly Closet.
+            </p>
+          </div>
+
+          <form id="formImagemCategoria">
+            <div class="campo-form">
+              <label for="categoriaAparencia">Selecionar categoria</label>
+              <select id="categoriaAparencia" required>
+                <option value="">Carregando categorias...</option>
+              </select>
+
+              <div class="campo-form">
+                <label for="imagemCategoria">Fotografia da categoria</label>
+
+                <input
+                  type="file"
+                  id="imagemCategoria"
+                  accept="image/jpeg,image/png,image/webp"
+                />
+
+                <small>
+                  Formatos: JPG, PNG ou WebP. Tamanho máximo: 5 MB. Proporção
+                  recomendada: 3:4.
+                </small>
+              </div>
+            </div>
+
+            <div
+              id="containerPreviewCategoria"
+              class="preview-imagem-container"
+              style="display: none"
+            >
+              <img
+                id="previewImagemCategoria"
+                alt="Pré-visualização da categoria"
+              />
+
+              <button
+                type="button"
+                id="removerPreviewCategoria"
+                class="btn-remover-imagem"
+                aria-label="Remover imagem selecionada"
+                title="Remover imagem"
+              >
+                &times;
+              </button>
+            </div>
+            <div class="acoes-form">
+              <button
+                type="submit"
+                class="btn-salvar"
+                id="salvarImagemCategoria"
+              >
+                Salvar imagem da categoria
+              </button>
+            </div>
+
+            <p
+              id="mensagemImagemCategoria"
+              role="status"
+              aria-live="polite"
+            ></p>
+          </form>
+        </section>
       </main>
     </div>
 
@@ -239,5 +322,6 @@
     <script type="module" src="./aparencia.js"></script>
     <script type="module" src="./novidades.js"></script>
     <script src="./cabecalho-mobile.js"></script>
+    <script type="module" src="./aparencia-categorias.js"></script>
   </body>
 </html>

@@ -2264,3 +2264,858 @@ footer h3 {
     outline: 2px solid var(--verde-principal);
     outline-offset: 3px;
 }
+
+/* ====================================================
+   LOLLY DECOR 3D — CABEÇALHO COMPACTO NO MOBILE
+   Adicionar ao FINAL do style.css existente.
+   ==================================================== */
+
+/* O botão do menu só existe visualmente no celular. */
+.menu-mobile-botao { display: none; }
+.icone-conta { display: none; }
+
+@media (max-width: 800px) {
+  header {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 12px 14px;
+    min-height: 64px;
+  }
+
+  header .logo { flex: 1 1 auto; min-width: 0; }
+  header .logo h1 {
+    font-size: clamp(1rem, 4vw, 1.3rem);
+    line-height: 1.2;
+    white-space: normal;
+  }
+
+  header .acoes { flex: 0 0 auto; gap: 6px; }
+  header .acoes a { padding: 7px; }
+  header .acoes .texto-conta { display: none; }
+  header .acoes .icone-conta { display: block; width: 21px; height: 21px; }
+  header .acoes .carrinho { gap: 3px; }
+  header .acoes .carrinho svg { width: 21px; height: 21px; }
+  header #contador-carrinho { font-size: .8rem; }
+
+  header .menu-mobile-botao {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+    background: transparent;
+    color: var(--branco);
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  header .menu-mobile-botao svg { width: 23px; height: 23px; }
+  header .menu-mobile-botao:hover { background: rgba(0, 0, 0, .12); }
+  header .menu-mobile-botao:focus-visible,
+  header .acoes a:focus-visible { outline: 2px solid var(--branco); outline-offset: 2px; }
+
+  /* O menu fica abaixo da barra fixa e abre por clique. */
+  header nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--verde-escuro);
+    padding: 10px 14px 14px;
+    box-shadow: 0 8px 14px rgba(0, 0, 0, .12);
+  }
+  header nav.menu-aberto { display: block; }
+  header nav ul {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+  header nav a { display: block; padding: 12px; font-size: 1rem; }
+
+  /* Reduz o espaço vazio acima do conteúdo da home. */
+  .banner { padding: 110px 15px 35px; }
+  .pagina-produto { padding-top: 105px; }
+  .pagina-catalogo { padding-top: 105px; }
+  .pagina-carrinho { padding-top: 105px; }
+  .pagina-checkout { padding-top: 105px; }
+
+  /* Rodapé: não comprimir três colunas no celular. */
+  .footer-conteudo { flex-direction: column; gap: 24px; }
+}
+
+
+/* =========================================
+   LOLLY DECOR 3D - MENU LATERAL MOBILE
+   ========================================= */
+
+@media (max-width: 800px) {
+
+  header {
+    flex-wrap: nowrap;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+
+  header .logo {
+    min-width: 0;
+    flex: 1;
+  }
+
+  header .logo h1 {
+    font-size: clamp(1rem, 4.5vw, 1.35rem);
+    white-space: nowrap;
+  }
+
+  header .acoes {
+    flex-shrink: 0;
+    gap: 12px;
+  }
+
+  /* Painel lateral menor e desde o topo */
+  header nav#menu-principal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: auto;
+
+    width: min(230px, 65vw);
+    height: 100vh;
+    height: 100dvh;
+
+    margin: 0;
+    padding: 82px 16px 24px;
+
+    background: var(--verde-escuro);
+    z-index: 1001;
+
+    display: block;
+    order: initial;
+
+    transform: translateX(105%);
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+      transform 0.3s ease,
+      visibility 0.3s ease;
+
+    overflow-y: auto;
+    box-shadow: -6px 0 20px rgba(0, 0, 0, 0.18);
+  }
+
+  header nav#menu-principal.menu-aberto {
+    transform: translateX(0);
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  header nav#menu-principal ul {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+  }
+
+  header nav#menu-principal a {
+    display: block;
+    padding: 12px 14px;
+    color: #fff;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border-radius: 8px;
+  }
+
+  header nav#menu-principal a:hover,
+  header nav#menu-principal a:focus-visible {
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  /* O botão permanece acima do painel
+     para permitir fechar o menu */
+  header .menu-mobile-botao {
+    position: relative;
+    z-index: 1002;
+  }
+}
+
+
+/* =========================================
+   LOLLY DECOR 3D - RODAPÉ MOBILE
+   ========================================= */
+
+@media (max-width: 800px) {
+
+  footer {
+    padding: 30px 14px 18px;
+  }
+
+  .footer-conteudo {
+    display: grid;
+    grid-template-columns: 1fr 0.7fr 1.3fr;
+    gap: 12px;
+    align-items: start;
+  }
+
+  .footer-marca,
+  .footer-links,
+  .footer-contato {
+    min-width: 0;
+  }
+
+  footer h2 {
+    font-size: 1rem;
+    line-height: 1.3;
+    margin-bottom: 10px;
+  }
+
+  footer h3 {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+  }
+
+  .footer-marca p,
+  .footer-links a,
+  .footer-contato a {
+    font-size: 0.78rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .footer-links a {
+    margin-bottom: 7px;
+  }
+
+  .footer-final {
+    margin-top: 25px;
+    padding-top: 15px;
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 360px) {
+  .footer-conteudo {
+    grid-template-columns: 1fr 0.65fr 1.2fr;
+    gap: 8px;
+  }
+
+  .footer-marca p,
+  .footer-links a,
+  .footer-contato a {
+    font-size: 0.7rem;
+  }
+}
+
+
+/* =========================================
+   AJUSTES FINAIS DO MENU MOBILE
+   ========================================= */
+
+@media (max-width: 800px) {
+
+  header nav#menu-principal {
+    padding: 24px 16px;
+    width: min(250px, 68vw);
+  }
+
+  /* Título e botão de fechar */
+  .titulo-menu-mobile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .titulo-menu-mobile h2 {
+    display: block;
+    margin: 0;
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+
+  #fechar-menu-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 1.3rem;
+    cursor: pointer;
+  }
+
+  /* Links de navegação */
+  header nav#menu-principal ul {
+    gap: 4px;
+    margin-bottom: 18px;
+  }
+
+  /* Conta e carrinho */
+  .acoes-menu-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .acoes-menu-mobile a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    color: #fff;
+    background: transparent;
+    box-shadow: none;
+    border: 0;
+    font-size: 0.95rem;
+    text-decoration: none;
+  }
+
+  .acoes-menu-mobile svg {
+    flex-shrink: 0;
+  }
+
+  /* Não mostrar conta duplicada no cabeçalho */
+  header .acoes .conta-desktop {
+    display: none;
+  }
+}
+
+/* Esconder elementos mobile no desktop */
+@media (min-width: 801px) {
+  .titulo-menu-mobile,
+  .acoes-menu-mobile {
+    display: none;
+  }
+}
+
+
+@media (max-width: 800px) {
+  header .acoes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  header .acoes .conta-desktop,
+  header .acoes .carrinho {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    min-width: 32px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  header .acoes .conta-desktop span {
+    display: none;
+  }
+
+  header .acoes .icone-conta {
+    display: block;
+    width: 22px;
+    height: 22px;
+  }
+
+  header .acoes .carrinho {
+    gap: 4px;
+  }
+
+  header .acoes .rotulo-carrinho-mobile {
+    display: none;
+  }
+
+  header .acoes .menu-mobile-botao {
+    display: flex;
+  }
+
+  header .acoes-menu-mobile {
+    display: none;
+  }
+}
+
+
+@media (max-width: 800px) {
+  header .acoes-menu-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 18px;
+    margin-top: 18px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+  }
+
+  header .acoes-menu-mobile .conta-menu,
+  header .acoes-menu-mobile .carrinho-menu {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    color: white;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  header .acoes-menu-mobile svg {
+    flex-shrink: 0;
+  }
+}
+
+@media (min-width: 801px) {
+  header .acoes-menu-mobile {
+    display: none;
+  }
+}
+
+
+@media (max-width: 800px) {
+  #fechar-menu-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  #fechar-menu-mobile svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+
+  #fechar-menu-mobile:hover {
+    background: rgba(255, 255, 255, 0.16);
+  }
+}
+
+
+
+@media (max-width: 800px) {
+  /* Menu aberto: esconde completamente o botão ☰ */
+  header:has(#menu-principal.menu-aberto) #alternar-menu-mobile {
+    display: none !important;
+  }
+
+  /* Menu fechado: esconde o botão X */
+  header #fechar-menu-mobile {
+    display: none !important;
+  }
+
+  /* Menu aberto: mostra somente o botão X */
+  header #menu-principal.menu-aberto #fechar-menu-mobile {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+
+@media (max-width: 800px) {
+  #fechar-menu-mobile {
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    color: #ffffff;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    cursor: pointer;
+  }
+
+  #fechar-menu-mobile svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+
+  #fechar-menu-mobile:hover {
+    color: #dce8dc;
+    background: transparent;
+  }
+}
+
+
+/* ==========================================
+   LOLLY DECOR 3D - AJUSTES MOBILE
+   SEÇÕES SOBRE E PRODUTOS
+   ========================================== */
+
+@media (max-width: 600px) {
+
+  /* SEÇÃO SOBRE */
+
+  .sobre {
+    padding: 38px 18px;
+  }
+
+  .sobre-conteudo {
+    max-width: 100%;
+  }
+
+  .sobre h2 {
+    font-size: 27px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+
+  .sobre p {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  .sobre .destaque-sobre {
+    font-size: 17px;
+    line-height: 1.4;
+    margin-top: 20px;
+    margin-bottom: 24px;
+  }
+
+  .btn-whatsapp-personalizado {
+    font-size: 14px;
+    padding: 13px 16px;
+    line-height: 1.4;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* SEÇÃO PRONTA ENTREGA */
+
+  .produtos {
+    padding: 35px 16px;
+  }
+
+  .produtos h2 {
+    font-size: 25px;
+    margin-bottom: 24px;
+  }
+
+  .lista-produtos {
+    gap: 18px;
+  }
+
+  .lista-produtos .produto {
+    padding: 16px;
+    max-width: 300px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-inline: auto;
+  }
+
+  .lista-produtos .produto img {
+    width: 100%;
+    max-height: 230px;
+    object-fit: contain;
+  }
+
+  .lista-produtos .produto h3 {
+    font-size: 19px;
+    line-height: 1.3;
+    margin: 14px 0 8px;
+  }
+
+  .lista-produtos .produto .preco {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .lista-produtos .produto .btn {
+    font-size: 15px;
+    padding: 12px 16px;
+  }
+}
+
+
+/* AVALIAÇÕES - MOBILE COMPACTO */
+
+@media (max-width: 600px) {
+
+  .avaliacoes {
+    padding: 28px 12px;
+  }
+
+  .avaliacoes h2 {
+    font-size: 22px;
+    line-height: 1.3;
+    margin-bottom: 18px;
+    text-align: center;
+  }
+
+  .lista-avaliacoes {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 12px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 12px 12px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .lista-avaliacoes .avaliacao {
+    flex: 0 0 240px;
+    width: 240px;
+    min-width: 0;
+    max-width: 240px;
+    box-sizing: border-box;
+    padding: 16px 14px;
+    margin: 0;
+    text-align: center;
+    scroll-snap-align: center;
+  }
+
+  .avaliacao .estrelas {
+    font-size: 17px;
+    margin-bottom: 8px;
+  }
+
+  .avaliacao p {
+    font-size: 13px;
+    line-height: 1.45;
+    margin: 0 0 10px;
+  }
+
+  .avaliacao span {
+    font-size: 12px;
+  }
+}
+
+
+/* CATÁLOGO DECOR 3D - AJUSTES MOBILE */
+
+@media (max-width: 800px) {
+  .pagina-catalogo {
+    padding: 125px 14px 30px;
+  }
+
+  .pagina-catalogo .filtros-produtos {
+    margin: 18px 0 12px;
+    padding: 4px 0 8px;
+    gap: 10px;
+  }
+
+  .pagina-catalogo .lista-produtos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: center;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .pagina-catalogo .lista-produtos .produto:only-child {
+    grid-column: 1 / -1;
+    width: min(100%, 240px);
+    justify-self: center;
+  }
+
+  .pagina-catalogo .lista-produtos .produto {
+    min-width: 0;
+    max-width: none;
+    padding: 12px;
+  }
+
+  .pagina-catalogo .lista-produtos .produto img {
+    width: 100%;
+    height: 150px;
+    max-height: none;
+    object-fit: contain;
+  }
+
+  .pagina-catalogo .lista-produtos .produto h3 {
+    font-size: 0.95rem;
+    margin: 8px 0 6px;
+  }
+
+  .pagina-catalogo .lista-produtos .produto .preco {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+
+  .pagina-catalogo .lista-produtos .produto .btn-ver-produto {
+    font-size: 0.85rem;
+    padding: 10px 6px;
+  }
+}
+
+/* AJUSTES DO CATÁLOGO MOBILE */
+
+@media (max-width: 800px) {
+  .pagina-catalogo .filtros-produtos {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 18px auto 20px;
+  }
+
+  .pagina-catalogo .lista-produtos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .pagina-catalogo .lista-produtos .produto:only-child {
+    grid-column: 1 / -1;
+    width: min(100%, 260px);
+    justify-self: center;
+  }
+}
+
+
+/* OCULTAR A BARRA VISUAL DE ROLAGEM NO MOBILE */
+
+@media (max-width: 800px) {
+  html {
+    scrollbar-width: none;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
+  }
+
+  body {
+    overflow-x: hidden;
+  }
+}
+
+
+/* ÍCONE DE USUÁRIO NO CABEÇALHO */
+
+header .acoes .conta-desktop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+header .acoes .conta-desktop svg {
+  display: block;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+
+/* Desktop: mantém o texto Minha conta */
+header .acoes .conta-responsiva .icone-conta {
+  display: none;
+}
+
+/* Mobile: mostra somente o bonequinho */
+@media (max-width: 800px) {
+  header .acoes .conta-responsiva {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+  }
+
+  header .acoes .conta-responsiva .texto-conta {
+    display: none;
+  }
+
+  header .acoes .conta-responsiva .icone-conta {
+    display: block;
+    width: 22px;
+    height: 22px;
+  }
+}
+
+
+/* CONTA: TEXTO NO DESKTOP, ÍCONE NO MOBILE */
+
+/* Desktop */
+header .acoes .conta-desktop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+header .acoes .conta-desktop .icone-conta {
+  display: none;
+}
+
+/* Mobile */
+@media (max-width: 800px) {
+  header .acoes .conta-desktop {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px;
+  }
+
+  header .acoes .conta-desktop .texto-conta {
+    display: none;
+  }
+
+  header .acoes .conta-desktop .icone-conta {
+    display: block;
+    width: 22px;
+    height: 22px;
+  }
+}
+
+
+/* Carrinho compacto no cabeçalho */
+header .acoes .carrinho {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+header .acoes .carrinho svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+
+
+
+/* CARRINHO COM A MESMA LARGURA DO MENU LATERAL */
+
+@media (max-width: 800px) {
+  .painel-carrinho {
+    width: 300px !important;
+    max-width: 85vw !important;
+    height: 100dvh;
+    box-sizing: border-box;
+  }
+}

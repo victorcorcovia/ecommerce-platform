@@ -4706,3 +4706,67 @@ button:disabled {
     cursor: not-allowed;
     opacity: 0.6;
 }
+
+
+/* ==========================================
+   PRÉ-VISUALIZAÇÃO DE IMAGENS
+   BANNERS E CATEGORIAS
+========================================== */
+
+.preview-imagem-container {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 16px;
+  vertical-align: top;
+}
+
+.preview-imagem-container img {
+  display: block;
+  width: 125px;
+  height: 125px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Banner: proporção horizontal 3:1 */
+#containerPreviewBanner img {
+  width: 360px;
+  max-width: 100%;
+  aspect-ratio: 3 / 1;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Categorias: proporção vertical 3:4 */
+#containerPreviewCategoria img {
+  width: 150px;
+  height: 200px;
+  max-width: 100%;
+  object-fit: cover;
+}
+
+/* Botão vermelho de remoção */
+.btn-remover-imagem {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #dc3545;
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-remover-imagem:hover {
+  background: #b91c1c;
+}

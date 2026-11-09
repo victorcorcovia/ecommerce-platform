@@ -21,18 +21,78 @@
         </a>
       </div>
 
-      <nav>
+      <!-- NAVEGAÇÃO DESKTOP E MENU LATERAL MOBILE -->
+      <nav id="menu-principal" aria-label="Navegação principal">
+        <div class="titulo-menu-mobile">
+          <h2>Menu</h2>
+          <button
+            type="button"
+            id="fechar-menu-mobile"
+            aria-label="Fechar menu"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M5 5L19 19M19 5L5 19"></path>
+            </svg>
+          </button>
+        </div>
+
         <ul>
           <li><a href="index.html">Início</a></li>
           <li><a href="produtos.html">Produtos</a></li>
           <li><a href="#sobre">Sobre</a></li>
         </ul>
+
+        <div class="acoes-menu-mobile">
+          <a href="#" class="conta-menu"> Minha conta </a>
+
+          <a href="#" id="abrir-carrinho-mobile" class="carrinho-menu">
+            Carrinho (<span id="contador-carrinho-mobile">0</span>)
+          </a>
+        </div>
       </nav>
 
+      <!-- AÇÕES DO CABEÇALHO -->
       <div class="acoes">
-        <a href="#" class="minha-conta"> Minha conta </a>
+        <a
+          href="#"
+          class="minha-conta"
+          aria-label="Minha conta"
+          title="Minha conta"
+        >
+          <span class="texto-conta">Minha conta</span>
 
-        <a href="#" class="carrinho" id="abrir-carrinho">
+          <svg
+            class="icone-conta"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
+          </svg>
+        </a>
+
+        <a
+          href="#"
+          class="carrinho"
+          id="abrir-carrinho"
+          aria-label="Abrir carrinho"
+        >
           <svg
             width="24"
             height="24"
@@ -42,6 +102,7 @@
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
+            aria-hidden="true"
           >
             <circle cx="9" cy="20" r="1"></circle>
             <circle cx="19" cy="20" r="1"></circle>
@@ -50,6 +111,28 @@
 
           <span id="contador-carrinho">0</span>
         </a>
+
+        <button
+          type="button"
+          class="menu-mobile-botao"
+          id="alternar-menu-mobile"
+          aria-label="Abrir menu de navegação"
+          aria-controls="menu-principal"
+          aria-expanded="false"
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
       </div>
     </header>
 
@@ -145,92 +228,24 @@
            CATEGORIAS
            ======================================== -->
 
-      <section class="categorias" id="categorias">
-        <!-- TÍTULO -->
-
-        <div class="cabecalho-categorias">
-          <div class="titulo-categorias">
+<section class="categorias" id="categorias" hidden>
+    <div class="cabecalho-categorias">
+        <div class="titulo-categorias">
             <span class="linha-decorativa"></span>
-
             <h2>Nossas categorias</h2>
-
             <span class="linha-decorativa"></span>
-          </div>
-
-          <p>Escolha o que você está procurando</p>
         </div>
 
-        <!-- CARDS -->
+        <p>Escolha o que você está procurando</p>
+    </div>
 
-        <div class="lista-categorias">
-          <!-- VESTIDOS -->
+    <div class="lista-categorias" id="lista-categorias"></div>
 
-          <a
-            href="produtos.html?categoria=vestidos"
-            class="categoria categoria-vestidos"
-          >
-            <div class="categoria-visual">
-              <div class="icone-categoria">👗</div>
-            </div>
-
-            <div class="categoria-conteudo">
-              <h3>Vestidos</h3>
-
-              <span>
-                Ver coleção
-                <b>→</b>
-              </span>
-            </div>
-          </a>
-
-          <!-- BLUSAS -->
-
-          <a
-            href="produtos.html?categoria=blusas"
-            class="categoria categoria-blusas"
-          >
-            <div class="categoria-visual">
-              <div class="icone-categoria">👚</div>
-            </div>
-
-            <div class="categoria-conteudo">
-              <h3>Blusas</h3>
-
-              <span>
-                Ver coleção
-                <b>→</b>
-              </span>
-            </div>
-          </a>
-
-          <!-- CALÇAS -->
-
-          <a
-            href="produtos.html?categoria=calcas"
-            class="categoria categoria-calcas"
-          >
-            <div class="categoria-visual">
-              <div class="icone-categoria">👖</div>
-            </div>
-
-            <div class="categoria-conteudo">
-              <h3>Calças</h3>
-
-              <span>
-                Ver coleção
-                <b>→</b>
-              </span>
-            </div>
-          </a>
-        </div>
-
-        <!-- BOTÃO -->
-
-        <a href="produtos.html" class="ver-todos-produtos">
-          VER TODOS OS PRODUTOS
-          <span>→</span>
-        </a>
-      </section>
+    <a href="produtos.html" class="ver-todos-produtos">
+        VER TODOS OS PRODUTOS
+        <span>→</span>
+    </a>
+</section>
 
       <!-- ========================================
            SOBRE
@@ -308,5 +323,7 @@
     <script src="script.js"></script>
     <script type="module" src="./banner.js"></script>
     <script type="module" src="./novidades.js"></script>
+    <script src="./menu-mobile.js"></script>
+    <script type="module" src="./categorias.js"></script>
   </body>
 </html>

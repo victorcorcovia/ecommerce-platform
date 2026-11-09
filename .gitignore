@@ -96,3 +96,19 @@ verificar-estrutura-backup.cjs
 /comandos/
 /scripts/
 /iniciar-emuladores.ps1
+
+# Copias temporarias e diagnosticos
+/app/closet/stlyle.txt
+/app/decor3d/style.txt
+/comparacao-functions.txt
+
+# Scripts seguros de controle dos emuladores
+!/scripts/
+!/scripts/emulators/
+/scripts/emulators/*
+!/scripts/emulators/controlar-emulador.cjs
+!/scripts/emulators/parar-emulador.ps1
+
+# Manter ferramentas de manutencao e recuperacao locais
+/scripts/maintenance/
+/scripts/recovery/

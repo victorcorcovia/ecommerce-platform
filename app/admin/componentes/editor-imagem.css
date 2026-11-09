@@ -1,0 +1,111 @@
+/* EDITOR DE RECORTE DE IMAGENS */
+
+.editor-imagem-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.editor-imagem-modal {
+  width: 100%;
+  max-width: 760px;
+  max-height: 95vh;
+  overflow-y: auto;
+  background: #ffffff;
+  color: #333333;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.editor-imagem-modal h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+
+.editor-imagem-area {
+  height: min(55vh, 450px);
+  margin: 20px 0;
+  background: #eeeeee;
+  overflow: hidden;
+}
+
+.editor-imagem-area img {
+  display: block;
+  max-width: 100%;
+}
+
+.editor-imagem-acoes {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.editor-imagem-acoes button {
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: 1px solid #dddddd;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Tema padrão do editor */
+.editor-imagem-overlay {
+  --editor-cor-principal: #b9904f;
+  --editor-cor-hover: #96713c;
+}
+
+/* Lolly Closet */
+.editor-imagem-overlay[data-loja="closet"] {
+  --editor-cor-principal: #b9904f;
+  --editor-cor-hover: #96713c;
+}
+
+/* Lolly Decor 3D */
+.editor-imagem-overlay[data-loja="3d"] {
+  --editor-cor-principal: #466348;
+  --editor-cor-hover: #789B7A;
+}
+
+/* Botão de confirmação */
+.editor-imagem-overlay .editor-imagem-confirmar {
+  background: var(--editor-cor-principal);
+  color: #ffffff;
+  border-color: var(--editor-cor-principal) !important;
+  transition: background 0.2s ease;
+}
+
+/* Efeito ao passar o mouse */
+.editor-imagem-overlay .editor-imagem-confirmar:hover:not(:disabled) {
+  background: var(--editor-cor-hover);
+  border-color: var(--editor-cor-hover) !important;
+}
+
+@media (max-width: 600px) {
+  .editor-imagem-modal {
+    padding: 16px;
+  }
+
+  .editor-imagem-area {
+    height: 45vh;
+  }
+
+  .editor-imagem-acoes button {
+    flex: 1;
+  }
+}
+
+/* COR DOS TEXTOS DO EDITOR */
+.editor-imagem-overlay .editor-imagem-modal h2 {
+  color: #333333 !important;
+}
+
+.editor-imagem-overlay .editor-imagem-modal p {
+  color: #666666 !important;
+}

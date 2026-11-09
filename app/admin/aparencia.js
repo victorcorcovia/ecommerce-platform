@@ -3,10 +3,12 @@ import { db, functions } from "./firebase-config.js";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 
 import { httpsCallable } from "firebase/functions";
+import { abrirEditorImagem } from "./componentes/editor-imagem.js";
 
 const autorizarUploadBanner = httpsCallable(functions, "autorizarUploadBanner");
 
 const salvarBannerLoja = httpsCallable(functions, "salvarBannerLoja");
+const removerBannerLoja = httpsCallable(functions, "removerBannerLoja");
 const TAMANHO_MAXIMO_BANNER = 5 * 1024 * 1024;
 
 async function enviarImagemBanner(arquivo, loja) {
@@ -53,16 +55,24 @@ async function enviarImagemBanner(arquivo, loja) {
 
 const lojaAparencia = document.getElementById("lojaAparencia");
 const bannerPrincipal = document.getElementById("bannerPrincipal");
+
+let versaoSelecaoBanner = 0;
+let editandoBanner = false;
+
 const previewBanner = document.getElementById("previewBanner");
+const containerPreviewBanner = document.getElementById(
+  "containerPreviewBanner",
+);
+
+const removerPreviewBanner = document.getElementById("removerPreviewBanner");
+
+let imagemBannerSalva = null;
 const formAparencia = document.getElementById("formAparencia");
 const corFundoBanner = document.getElementById("corFundoBanner");
 
 let urlPreview = null;
 
-// Mostrar pré-visualização
-bannerPrincipal.addEventListener("change", () => {
-  const arquivo = bannerPrincipal.files[0];
-
+function limparPreviewBanner() {
   if (urlPreview) {
     URL.revokeObjectURL(urlPreview);
     urlPreview = null;
@@ -71,11 +81,40 @@ bannerPrincipal.addEventListener("change", () => {
   previewBanner.removeAttribute("src");
   previewBanner.style.display = "none";
 
-  if (!arquivo) return;
+  containerPreviewBanner.style.display = "none";
+  removerPreviewBanner.style.display = "none";
+}
+
+function mostrarPreviewBanner(url, temporaria = false) {
+  if (!url) return;
+
+  previewBanner.src = url;
+  previewBanner.style.display = "block";
+
+  containerPreviewBanner.style.display = "inline-block";
+
+  removerPreviewBanner.style.display = "flex";
+}
+
+/* Pré-visualização do banner com editor de recorte */
+bannerPrincipal.addEventListener("change", async () => {
+  const arquivo = bannerPrincipal.files[0];
+
+  // Identifica a seleção e a loja de origem
+  const versaoAtual = ++versaoSelecaoBanner;
+  const lojaOriginal = lojaAparencia.value;
+
+  limparPreviewBanner();
+
+  if (!arquivo) {
+    mostrarPreviewBanner(imagemBannerSalva?.url);
+    return;
+  }
 
   if (arquivo.size > TAMANHO_MAXIMO_BANNER) {
     alert("A imagem deve ter no máximo 5 MB.");
     bannerPrincipal.value = "";
+    mostrarPreviewBanner(imagemBannerSalva?.url);
     return;
   }
 
@@ -84,12 +123,105 @@ bannerPrincipal.addEventListener("change", () => {
   if (!formatosPermitidos.includes(arquivo.type)) {
     alert("Selecione uma imagem JPG, PNG ou WebP.");
     bannerPrincipal.value = "";
+    mostrarPreviewBanner(imagemBannerSalva?.url);
     return;
   }
 
-  urlPreview = URL.createObjectURL(arquivo);
-  previewBanner.src = urlPreview;
-  previewBanner.style.display = "block";
+  editandoBanner = true;
+
+  try {
+    const recortado = await abrirEditorImagem(arquivo, {
+      proporcao: 3 / 1,
+      largura: 1920,
+      altura: 640,
+    });
+
+    // Impede aplicar o recorte em outra loja
+    if (
+      versaoAtual !== versaoSelecaoBanner ||
+      lojaAparencia.value !== lojaOriginal
+    ) {
+      return;
+    }
+
+    if (!recortado) {
+      bannerPrincipal.value = "";
+      mostrarPreviewBanner(imagemBannerSalva?.url);
+      return;
+    }
+
+    if (recortado.size > TAMANHO_MAXIMO_BANNER) {
+      alert("A imagem recortada ultrapassou 5 MB.");
+      bannerPrincipal.value = "";
+      mostrarPreviewBanner(imagemBannerSalva?.url);
+      return;
+    }
+
+    const transferencia = new DataTransfer();
+    transferencia.items.add(recortado);
+    bannerPrincipal.files = transferencia.files;
+
+    urlPreview = URL.createObjectURL(recortado);
+    mostrarPreviewBanner(urlPreview, true);
+  } catch (erro) {
+    console.error("Erro ao editar banner:", erro);
+
+    bannerPrincipal.value = "";
+    mostrarPreviewBanner(imagemBannerSalva?.url);
+
+    alert("Não foi possível editar a imagem do banner.");
+  } finally {
+    editandoBanner = false;
+  }
+});
+
+removerPreviewBanner.addEventListener("click", async () => {
+  // Se a imagem ainda não foi salva, apenas cancelar a seleção.
+  if (bannerPrincipal.files.length > 0) {
+    bannerPrincipal.value = "";
+    limparPreviewBanner();
+
+    if (imagemBannerSalva?.url) {
+      mostrarPreviewBanner(imagemBannerSalva.url);
+    }
+
+    return;
+  }
+
+  // Se não existe imagem salva, não há nada para remover.
+  if (!imagemBannerSalva?.publicId) return;
+
+  const loja = lojaAparencia.value;
+  const publicId = imagemBannerSalva.publicId;
+
+  const confirmou = confirm("Deseja remover o banner cadastrado desta loja?");
+
+  if (!confirmou) return;
+
+  const botaoSalvar = formAparencia.querySelector('button[type="submit"]');
+
+  removerPreviewBanner.disabled = true;
+  if (botaoSalvar) botaoSalvar.disabled = true;
+
+  try {
+    await removerBannerLoja({
+      loja,
+      publicId,
+    });
+
+    // Atualizar a tela com os dados salvos no Firebase.
+    if (loja === lojaAparencia.value) {
+      await carregarAparenciaLoja();
+    }
+
+    alert("Banner removido com sucesso!");
+  } catch (erro) {
+    console.error("Erro ao remover banner:", erro);
+    alert("Não foi possível remover o banner: " + erro.message);
+  } finally {
+    removerPreviewBanner.disabled = false;
+    if (botaoSalvar) botaoSalvar.disabled = false;
+  }
 });
 
 // Carregar configurações da loja selecionada
@@ -97,16 +229,9 @@ async function carregarAparenciaLoja() {
   const loja = lojaAparencia.value;
 
   bannerPrincipal.value = "";
+  imagemBannerSalva = null;
+  limparPreviewBanner();
 
-  if (urlPreview) {
-    URL.revokeObjectURL(urlPreview);
-    urlPreview = null;
-  }
-
-  previewBanner.removeAttribute("src");
-  previewBanner.style.display = "none";
-
-  // Cor padrão quando não existe configuração salva
   corFundoBanner.value = "#ffffff";
 
   try {
@@ -131,8 +256,8 @@ async function carregarAparenciaLoja() {
         if (opcaoImagem) opcaoImagem.checked = true;
 
         if (configuracao.imagem?.url) {
-          previewBanner.src = configuracao.imagem.url;
-          previewBanner.style.display = "block";
+          imagemBannerSalva = configuracao.imagem;
+          mostrarPreviewBanner(imagemBannerSalva.url);
         }
       } else {
         const opcaoCor = document.querySelector(
@@ -156,8 +281,10 @@ async function carregarAparenciaLoja() {
   }
 }
 
-// Atualizar quando trocar de loja
-lojaAparencia.addEventListener("change", carregarAparenciaLoja);
+lojaAparencia.addEventListener("change", () => {
+  versaoSelecaoBanner++;
+  carregarAparenciaLoja();
+});
 
 // Carregar a loja inicial
 carregarAparenciaLoja();
@@ -165,6 +292,11 @@ carregarAparenciaLoja();
 // Salvamento será implementado com Firebase
 formAparencia.addEventListener("submit", async (event) => {
   event.preventDefault();
+
+  if (editandoBanner) {
+    alert("Conclua ou cancele o recorte antes de salvar o banner.");
+    return;
+  }
 
   const loja = lojaAparencia.value;
   const tipo = document.querySelector(
@@ -191,7 +323,19 @@ formAparencia.addEventListener("submit", async (event) => {
       const arquivo = bannerPrincipal.files[0];
 
       if (!arquivo) {
-        alert("Selecione uma imagem para o banner.");
+        if (!imagemBannerSalva?.url) {
+          alert("Selecione uma imagem para o banner.");
+          return;
+        }
+
+        await salvarBannerLoja({
+          loja,
+          tipo: "imagem",
+          imagem: imagemBannerSalva,
+        });
+
+        alert("Banner salvo com sucesso!");
+        await carregarAparenciaLoja();
         return;
       }
 

@@ -15,17 +15,98 @@
         </a>
       </div>
 
-      <nav>
+      <nav id="menu-principal" aria-label="Navegação principal">
+        <div class="titulo-menu-mobile">
+          <h2>Menu</h2>
+
+          <button
+            type="button"
+            id="fechar-menu-mobile"
+            aria-label="Fechar menu"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              aria-hidden="true"
+            >
+              <path d="M5 5L19 19M19 5L5 19" />
+            </svg>
+          </button>
+        </div>
+
         <ul>
           <li><a href="index.html">Início</a></li>
           <li><a href="produtos.html">Produtos</a></li>
           <li><a href="#sobre">Sobre</a></li>
         </ul>
+
+        <div class="acoes-menu-mobile" id="acoes-menu-mobile">
+          <a href="#" class="btn conta-menu" aria-label="Minha conta">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
+            </svg>
+            <span>Minha conta</span>
+          </a>
+
+          <a href="#" class="btn carrinho-menu" id="abrir-carrinho-menu">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="9" cy="20" r="1"></circle>
+              <circle cx="19" cy="20" r="1"></circle>
+              <path d="M3 4h2l2.5 11h10.5l2-7H7"></path>
+            </svg>
+            <span>Carrinho (<span id="contador-carrinho-menu">0</span>)</span>
+          </a>
+        </div>
       </nav>
 
-      <div class="acoes">
-        <a href="#" class="btn">Minha conta</a>
-        <a href="#" class="btn btn-outline carrinho" id="abrir-carrinho">
+      <div class="acoes" id="acoes-cabecalho">
+        <a href="#" class="btn conta-desktop" id="link-minha-conta">
+          <svg
+            class="icone-conta"
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
+          </svg>
+          <span>Minha conta</span>
+        </a>
+
+        <a
+          href="#"
+          class="btn btn-outline carrinho"
+          id="abrir-carrinho"
+          aria-label="Abrir carrinho"
+        >
           <svg
             width="24"
             height="24"
@@ -35,6 +116,7 @@
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
+            aria-hidden="true"
           >
             <circle cx="9" cy="20" r="1"></circle>
             <circle cx="19" cy="20" r="1"></circle>
@@ -43,6 +125,26 @@
 
           <span id="contador-carrinho">0</span>
         </a>
+
+        <button
+          type="button"
+          class="menu-mobile-botao"
+          id="alternar-menu-mobile"
+          aria-label="Abrir menu de navegação"
+          aria-controls="menu-principal"
+          aria-expanded="false"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <path d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
       </div>
     </header>
 
@@ -90,7 +192,7 @@
      ======================================== -->
 
       <div class="produtos" id="produtos">
-        <h2>Pronta entrega</h2>
+        <h2>Novidades</h2>
 
         <div class="lista-produtos" id="lista-novidades">
           <p>Carregando produtos...</p>
@@ -196,6 +298,7 @@
     </footer>
     <script src="script.js"></script>
     <script type="module" src="./banner.js"></script>
+    <script src="./menu-mobile.js"></script>
     <script type="module" src="./novidades.js"></script>
   </body>
 </html>
