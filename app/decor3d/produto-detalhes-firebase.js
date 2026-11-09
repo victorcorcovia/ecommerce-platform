@@ -1,9 +1,9 @@
+
 import { buscarProdutoDecor3DPorId } from "./produtos-firebase.js";
 
 async function carregarProdutoFirebase() {
   const parametros = new URLSearchParams(window.location.search);
   const idProduto = parametros.get("id");
-
   const botaoAdicionar = document.querySelector("#adicionar-produto");
   const mensagem = document.querySelector("#mensagem-produto");
 
@@ -23,124 +23,12 @@ async function carregarProdutoFirebase() {
     const produto = await buscarProdutoDecor3DPorId(idProduto);
 
     if (!produto) {
-      // ==========================================
-      // ADICIONAR PRODUTO FIREBASE AO CARRINHO
-      // ==========================================
-
-      const campoQuantidade = document.querySelector("#quantidade-produto");
-      const campoEstoque = document.querySelector("#produto-estoque");
-
-      // Não considerar estoque ausente como zero válido.
-      const estoqueValido =
-        produto.estoque !== undefined &&
-        produto.estoque !== null &&
-        Number.isInteger(Number(produto.estoque)) &&
-        Number(produto.estoque) >= 0;
-
-      const estoque = estoqueValido ? Number(produto.estoque) : 0;
-
-      if (campoEstoque) {
-        campoEstoque.textContent = estoqueValido
-          ? `Estoque disponível: ${estoque} unidades`
-          : "Estoque indisponível para consulta";
-      }
-
-      if (campoQuantidade) {
-        campoQuantidade.min = 1;
-        campoQuantidade.max = estoque;
-      }
-
-      if (botaoAdicionar) {
-        botaoAdicionar.disabled =
-          !estoqueValido ||
-          estoque <= 0 ||
-          imagens.length === 0 ||
-          typeof window.adicionarProdutoFirebaseAoCarrinho !== "function";
-
-        botaoAdicionar.addEventListener("click", function () {
-          const quantidade = Number(campoQuantidade?.value);
-
-          if (!Number.isInteger(quantidade) || quantidade < 1) {
-            if (mensagem) {
-              mensagem.textContent = "Informe uma quantidade válida.";
-            }
-            return;
-          }
-
-          if (quantidade > estoque) {
-            if (mensagem) {
-              mensagem.textContent = `Quantidade máxima disponível: ${estoque}.`;
-            }
-            return;
-          }
-
-          // Validar cor selecionada
-          const corSelecionada = window.corSelecionadaFirebase ?? null;
-
-          if (cores.length > 0) {
-            const corValida = cores.some(function (cor) {
-              return (
-                (cor.nome || cor.codigo) === corSelecionada &&
-                typeof cor.codigo === "string" &&
-                /^#[0-9a-fA-F]{6}$/.test(cor.codigo)
-              );
-            });
-
-            if (!corValida) {
-              if (mensagem) {
-                mensagem.textContent = "Selecione uma cor.";
-              }
-              return;
-            }
-          }
-
-          // Validar personalização com nome
-          const nomeConfirmado =
-            window.nomePersonalizadoConfirmadoFirebase || "";
-
-          if (permitePersonalizacao && !nomeConfirmado.trim()) {
-            if (mensagem) {
-              mensagem.textContent =
-                "Confirme o nome personalizado antes de adicionar.";
-            }
-            return;
-          }
-
-          if (permitePersonalizacao && nomeConfirmado.length > 60) {
-            if (mensagem) {
-              mensagem.textContent =
-                "O nome personalizado deve ter no máximo 60 caracteres.";
-            }
-            return;
-          }
-
-          // Enviar produto para o carrinho existente
-          const adicionado = window.adicionarProdutoFirebaseAoCarrinho({
-            id: idProduto,
-            nome: produto.nome,
-            preco: produto.preco,
-            imagem: imagens[0],
-            cor: corSelecionada,
-            personalizacao: permitePersonalizacao
-              ? nomeConfirmado.trim()
-              : null,
-            quantidade: quantidade,
-            estoque: estoque,
-          });
-
-          if (mensagem) {
-            mensagem.textContent = adicionado
-              ? "Produto adicionado ao carrinho!"
-              : "Não foi possível adicionar. Verifique o estoque disponível.";
-          }
-        });
-      }
-
       if (mensagem) {
-        mensagem.textContent = "";
+        mensagem.textContent = "Produto não encontrado.";
       }
       return;
     }
+
     // Disponibiliza os dados para a integração com o carrinho.
     window.produtoAtualFirebase = produto;
 
@@ -166,7 +54,6 @@ async function carregarProdutoFirebase() {
     // ==========================================
     // PERSONALIZAÇÃO COM NOME - FIREBASE
     // ==========================================
-
     const secaoPersonalizacao = document.querySelector(
       "#personalizacao-produto",
     );
@@ -190,10 +77,8 @@ async function carregarProdutoFirebase() {
     // ==========================================
     // CORES DO PRODUTO - FIREBASE
     // ==========================================
-
     const secaoCores = document.querySelector("#produto-cores");
     const containerCores = document.querySelector("#produto-cores .cores");
-
     const cores = Array.isArray(produto.cores) ? produto.cores : [];
 
     window.corSelecionadaFirebase = null;
@@ -216,7 +101,6 @@ async function carregarProdutoFirebase() {
           }
 
           const botaoCor = document.createElement("button");
-
           botaoCor.type = "button";
           botaoCor.className = "cor-produto";
           botaoCor.style.backgroundColor = cor.codigo;
@@ -244,10 +128,10 @@ async function carregarProdutoFirebase() {
         }
       }
     }
+
     // ==========================================
     // GALERIA DE IMAGENS DO FIREBASE
     // ==========================================
-
     const imagemPrincipal = document.querySelector("#produto-imagem");
     const galeriaMiniaturas = document.querySelector("#galeria-miniaturas");
     const botaoAnterior = document.querySelector("#foto-anterior");
@@ -321,8 +205,117 @@ async function carregarProdutoFirebase() {
       imagemPrincipal.alt = "Produto sem imagem";
     }
 
-    // A galeria, as cores e o carrinho serão integrados
-    // nas próximas etapas.
+    // ==========================================
+    // ESTOQUE E CARRINHO
+    // ==========================================
+    const campoQuantidade = document.querySelector("#quantidade-produto");
+    const campoEstoque = document.querySelector("#produto-estoque");
+
+    // Não considerar estoque ausente como zero válido.
+    const estoqueValido =
+      produto.estoque !== undefined &&
+      produto.estoque !== null &&
+      Number.isInteger(Number(produto.estoque)) &&
+      Number(produto.estoque) >= 0;
+
+    const estoque = estoqueValido ? Number(produto.estoque) : 0;
+
+    if (campoEstoque) {
+      campoEstoque.textContent = estoqueValido
+        ? `Estoque disponível: ${estoque} unidades`
+        : "Estoque indisponível para consulta";
+    }
+
+    if (campoQuantidade) {
+      campoQuantidade.min = 1;
+      campoQuantidade.max = estoque;
+    }
+
+    if (botaoAdicionar) {
+      botaoAdicionar.disabled =
+        !estoqueValido ||
+        estoque <= 0 ||
+        imagens.length === 0 ||
+        typeof window.adicionarProdutoFirebaseAoCarrinho !== "function";
+
+      botaoAdicionar.addEventListener("click", function () {
+        const quantidade = Number(campoQuantidade?.value);
+
+        if (!Number.isInteger(quantidade) || quantidade < 1) {
+          if (mensagem) {
+            mensagem.textContent = "Informe uma quantidade válida.";
+          }
+          return;
+        }
+
+        if (quantidade > estoque) {
+          if (mensagem) {
+            mensagem.textContent = `Quantidade máxima disponível: ${estoque}.`;
+          }
+          return;
+        }
+
+        // Validar cor selecionada.
+        const corSelecionada = window.corSelecionadaFirebase ?? null;
+
+        if (cores.length > 0) {
+          const corValida = cores.some(function (cor) {
+            return (
+              (cor.nome || cor.codigo) === corSelecionada &&
+              typeof cor.codigo === "string" &&
+              /^#[0-9a-fA-F]{6}$/.test(cor.codigo)
+            );
+          });
+
+          if (!corValida) {
+            if (mensagem) {
+              mensagem.textContent = "Selecione uma cor.";
+            }
+            return;
+          }
+        }
+
+        // Validar personalização com nome.
+        const nomeConfirmado =
+          window.nomePersonalizadoConfirmadoFirebase || "";
+
+        if (permitePersonalizacao && !nomeConfirmado.trim()) {
+          if (mensagem) {
+            mensagem.textContent =
+              "Confirme o nome personalizado antes de adicionar.";
+          }
+          return;
+        }
+
+        if (permitePersonalizacao && nomeConfirmado.length > 60) {
+          if (mensagem) {
+            mensagem.textContent =
+              "O nome personalizado deve ter no máximo 60 caracteres.";
+          }
+          return;
+        }
+
+        // Enviar produto para o carrinho existente.
+        const adicionado = window.adicionarProdutoFirebaseAoCarrinho({
+          id: idProduto,
+          nome: produto.nome,
+          preco: produto.preco,
+          imagem: imagens[0],
+          cor: corSelecionada,
+          personalizacao: permitePersonalizacao
+            ? nomeConfirmado.trim()
+            : null,
+          quantidade: quantidade,
+          estoque: estoque,
+        });
+
+        if (mensagem) {
+          mensagem.textContent = adicionado
+            ? "Produto adicionado ao carrinho!"
+            : "Não foi possível adicionar. Verifique o estoque disponível.";
+        }
+      });
+    }
 
     if (mensagem) {
       mensagem.textContent = "";

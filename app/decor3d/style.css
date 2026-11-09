@@ -3119,3 +3119,75 @@ header .acoes .carrinho svg {
     box-sizing: border-box;
   }
 }
+
+
+/* ==========================================
+   CARRINHO LATERAL - ROLAGEM INDEPENDENTE
+   Lolly Closet e Lolly Decor 3D
+   ========================================== */
+
+.painel-carrinho {
+    display: flex;
+    flex-direction: column;
+
+    height: 100vh;
+    height: 100dvh;
+
+    max-height: 100dvh;
+    box-sizing: border-box;
+
+    overflow: hidden;
+}
+
+/* Cabeçalho sempre visível */
+.painel-carrinho > .cabecalho-carrinho {
+    flex: 0 0 auto;
+}
+
+/* Apenas a lista de produtos possui scroll */
+.painel-carrinho > .conteudo-carrinho {
+    flex: 1 1 auto;
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+}
+
+/* Rodapé da Lolly Closet */
+.painel-carrinho > .resumo-carrinho {
+    flex: 0 0 auto;
+    min-height: 0;
+    max-height: 55%;
+    overflow-y: auto;
+}
+
+/* Rodapé da Lolly Decor 3D */
+.painel-carrinho > .calculo-frete {
+    flex: 0 0 auto;
+    min-height: 0;
+    max-height: 55%;
+    overflow-y: auto;
+
+    margin: 0;
+    padding-top: 16px;
+}
+
+/* Ajustes para celulares */
+@media (max-width: 600px) {
+    .painel-carrinho {
+        padding: 16px;
+    }
+
+    .painel-carrinho > .conteudo-carrinho {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    .painel-carrinho > .resumo-carrinho,
+    .painel-carrinho > .calculo-frete {
+        max-height: 50%;
+    }
+}
