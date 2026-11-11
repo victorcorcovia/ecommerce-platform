@@ -856,7 +856,7 @@ if (botaoAdicionarProduto && campoQuantidadeProduto && produtoAtual) {
       const item = {
         nome: produtoAtual.nome,
         preco: produtoAtual.preco,
-        estoque: Number(produto.estoque) || 0,
+        estoque: Number(produtoAtual.estoque) || 0,
         imagem: produtoAtual.imagens[0],
         cor: corSelecionada,
         quantidade: quantidade,

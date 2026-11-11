@@ -68,6 +68,14 @@ async function carregarVitrine() {
     }
   } catch (erro) {
     console.error("Erro ao carregar produtos da Closet:", erro);
+
+    lista.replaceChildren();
+
+    const mensagem = document.createElement("p");
+    mensagem.textContent =
+      "Não foi possível carregar os produtos. Tente novamente mais tarde.";
+
+    lista.appendChild(mensagem);
   }
 }
 

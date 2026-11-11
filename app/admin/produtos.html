@@ -403,6 +403,136 @@
             </table>
           </div>
         </section>
+
+        <!-- GERENCIAMENTO DE EMBALAGENS -->
+        <section class="gerenciar-embalagens">
+          <div class="cabecalho-embalagens">
+            <div>
+              <h2>Embalagens</h2>
+              <p>Gerencie as embalagens utilizadas no envio dos produtos</p>
+            </div>
+
+            <button
+              type="button"
+              class="btn-novo-produto"
+              id="btnNovaEmbalagem"
+            >
+              + Nova embalagem
+            </button>
+          </div>
+
+          <!-- FORMULÁRIO -->
+          <form id="cadastroEmbalagem" class="form-embalagem-produto">
+            <div class="grid-form">
+              <div class="campo-form">
+                <label for="nomeEmbalagem">Nome da embalagem *</label>
+                <input
+                  type="text"
+                  id="nomeEmbalagem"
+                  placeholder="Ex: Caixa pequena"
+                  maxlength="100"
+                  required
+                />
+              </div>
+
+              <div class="campo-form">
+                <label for="lojaEmbalagem">Loja *</label>
+                <select id="lojaEmbalagem" required>
+                  <option value="">Selecione a loja</option>
+                  <option value="closet">Closet</option>
+                  <option value="3d">Decor 3D</option>
+                  <option value="ambas">Ambas as lojas</option>
+                </select>
+              </div>
+
+              <div class="campo-form">
+                <label for="comprimentoEmbalagem">Comprimento (cm) *</label>
+                <input
+                  type="number"
+                  id="comprimentoEmbalagem"
+                  min="0.1"
+                  step="0.1"
+                  required
+                />
+              </div>
+
+              <div class="campo-form">
+                <label for="larguraEmbalagem">Largura (cm) *</label>
+                <input
+                  type="number"
+                  id="larguraEmbalagem"
+                  min="0.1"
+                  step="0.1"
+                  required
+                />
+              </div>
+
+              <div class="campo-form">
+                <label for="alturaEmbalagem">Altura (cm) *</label>
+                <input
+                  type="number"
+                  id="alturaEmbalagem"
+                  min="0.1"
+                  step="0.1"
+                  required
+                />
+              </div>
+
+              <div class="campo-form">
+                <label for="pesoEmbalagem">Peso da embalagem vazia (g) *</label>
+                <input
+                  type="number"
+                  id="pesoEmbalagem"
+                  min="0"
+                  step="1"
+                  required
+                />
+              </div>
+
+              <div class="campo-form">
+                <label for="statusEmbalagem">Status *</label>
+                <select id="statusEmbalagem" required>
+                  <option value="ativa">Ativa</option>
+                  <option value="inativa">Inativa</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="acoes-form">
+              <button
+                type="button"
+                class="btn-cancelar"
+                id="btnCancelarEmbalagem"
+              >
+                Cancelar
+              </button>
+              <button type="submit" class="btn-salvar">Salvar embalagem</button>
+            </div>
+          </form>
+
+          <!-- TABELA -->
+          <div class="tabela-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Embalagem</th>
+                  <th>Loja</th>
+                  <th>Dimensões (cm)</th>
+                  <th>Peso (g)</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaEmbalagens">
+                <tr>
+                  <td colspan="6" class="sem-dados">
+                    Nenhuma embalagem cadastrada.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
       </main>
     </div>
 

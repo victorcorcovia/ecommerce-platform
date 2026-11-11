@@ -1344,3 +1344,25 @@ if (btnAdicionarTamanhoProduto && inputTamanhoProduto) {
     inputTamanhoProduto.focus();
   });
 }
+
+
+/* ==========================================
+   LOLLY - FORMULÁRIO DE EMBALAGENS
+========================================== */
+
+const btnNovaEmbalagem = document.getElementById("btnNovaEmbalagem");
+const btnCancelarEmbalagem = document.getElementById("btnCancelarEmbalagem");
+const cadastroEmbalagem = document.getElementById("cadastroEmbalagem");
+
+if (btnNovaEmbalagem && btnCancelarEmbalagem && cadastroEmbalagem) {
+  btnNovaEmbalagem.addEventListener("click", () => {
+    cadastroEmbalagem.reset();
+    cadastroEmbalagem.classList.add("aberto");
+    document.getElementById("nomeEmbalagem")?.focus();
+  });
+
+  btnCancelarEmbalagem.addEventListener("click", () => {
+    cadastroEmbalagem.reset();
+    cadastroEmbalagem.classList.remove("aberto");
+  });
+}

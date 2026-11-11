@@ -3119,3 +3119,32 @@ header .acoes .carrinho svg {
     box-sizing: border-box;
   }
 }
+
+@media (max-width: 800px) {
+  .pagina-catalogo .filtros-produtos {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 10px;
+
+    width: 100%;
+    max-width: 100%;
+    margin: 18px auto 20px;
+    padding: 5px 12px 15px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+  }
+
+  .pagina-catalogo .filtros-produtos::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pagina-catalogo .filtros-produtos button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+}

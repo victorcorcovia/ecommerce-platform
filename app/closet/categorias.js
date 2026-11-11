@@ -1,13 +1,6 @@
-
 import { db } from "./firebase-config.js";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
+import { buscarCategoriasCloset } from "./categorias-firebase.js";
 
 async function carregarCategorias() {
   const secao = document.getElementById("categorias");
@@ -19,36 +12,26 @@ async function carregarCategorias() {
   lista.replaceChildren();
 
   try {
-    const [resultadoCategorias, resultadoAparencia] =
-      await Promise.all([
-        getDocs(
-          query(
-            collection(db, "categorias"),
-            where("loja", "==", "closet")
-          )
-        ),
-        getDoc(doc(db, "aparenciaLojas", "closet")),
-      ]);
+    const [categoriasPublicas, resultadoAparencia] = await Promise.all([
+      buscarCategoriasCloset(),
+      getDoc(doc(db, "aparenciaLojas", "closet")),
+    ]);
 
-    const imagens =
-      resultadoAparencia.data()?.imagensCategorias || {};
+    const imagens = resultadoAparencia.data()?.imagensCategorias || {};
 
-    const categorias = resultadoCategorias.docs
-      .map((documento) => ({
-        id: documento.id,
-        nome: documento.data().nome || documento.id,
-        imagem: imagens[documento.id]?.url,
+    const categorias = categoriasPublicas
+      .map((categoria) => ({
+        id: categoria.id,
+        nome: categoria.nome || categoria.id,
+        imagem: imagens[categoria.id]?.url,
       }))
       .filter((categoria) => categoria.imagem)
-      .sort((a, b) =>
-        a.nome.localeCompare(b.nome, "pt-BR")
-      );
+      .sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
 
     for (const categoria of categorias) {
       const card = document.createElement("a");
       card.className = "categoria";
-      card.href =
-        `produtos.html?categoria=${encodeURIComponent(categoria.id)}`;
+      card.href = `produtos.html?categoria=${encodeURIComponent(categoria.id)}`;
 
       const visual = document.createElement("div");
       visual.className = "categoria-visual";
