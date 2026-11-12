@@ -12,7 +12,6 @@ import {
 
 const tabelaEstoque = document.getElementById("tabelaEstoque");
 const tabelaHistoricoEstoque = document.getElementById( "tabelaHistoricoEstoque",);
-const filtroLojaEstoque = document.getElementById("filtroLojaEstoque");
 const buscarEstoque = document.getElementById("buscarEstoque");
 const movimentacaoEstoque = document.getElementById("movimentacaoEstoque");
 const produtoMovimentacao = document.getElementById("produtoMovimentacao");
@@ -27,13 +26,6 @@ const btnCancelarMovimentacao = document.getElementById(
 
 let produtoSelecionado = null;
 let produtos = [];
-
-function obterNomeLoja(loja) {
-  if (loja === "closet") return "Closet";
-  if (loja === "3d") return "Decor 3D";
-
-  return loja;
-}
 
 async function carregarEstoque() {
   try {
@@ -54,57 +46,40 @@ async function carregarEstoque() {
       });
     });
 
-    // Busca os produtos da Decor 3D
-    const consultaDecor3D = query(
-      collection(db, "produtos"),
-      where("loja", "==", "3d"),
-    );
-
-    const resultadoDecor3D = await getDocs(consultaDecor3D);
-
-    resultadoDecor3D.forEach((documento) => {
-      produtos.push({
-        id: documento.id,
-        ...documento.data(),
-      });
-    });
-
     renderizarEstoque();
   } catch (erro) {
     console.error("Erro ao carregar estoque:", erro);
 
     tabelaEstoque.innerHTML = `
       <tr>
-        <td colspan="5">Erro ao carregar o estoque.</td>
+        <td colspan="4">Erro ao carregar o estoque.</td>
       </tr>
     `;
   }
 }
 
+function escaparHtml(valor) {
+  return String(valor ?? "").replace(/[&<>"']/g, (caractere) => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;",
+  })[caractere]);
+}
+
 function renderizarEstoque() {
-  const lojaSelecionada = filtroLojaEstoque.value;
   const busca = buscarEstoque.value.toLowerCase().trim();
 
   let produtosFiltrados = produtos;
 
-  // Filtrar por loja
-  if (lojaSelecionada !== "todas") {
-    produtosFiltrados = produtosFiltrados.filter(
-      (produto) => produto.loja === lojaSelecionada,
-    );
-  }
-
   // Buscar pelo nome
   if (busca) {
     produtosFiltrados = produtosFiltrados.filter((produto) =>
-      produto.nome.toLowerCase().includes(busca),
+      String(produto.nome || "").toLowerCase().includes(busca),
     );
   }
 
   if (produtosFiltrados.length === 0) {
     tabelaEstoque.innerHTML = `
       <tr>
-        <td colspan="5">Nenhum produto encontrado.</td>
+        <td colspan="4">Nenhum produto encontrado.</td>
       </tr>
     `;
 
@@ -127,11 +102,7 @@ function renderizarEstoque() {
     const linha = document.createElement("tr");
 
     linha.innerHTML = `
-      <td>${produto.nome}</td>
-
-      <td>
-        ${obterNomeLoja(produto.loja)}
-      </td>
+      <td>${escaparHtml(produto.nome)}</td>
 
       <td>
         ${estoqueAtual}
@@ -154,10 +125,6 @@ function renderizarEstoque() {
     tabelaEstoque.appendChild(linha);
   });
 }
-
-filtroLojaEstoque.addEventListener("change", () => {
-  renderizarEstoque();
-});
 
 buscarEstoque.addEventListener("input", () => {
   renderizarEstoque();
@@ -240,6 +207,10 @@ formMovimentacao.addEventListener("submit", async (evento) => {
       }
 
       const produto = documentoProduto.data();
+
+      if (produto.loja !== "closet") {
+        throw new Error("Movimentação permitida apenas para produtos da Closet.");
+      }
       const estoqueAtual = produto.estoque;
 
       if (
@@ -321,21 +292,6 @@ async function carregarHistoricoEstoque() {
       });
     });
 
-    // Movimentações da Decor 3D
-    const consultaDecor3D = query(
-      collection(db, "movimentacoesEstoque"),
-      where("loja", "==", "3d"),
-    );
-
-    const resultadoDecor3D = await getDocs(consultaDecor3D);
-
-    resultadoDecor3D.forEach((documento) => {
-      movimentacoes.push({
-        id: documento.id,
-        ...documento.data(),
-      });
-    });
-
     // Mais recentes primeiro
     movimentacoes.sort((a, b) => {
       const dataA = a.criadoEm?.toMillis?.() || 0;
@@ -347,7 +303,7 @@ async function carregarHistoricoEstoque() {
     if (movimentacoes.length === 0) {
       tabelaHistoricoEstoque.innerHTML = `
         <tr>
-          <td colspan="7">Nenhuma movimentação registrada.</td>
+          <td colspan="6">Nenhuma movimentação registrada.</td>
         </tr>
       `;
 
@@ -368,9 +324,7 @@ async function carregarHistoricoEstoque() {
       linha.innerHTML = `
         <td>${dataFormatada}</td>
 
-        <td>${movimentacao.produtoNome || "—"}</td>
-
-        <td>${obterNomeLoja(movimentacao.loja)}</td>
+        <td>${escaparHtml(movimentacao.produtoNome || "—")}</td>
 
         <td>${movimentacao.tipo === "entrada" ? "Entrada" : "Saída"}</td>
 
@@ -388,7 +342,7 @@ async function carregarHistoricoEstoque() {
 
     tabelaHistoricoEstoque.innerHTML = `
       <tr>
-        <td colspan="7">Erro ao carregar o histórico.</td>
+        <td colspan="6">Erro ao carregar o histórico.</td>
       </tr>
     `;
   }

@@ -22,8 +22,6 @@ const pedidosCanceladosFinanceiro = document.getElementById(
 
 const tabelaFinanceiro = document.getElementById("tabelaFinanceiro");
 
-const filtroLojaFinanceiro = document.getElementById("filtroLojaFinanceiro");
-
 const filtroPeriodoFinanceiro = document.getElementById(
   "filtroPeriodoFinanceiro",
 );
@@ -111,20 +109,6 @@ function dataEstaNoPeriodo(data) {
 }
 
 // ==========================================
-// FILTRAR PEDIDOS POR LOJA
-// ==========================================
-
-function obterPedidosFiltradosPorLoja() {
-  const lojaSelecionada = filtroLojaFinanceiro?.value || "todas";
-
-  if (lojaSelecionada === "todas") {
-    return pedidos;
-  }
-
-  return pedidos.filter((pedido) => pedido.loja === lojaSelecionada);
-}
-
-// ==========================================
 // FILTRAR PEDIDOS POR PERÍODO
 // ==========================================
 
@@ -143,9 +127,7 @@ function obterPedidosFiltradosPorPeriodo(
 }
 
 function obterPedidosFiltrados(tipoData = "criacao") {
-  const pedidosPorLoja = obterPedidosFiltradosPorLoja();
-
-  return obterPedidosFiltradosPorPeriodo(pedidosPorLoja, tipoData);
+  return obterPedidosFiltradosPorPeriodo(pedidos, tipoData);
 }
 
 // ==========================================
@@ -153,18 +135,9 @@ function obterPedidosFiltrados(tipoData = "criacao") {
 // ==========================================
 
 function obterCustosFiltrados() {
-  const lojaSelecionada = filtroLojaFinanceiro?.value || "todas";
-
   const periodoSelecionado = filtroPeriodoFinanceiro?.value || "todos";
 
   return custos.filter((custo) => {
-    const correspondeLoja =
-      lojaSelecionada === "todas" || custo.loja === lojaSelecionada;
-
-    if (!correspondeLoja) {
-      return false;
-    }
-
     if (periodoSelecionado === "todos") {
       return true;
     }
@@ -281,38 +254,14 @@ function calcularPedidosCancelados() {
 
 async function carregarPedidosFinanceiro() {
   try {
-    pedidos = [];
-
-    const consultaCloset = query(
+    const resultado = await getDocs(query(
       collection(db, "pedidos"),
       where("loja", "==", "closet"),
-    );
-
-    const consultaDecor3D = query(
-      collection(db, "pedidos"),
-      where("loja", "==", "3d"),
-    );
-
-    const [resultadoCloset, resultadoDecor3D] = await Promise.all([
-      getDocs(consultaCloset),
-      getDocs(consultaDecor3D),
-    ]);
-
-    resultadoCloset.forEach((documento) => {
-      pedidos.push({
-        id: documento.id,
-        ...documento.data(),
-      });
-    });
-
-    resultadoDecor3D.forEach((documento) => {
-      pedidos.push({
-        id: documento.id,
-        ...documento.data(),
-      });
-    });
-
-    console.log("Pedidos carregados no Financeiro:", pedidos);
+    ));
+    pedidos = resultado.docs.map((documento) => ({
+      id: documento.id,
+      ...documento.data(),
+    }));
   } catch (erro) {
     console.error("Erro ao carregar dados financeiros:", erro);
     throw erro;
@@ -325,38 +274,14 @@ async function carregarPedidosFinanceiro() {
 
 async function carregarCustosFinanceiro() {
   try {
-    custos = [];
-
-    const consultaCloset = query(
+    const resultado = await getDocs(query(
       collection(db, "custos"),
       where("loja", "==", "closet"),
-    );
-
-    const consultaDecor3D = query(
-      collection(db, "custos"),
-      where("loja", "==", "3d"),
-    );
-
-    const [resultadoCloset, resultadoDecor3D] = await Promise.all([
-      getDocs(consultaCloset),
-      getDocs(consultaDecor3D),
-    ]);
-
-    resultadoCloset.forEach((documento) => {
-      custos.push({
-        id: documento.id,
-        ...documento.data(),
-      });
-    });
-
-    resultadoDecor3D.forEach((documento) => {
-      custos.push({
-        id: documento.id,
-        ...documento.data(),
-      });
-    });
-
-    console.log("Custos carregados no Financeiro:", custos);
+    ));
+    custos = resultado.docs.map((documento) => ({
+      id: documento.id,
+      ...documento.data(),
+    }));
   } catch (erro) {
     console.error("Erro ao carregar custos no Financeiro:", erro);
     throw erro;
@@ -367,48 +292,24 @@ async function carregarCustosFinanceiro() {
 // DADOS FINANCEIROS POR LOJA
 // ==========================================
 
-function calcularDadosLoja(loja) {
-  // Total de pedidos considera a data de criação.
-  const pedidosDaLoja = obterPedidosFiltradosPorPeriodo(
-    pedidos.filter((pedido) => pedido.loja === loja),
-    "criacao",
-  );
-
-  // Pedidos pagos e faturamento consideram
-  // a data de aprovação do pagamento.
-  const pedidosPagos = obterPedidosFiltradosPorPeriodo(
-    pedidos.filter(
-      (pedido) => pedido.loja === loja && pedidoEstaFaturado(pedido),
-    ),
-    "pagamento",
-  );
-
+function calcularDadosCloset() {
+  // Pedidos realizados no período de criação.
+  const pedidosDoPeriodo = obterPedidosFiltrados("criacao");
+  // Faturamento considera a data de aprovação do pagamento.
+  const pedidosPagos = obterPedidosFaturados();
   const faturamento = pedidosPagos.reduce(
-    (total, pedido) => total + Number(pedido.total || 0),
-    0,
+    (total, pedido) => total + Number(pedido.total || 0), 0,
   );
-
-  const custosDaLoja = obterCustosFiltrados().filter(
-    (custo) => custo.loja === loja,
+  const totalCustos = obterCustosFiltrados().reduce(
+    (total, custo) => total + Number(custo.valor || 0), 0,
   );
-
-  const totalCustos = custosDaLoja.reduce(
-    (total, custo) => total + Number(custo.valor || 0),
-    0,
-  );
-
-  const lucro = faturamento - totalCustos;
-
-  const ticketMedio =
-    pedidosPagos.length > 0 ? faturamento / pedidosPagos.length : 0;
-
   return {
-    pedidos: pedidosDaLoja.length,
+    pedidos: pedidosDoPeriodo.length,
     pedidosPagos: pedidosPagos.length,
     faturamento,
     custos: totalCustos,
-    lucro,
-    ticketMedio,
+    lucro: faturamento - totalCustos,
+    ticketMedio: pedidosPagos.length ? faturamento / pedidosPagos.length : 0,
   };
 }
 
@@ -417,39 +318,23 @@ function calcularDadosLoja(loja) {
 // ==========================================
 
 function renderizarTabelaFinanceiro() {
-  if (!tabelaFinanceiro) {
-    return;
+  if (!tabelaFinanceiro) return;
+  const dados = calcularDadosCloset();
+  const linha = document.createElement("tr");
+  const valores = [
+    dados.pedidos,
+    dados.pedidosPagos,
+    formatarValor(dados.faturamento),
+    formatarValor(dados.custos),
+    formatarValor(dados.lucro),
+    formatarValor(dados.ticketMedio),
+  ];
+  for (const valor of valores) {
+    const celula = document.createElement("td");
+    celula.textContent = String(valor);
+    linha.appendChild(celula);
   }
-
-  const lojaSelecionada = filtroLojaFinanceiro?.value || "todas";
-
-  let lojas = ["closet", "3d"];
-
-  if (lojaSelecionada !== "todas") {
-    lojas = [lojaSelecionada];
-  }
-
-  tabelaFinanceiro.innerHTML = "";
-
-  lojas.forEach((loja) => {
-    const dados = calcularDadosLoja(loja);
-
-    const nomeLoja = loja === "closet" ? "Closet" : "Decor 3D";
-
-    const linha = document.createElement("tr");
-
-    linha.innerHTML = `
-      <td>${nomeLoja}</td>
-      <td>${dados.pedidos}</td>
-      <td>${dados.pedidosPagos}</td>
-      <td>${formatarValor(dados.faturamento)}</td>
-      <td>${formatarValor(dados.custos)}</td>
-      <td>${formatarValor(dados.lucro)}</td>
-      <td>${formatarValor(dados.ticketMedio)}</td>
-    `;
-
-    tabelaFinanceiro.appendChild(linha);
-  });
+  tabelaFinanceiro.replaceChildren(linha);
 }
 
 // ==========================================
@@ -467,8 +352,6 @@ function atualizarFinanceiro() {
 // ==========================================
 // EVENTOS DOS FILTROS
 // ==========================================
-
-filtroLojaFinanceiro?.addEventListener("change", atualizarFinanceiro);
 
 filtroPeriodoFinanceiro?.addEventListener("change", atualizarFinanceiro);
 

@@ -17,7 +17,6 @@ const autorizarUpload = httpsCallable(
 
 const salvarImagem = httpsCallable(functions, "salvarImagemCategoria");
 const removerImagem = httpsCallable(functions, "removerImagemCategoria");
-const lojaAparencia = document.getElementById("lojaAparencia");
 const secao = document.getElementById("secaoImagensCategorias");
 const formulario = document.getElementById("formImagemCategoria");
 const seletor = document.getElementById("categoriaAparencia");
@@ -140,17 +139,13 @@ function atualizarPreviewCategoria() {
 
 async function carregarCategorias() {
   const versao = ++versaoCarregamento;
-  const loja = lojaAparencia.value;
-
-  secao.style.display = loja === "closet" ? "" : "none";
+  secao.style.display = "";
 
   seletor.replaceChildren();
   campoImagem.value = "";
   limparPreview();
   imagensSalvas = {};
   mostrarMensagem("");
-
-  if (loja !== "closet") return;
 
   seletor.disabled = true;
   botaoSalvar.disabled = true;
@@ -247,8 +242,6 @@ campoImagem.addEventListener("change", async () => {
 });
 
 
-lojaAparencia.addEventListener("change", carregarCategorias);
-
 formulario.addEventListener("submit", async (evento) => {
   evento.preventDefault();
 
@@ -257,7 +250,7 @@ formulario.addEventListener("submit", async (evento) => {
   const categoriaId = seletor.value;
   const arquivo = campoImagem.files[0];
 
-  if (lojaAparencia.value !== "closet" || !categoriaId) {
+  if (!categoriaId) {
     mostrarMensagem("Selecione uma categoria da Closet.");
     return;
   }
@@ -275,7 +268,6 @@ formulario.addEventListener("submit", async (evento) => {
   salvando = true;
   botaoSalvar.disabled = true;
   seletor.disabled = true;
-  lojaAparencia.disabled = true;
 
   try {
     mostrarMensagem("Enviando fotografia...");
@@ -335,7 +327,6 @@ formulario.addEventListener("submit", async (evento) => {
     salvando = false;
     botaoSalvar.disabled = false;
     seletor.disabled = false;
-    lojaAparencia.disabled = false;
   }
 });
 

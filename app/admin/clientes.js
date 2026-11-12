@@ -14,7 +14,6 @@ import {
 const $ = (id) => document.getElementById(id);
 
 const tabelaClientes = $("tabelaClientes");
-const filtroLojaClientes = $("filtroLojaClientes");
 const buscarCliente = $("buscarCliente");
 const detalhesCliente = $("detalhesCliente");
 const tabelaPedidosCliente = $("tabelaPedidosCliente");
@@ -27,22 +26,6 @@ let salvandoCliente = false;
 // ==========================================
 // FUNÇÕES AUXILIARES
 // ==========================================
-
-function obterNomeLoja(loja) {
-  if (loja === "closet") return "Closet";
-  if (loja === "3d") return "Decor 3D";
-  return loja || "—";
-}
-
-function obterLojasCliente(lojas) {
-  if (!lojas?.length) return "—";
-
-  if (lojas.includes("closet") && lojas.includes("3d")) {
-    return "Closet e Decor 3D";
-  }
-
-  return lojas.map(obterNomeLoja).join(", ");
-}
 
 function obterNomeStatus(status) {
   const nomes = {
@@ -112,7 +95,7 @@ function mostrarMensagemTabela(tabela, mensagem) {
   const linha = document.createElement("tr");
   const celula = adicionarCelula(linha, mensagem);
 
-  celula.colSpan = 7;
+  celula.colSpan = 6;
   celula.className = "sem-dados";
 
   tabela.appendChild(linha);
@@ -126,19 +109,17 @@ async function carregarClientes() {
   try {
     const colecaoPedidos = collection(db, "pedidos");
 
-    const [resultadoClientes, resultadoCloset, resultadoDecor3D] =
-      await Promise.all([
-        getDocs(collection(db, "clientes")),
-        getDocs(query(colecaoPedidos, where("loja", "==", "closet"))),
-        getDocs(query(colecaoPedidos, where("loja", "==", "3d"))),
-      ]);
+    const [resultadoClientes, resultadoCloset] = await Promise.all([
+      getDocs(collection(db, "clientes")),
+      getDocs(query(colecaoPedidos, where("loja", "==", "closet"))),
+    ]);
 
     clientesCadastrados = resultadoClientes.docs.map((documento) => ({
       ...documento.data(),
       id: documento.id,
     }));
 
-    const pedidos = [...resultadoCloset.docs, ...resultadoDecor3D.docs].map(
+    const pedidos = resultadoCloset.docs.map(
       (documento) => ({
         ...documento.data(),
         id: documento.id,
@@ -169,7 +150,6 @@ function montarClientes(pedidos) {
       nome: cadastro.nome || "—",
       email: cadastro.email || "—",
       telefone: cadastro.telefone || "",
-      lojas: [],
       quantidadePedidos: 0,
       totalGasto: 0,
       ultimoPedido: null,
@@ -200,8 +180,7 @@ function montarClientes(pedidos) {
         nome: pedido.clienteNome || "—",
         email: pedido.clienteEmail || "—",
         telefone: pedido.clienteTelefone || "",
-        lojas: [],
-        quantidadePedidos: 0,
+          quantidadePedidos: 0,
         totalGasto: 0,
         ultimoPedido: null,
         ultimoEndereco: null,
@@ -221,10 +200,6 @@ function montarClientes(pedidos) {
 
     if (!cliente.telefone) {
       cliente.telefone = pedido.clienteTelefone || "";
-    }
-
-    if (pedido.loja && !cliente.lojas.includes(pedido.loja)) {
-      cliente.lojas.push(pedido.loja);
     }
 
     cliente.pedidos.push(pedido);
@@ -264,15 +239,11 @@ function montarClientes(pedidos) {
 function renderizarClientes() {
   if (!tabelaClientes) return;
 
-  const loja = filtroLojaClientes?.value || "todas";
   const busca = String(buscarCliente?.value || "")
     .trim()
     .toLowerCase();
 
   const filtrados = clientes.filter((cliente) => {
-    if (loja !== "todas" && !cliente.lojas.includes(loja)) {
-      return false;
-    }
 
     if (!busca) return true;
 
@@ -295,7 +266,6 @@ function renderizarClientes() {
 
     adicionarCelula(linha, cliente.nome);
     adicionarCelula(linha, cliente.email);
-    adicionarCelula(linha, obterLojasCliente(cliente.lojas));
     adicionarCelula(linha, cliente.quantidadePedidos);
     adicionarCelula(linha, formatarValor(cliente.totalGasto));
     adicionarCelula(linha, formatarData(cliente.ultimoPedido));
@@ -345,7 +315,7 @@ function mostrarItensPedido(pedido, linhaPedido) {
   linhaItens.className = "linha-itens-pedido";
 
   const celula = document.createElement("td");
-  celula.colSpan = 7;
+  celula.colSpan = 6;
 
   const container = document.createElement("div");
   container.className = "itens-pedido-cliente";
@@ -419,7 +389,6 @@ function abrirDetalhesCliente(cliente) {
   escrever("detalheClienteNome", cliente.nome);
   escrever("detalheClienteEmail", cliente.email);
   escrever("detalheClienteTelefone", cliente.telefone || "—");
-  escrever("detalheClienteLoja", obterLojasCliente(cliente.lojas));
   escrever("detalheClientePedidos", cliente.quantidadePedidos);
   escrever("detalheClienteTotal", formatarValor(cliente.totalGasto));
   escrever("detalheClienteUltimoPedido", formatarData(cliente.ultimoPedido));
@@ -475,7 +444,6 @@ function renderizarHistoricoCliente(cliente) {
     const linha = document.createElement("tr");
 
     adicionarCelula(linha, pedido.numero || "—");
-    adicionarCelula(linha, obterNomeLoja(pedido.loja));
     adicionarCelula(linha, formatarData(pedido.criadoEm));
     adicionarCelula(linha, pedido.statusPagamento || "—");
     adicionarCelula(linha, formatarValor(pedido.total));
@@ -722,8 +690,6 @@ $("fecharDetalhesCliente")?.addEventListener("click", () => {
 
   clienteSelecionado = null;
 });
-
-filtroLojaClientes?.addEventListener("change", renderizarClientes);
 
 buscarCliente?.addEventListener("input", renderizarClientes);
 

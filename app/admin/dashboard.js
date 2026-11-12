@@ -10,8 +10,6 @@ let pedidos = [];
 let produtos = [];
 let custos = [];
 
-const filtroLoja = document.getElementById("lojaSelecionada");
-
 const filtroPeriodo = document.getElementById("periodoDashboard");
 
 // ==========================================
@@ -127,25 +125,8 @@ function atualizarTexto(id, valor) {
   }
 }
 
-function obterNomeLoja(loja) {
-  if (loja === "closet") return "Closet";
-  if (loja === "3d") return "Decor 3D";
-
-  return "—";
-}
-
 function pedidoEstaFaturado(pedido) {
   return pedido.statusPagamento === "Aprovado" && pedido.status !== "cancelado";
-}
-
-function filtrarPorLoja(registros) {
-  const lojaSelecionada = filtroLoja?.value || "todas";
-
-  if (lojaSelecionada === "todas") {
-    return registros;
-  }
-
-  return registros.filter((registro) => registro.loja === lojaSelecionada);
 }
 
 function somarValores(registros, campo) {
@@ -162,23 +143,12 @@ function somarValores(registros, campo) {
 async function carregarColecao(nomeColecao) {
   const colecao = collection(db, nomeColecao);
 
-  const [resultadoCloset, resultado3D] = await Promise.all([
-    getDocs(query(colecao, where("loja", "==", "closet"))),
-    getDocs(query(colecao, where("loja", "==", "3d"))),
-  ]);
+  const resultado = await getDocs(query(colecao, where("loja", "==", "closet")));
 
-  const registros = [];
-
-  for (const resultado of [resultadoCloset, resultado3D]) {
-    resultado.forEach((documento) => {
-      registros.push({
-        id: documento.id,
-        ...documento.data(),
-      });
-    });
-  }
-
-  return registros;
+  return resultado.docs.map((documento) => ({
+    id: documento.id,
+    ...documento.data(),
+  }));
 }
 
 // ==========================================
@@ -186,12 +156,10 @@ async function carregarColecao(nomeColecao) {
 // ==========================================
 
 function atualizarIndicadores() {
-  const pedidosFiltrados = filtrarPorLoja(pedidos).filter((pedido) =>
-    dataDentroDoPeriodo(pedido.criadoEm),
-  );
+  const pedidosFiltrados = pedidos;
 
-  const produtosFiltrados = filtrarPorLoja(produtos);
-  const custosFiltrados = filtrarPorLoja(custos);
+  const produtosFiltrados = produtos;
+  const custosFiltrados = custos;
 
   // Pedidos criados no período selecionado
   const pedidosDoPeriodo = pedidosFiltrados.filter((pedido) =>
@@ -259,56 +227,6 @@ function atualizarIndicadores() {
 }
 
 // ==========================================
-// RESULTADOS POR LOJA
-// ==========================================
-
-function calcularResultadoLoja(loja) {
-  // Pedidos da loja com pagamento aprovado
-  const pedidosFaturados = pedidos.filter((pedido) => {
-    if (pedido.loja !== loja || !pedidoEstaFaturado(pedido)) {
-      return false;
-    }
-
-    // Para pedidos antigos, utiliza a data de criação
-    const dataPagamento = pedido.pagamentoAprovadoEm || pedido.criadoEm;
-
-    return dataDentroDoPeriodo(dataPagamento);
-  });
-
-  // Custos da loja dentro do período selecionado
-  const custosLoja = custos.filter(
-    (custo) => custo.loja === loja && dataDentroDoPeriodo(custo.data),
-  );
-
-  const faturamento = somarValores(pedidosFaturados, "total");
-
-  const totalCustos = somarValores(custosLoja, "valor");
-
-  return {
-    faturamento,
-    custos: totalCustos,
-    lucro: faturamento - totalCustos,
-  };
-}
-
-function atualizarResultadosLojas() {
-  const closet = calcularResultadoLoja("closet");
-  const decor3D = calcularResultadoLoja("3d");
-
-  atualizarTexto("faturamentoCloset", formatarMoeda(closet.faturamento));
-
-  atualizarTexto("custosCloset", formatarMoeda(closet.custos));
-
-  atualizarTexto("lucroCloset", formatarMoeda(closet.lucro));
-
-  atualizarTexto("faturamento3D", formatarMoeda(decor3D.faturamento));
-
-  atualizarTexto("custos3D", formatarMoeda(decor3D.custos));
-
-  atualizarTexto("lucro3D", formatarMoeda(decor3D.lucro));
-}
-
-// ==========================================
 // PEDIDOS RECENTES
 // ==========================================
 
@@ -317,7 +235,7 @@ function atualizarPedidosRecentes() {
 
   if (!tabela) return;
 
-  const pedidosRecentes = filtrarPorLoja(pedidos)
+  const pedidosRecentes = pedidos
     .slice()
     .sort((a, b) => {
       const dataA = a.criadoEm?.toMillis?.() || 0;
@@ -333,7 +251,7 @@ function atualizarPedidosRecentes() {
     const linha = document.createElement("tr");
     const celula = document.createElement("td");
 
-    celula.colSpan = 6;
+    celula.colSpan = 5;
     celula.className = "sem-dados";
     celula.textContent = "Nenhum pedido encontrado.";
 
@@ -369,7 +287,6 @@ function atualizarPedidosRecentes() {
 
     const valores = [
       numeroPedido,
-      obterNomeLoja(pedido.loja),
       nomeCliente,
       data,
       formatarMoeda(pedido.total),
@@ -404,7 +321,7 @@ function atualizarPedidosRecentes() {
 
 function atualizarAlertasEstoque() {
 
-  const produtosFiltrados = filtrarPorLoja(produtos);
+  const produtosFiltrados = produtos;
 
 
   const produtosBaixos = [];
@@ -457,7 +374,7 @@ function atualizarAlertasEstoque() {
     const linha = document.createElement("tr");
     const celula = document.createElement("td");
 
-    celula.colSpan = 4;
+    celula.colSpan = 3;
     celula.className = "sem-dados";
 
     celula.textContent =
@@ -479,7 +396,6 @@ function atualizarAlertasEstoque() {
 
     const valores = [
       produto.nome || "Produto sem nome",
-      obterNomeLoja(produto.loja),
       quantidade,
     ];
 
@@ -511,12 +427,9 @@ function atualizarAlertasEstoque() {
 
 function atualizarDashboard() {
   atualizarIndicadores();
-  atualizarResultadosLojas();
   atualizarPedidosRecentes();
   atualizarAlertasEstoque();
 }
-
-filtroLoja?.addEventListener("change", atualizarDashboard);
 
 filtroPeriodo?.addEventListener("change", atualizarDashboard);
 

@@ -66,7 +66,7 @@
         <header class="topo">
           <div>
             <h1>Custos</h1>
-            <p>Cadastre e acompanhe os custos da Closet e da Decor 3D.</p>
+            <p>Cadastre e acompanhe os custos da Lolly Closet.</p>
           </div>
 
           <div class="usuario">
@@ -86,7 +86,7 @@
           <div class="barra-produtos">
             <div>
               <h2>Controle de custos</h2>
-              <p>Consulte os gastos registrados de cada loja.</p>
+              <p>Consulte os gastos registrados da Closet.</p>
             </div>
 
             <button type="button" id="btnNovoCusto" class="btn-principal">
@@ -95,15 +95,6 @@
           </div>
 
           <div class="filtros-produtos">
-            <div class="campo-filtro">
-              <label for="filtroLojaCustos">Loja</label>
-
-              <select id="filtroLojaCustos">
-                <option value="todas">Todas as lojas</option>
-                <option value="closet">Closet</option>
-                <option value="3d">Decor 3D</option>
-              </select>
-            </div>
 
             <div class="campo-filtro">
               <label for="filtroPeriodoCustos">Período</label>
@@ -147,16 +138,6 @@
 
           <form id="formCusto">
             <div class="form-grid">
-              <!-- LOJA -->
-              <div class="campo-form">
-                <label for="custoLoja">Loja</label>
-
-                <select id="custoLoja" required>
-                  <option value="">Selecione a loja</option>
-                  <option value="closet">Closet</option>
-                  <option value="3d">Decor 3D</option>
-                </select>
-              </div>
 
               <!-- DESCRIÇÃO -->
               <div class="campo-form">
@@ -273,7 +254,7 @@
           <div class="barra-produtos">
             <div>
               <h2>Histórico de custos</h2>
-              <p>Gastos cadastrados para a Closet e Decor 3D.</p>
+              <p>Gastos cadastrados para a Closet.</p>
             </div>
           </div>
 
@@ -282,7 +263,6 @@
               <thead>
                 <tr>
                   <th>Data</th>
-                  <th>Loja</th>
                   <th>Descrição</th>
                   <th>Categoria</th>
                   <th>Valor</th>
@@ -293,7 +273,7 @@
 
               <tbody id="tabelaCustos">
                 <tr>
-                  <td colspan="7" class="sem-dados">
+                  <td colspan="6" class="sem-dados">
                     Nenhum custo cadastrado.
                   </td>
                 </tr>

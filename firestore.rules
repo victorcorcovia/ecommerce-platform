@@ -68,17 +68,20 @@ match /controleImagensProdutos/{imagemId} {
     match /categorias/{categoriaId} {
 
       allow create: if
-        temAcessoLoja(request.resource.data.loja);
+        request.resource.data.loja == "closet"
+        && temAcessoLoja("closet");
 
       allow read: if
         temAcessoLoja(resource.data.loja);
 
       allow update: if
-        temAcessoLoja(resource.data.loja)
-        && temAcessoLoja(request.resource.data.loja);
+        resource.data.loja == "closet"
+        && request.resource.data.loja == "closet"
+        && temAcessoLoja("closet");
 
       allow delete: if
-        temAcessoLoja(resource.data.loja);
+        resource.data.loja == "closet"
+        && temAcessoLoja("closet");
     }
 
     // ==========================================
@@ -100,7 +103,8 @@ match /controleImagensProdutos/{imagemId} {
       // Alterações de imagens devem passar
       // pela Cloud Function autorizada.
       allow update: if
-        temAcessoLoja(resource.data.loja)
+        resource.data.loja == "closet"
+        && temAcessoLoja("closet")
         && request.resource.data.loja == resource.data.loja
         && request.resource.data.estoque is int
         && request.resource.data.estoque >= 0
@@ -120,7 +124,8 @@ match /controleImagensProdutos/{imagemId} {
     match /movimentacoesEstoque/{movimentacaoId} {
 
       allow create: if
-        temAcessoLoja(request.resource.data.loja)
+        request.resource.data.loja == "closet"
+        && temAcessoLoja("closet")
 
         && request.resource.data.keys().hasAll([
           "produtoId",
@@ -136,10 +141,7 @@ match /controleImagensProdutos/{imagemId} {
         && request.resource.data.produtoId is string
         && request.resource.data.produtoNome is string
 
-        && request.resource.data.loja in [
-          "closet",
-          "3d"
-        ]
+        && request.resource.data.loja == "closet"
 
         && request.resource.data.tipo in [
           "entrada",
@@ -179,14 +181,16 @@ match /controleImagensProdutos/{imagemId} {
     match /pedidos/{pedidoId} {
 
       allow create: if
-        temAcessoLoja(request.resource.data.loja);
+        request.resource.data.loja == "closet"
+        && temAcessoLoja("closet");
 
       allow read: if
         temAcessoLoja(resource.data.loja);
 
       allow update: if
-        temAcessoLoja(resource.data.loja)
-        && temAcessoLoja(request.resource.data.loja);
+        resource.data.loja == "closet"
+        && request.resource.data.loja == "closet"
+        && temAcessoLoja("closet");
 
       allow delete: if false;
     }
@@ -198,17 +202,20 @@ match /controleImagensProdutos/{imagemId} {
     match /custos/{custoId} {
 
       allow create: if
-        temAcessoLoja(request.resource.data.loja);
+        request.resource.data.loja == "closet"
+        && temAcessoLoja("closet");
 
       allow read: if
         temAcessoLoja(resource.data.loja);
 
       allow update: if
-        temAcessoLoja(resource.data.loja)
-        && temAcessoLoja(request.resource.data.loja);
+        resource.data.loja == "closet"
+        && request.resource.data.loja == "closet"
+        && temAcessoLoja("closet");
 
       allow delete: if
-        temAcessoLoja(resource.data.loja);
+        resource.data.loja == "closet"
+        && temAcessoLoja("closet");
     }
 
     // ==========================================
@@ -218,7 +225,8 @@ match /controleImagensProdutos/{imagemId} {
     match /historicoPedidos/{historicoId} {
 
       allow create: if
-        temAcessoLoja(request.resource.data.loja)
+        request.resource.data.loja == "closet"
+        && temAcessoLoja("closet")
 
         && request.resource.data.keys().hasAll([
           "pedidoId",
@@ -327,7 +335,7 @@ match /controleImagensProdutos/{imagemId} {
     match /catalogoPublico/{produtoId} {
 
       // Visitantes podem consultar produtos publicados.
-      allow read: if resource.data.loja in ["closet", "3d"];
+      allow read: if resource.data.loja == "closet";
 
       // Somente o backend pode modificar o catalogo.
       allow write: if false;
@@ -341,7 +349,7 @@ match /controleImagensProdutos/{imagemId} {
 match /categoriasPublicas/{categoriaId} {
 
   // Visitantes podem consultar categorias das lojas.
-  allow read: if resource.data.loja in ["closet", "3d"];
+  allow read: if resource.data.loja == "closet";
 
   // Somente o backend pode modificar categorias publicas.
   allow write: if false;
@@ -354,7 +362,7 @@ match /categoriasPublicas/{categoriaId} {
 match /aparenciaLojas/{loja} {
 
   // Somente as configurações das duas lojas são públicas.
-  allow get: if loja in ["closet", "3d"];
+  allow get: if loja == "closet";
 
   // Não permite listar documentos nem alterar pelo navegador.
   allow list, create, update, delete: if false;

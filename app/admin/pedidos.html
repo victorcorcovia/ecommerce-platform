@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Pedidos | Lojas Lolly</title>
+    <title>Pedidos | Lolly Closet</title>
 
     <link rel="stylesheet" href="./style.css" />
   </head>
@@ -61,7 +61,7 @@
         <header class="topo">
           <div>
             <h1>Pedidos</h1>
-            <p>Acompanhe os pedidos da Closet e da Decor 3D.</p>
+            <p>Acompanhe os pedidos da Lolly Closet.</p>
           </div>
 
           <div class="acoes-topo">
@@ -80,15 +80,6 @@
         <!-- FILTROS DOS PEDIDOS -->
         <section class="barra-produtos">
           <div class="filtros-produtos">
-            <div class="campo-filtro">
-              <label for="filtroLojaPedidos">Loja</label>
-
-              <select id="filtroLojaPedidos">
-                <option value="todas">Todas as lojas</option>
-                <option value="closet">Closet</option>
-                <option value="3d">Decor 3D</option>
-              </select>
-            </div>
 
             <div class="campo-filtro">
               <label for="filtroStatusPedidos">Status</label>
@@ -137,14 +128,6 @@
 
           <form id="cadastroPedido">
             <div class="grid-form">
-              <div class="campo-form">
-                <label for="pedidoLoja">Loja</label>
-                <select id="pedidoLoja" required>
-                  <option value="">Selecione a loja</option>
-                  <option value="closet">Closet</option>
-                  <option value="3d">Decor 3D</option>
-                </select>
-              </div>
 
               <div class="campo-form">
                 <label for="pedidoOrigem">Origem da venda</label>
@@ -217,7 +200,7 @@
               <div class="campo-form">
                 <label for="pedidoProduto">Produto</label>
                 <select id="pedidoProduto">
-                  <option value="">Selecione uma loja primeiro</option>
+                  <option value="">Selecione um produto</option>
                 </select>
               </div>
 
@@ -310,7 +293,6 @@
                 <tr>
                   <th>Pedido</th>
                   <th>Cliente</th>
-                  <th>Loja</th>
                   <th>Data</th>
                   <th>Pagamento</th>
                   <th>Total</th>
@@ -321,7 +303,7 @@
 
               <tbody id="tabelaPedidos">
                 <tr>
-                  <td colspan="8" class="sem-dados">
+                  <td colspan="7" class="sem-dados">
                     Nenhum pedido registrado.
                   </td>
                 </tr>
@@ -352,11 +334,6 @@
             <div class="campo-form">
               <label>E-mail</label>
               <p id="detalheEmail">—</p>
-            </div>
-
-            <div class="campo-form">
-              <label>Loja</label>
-              <p id="detalheLoja">—</p>
             </div>
 
             <div class="campo-form">

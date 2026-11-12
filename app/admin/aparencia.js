@@ -50,10 +50,10 @@ async function enviarImagemBanner(arquivo, loja) {
 }
 
 /* ==========================================
-   APARÊNCIA - BANNERS DAS LOJAS
+   APARÊNCIA - BANNERS DA CLOSET
 ========================================== */
 
-const lojaAparencia = document.getElementById("lojaAparencia");
+const LOJA = "closet";
 const bannerPrincipal = document.getElementById("bannerPrincipal");
 
 let versaoSelecaoBanner = 0;
@@ -100,9 +100,8 @@ function mostrarPreviewBanner(url, temporaria = false) {
 bannerPrincipal.addEventListener("change", async () => {
   const arquivo = bannerPrincipal.files[0];
 
-  // Identifica a seleção e a loja de origem
+  // Identifica a seleção atual do arquivo
   const versaoAtual = ++versaoSelecaoBanner;
-  const lojaOriginal = lojaAparencia.value;
 
   limparPreviewBanner();
 
@@ -136,11 +135,8 @@ bannerPrincipal.addEventListener("change", async () => {
       altura: 640,
     });
 
-    // Impede aplicar o recorte em outra loja
-    if (
-      versaoAtual !== versaoSelecaoBanner ||
-      lojaAparencia.value !== lojaOriginal
-    ) {
+    // Impede aplicar o recorte de uma seleção anterior.
+    if (versaoAtual !== versaoSelecaoBanner) {
       return;
     }
 
@@ -191,7 +187,7 @@ removerPreviewBanner.addEventListener("click", async () => {
   // Se não existe imagem salva, não há nada para remover.
   if (!imagemBannerSalva?.publicId) return;
 
-  const loja = lojaAparencia.value;
+  const loja = LOJA;
   const publicId = imagemBannerSalva.publicId;
 
   const confirmou = confirm("Deseja remover o banner cadastrado desta loja?");
@@ -210,9 +206,7 @@ removerPreviewBanner.addEventListener("click", async () => {
     });
 
     // Atualizar a tela com os dados salvos no Firebase.
-    if (loja === lojaAparencia.value) {
-      await carregarAparenciaLoja();
-    }
+    await carregarAparenciaLoja();
 
     alert("Banner removido com sucesso!");
   } catch (erro) {
@@ -224,9 +218,9 @@ removerPreviewBanner.addEventListener("click", async () => {
   }
 });
 
-// Carregar configurações da loja selecionada
+// Carregar configurações da Closet
 async function carregarAparenciaLoja() {
-  const loja = lojaAparencia.value;
+  const loja = LOJA;
 
   bannerPrincipal.value = "";
   imagemBannerSalva = null;
@@ -237,9 +231,6 @@ async function carregarAparenciaLoja() {
   try {
     const referencia = doc(db, "aparenciaLojas", loja);
     const resultado = await getDoc(referencia);
-
-    // Evita aplicar dados de outra loja após uma troca rápida
-    if (loja !== lojaAparencia.value) return;
 
     if (resultado.exists()) {
       const configuracao = resultado.data();
@@ -281,12 +272,7 @@ async function carregarAparenciaLoja() {
   }
 }
 
-lojaAparencia.addEventListener("change", () => {
-  versaoSelecaoBanner++;
-  carregarAparenciaLoja();
-});
-
-// Carregar a loja inicial
+// Carregar a Closet
 carregarAparenciaLoja();
 
 // Salvamento será implementado com Firebase
@@ -298,7 +284,7 @@ formAparencia.addEventListener("submit", async (event) => {
     return;
   }
 
-  const loja = lojaAparencia.value;
+  const loja = LOJA;
   const tipo = document.querySelector(
     'input[name="tipoBanner"]:checked',
   )?.value;

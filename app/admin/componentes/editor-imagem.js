@@ -23,7 +23,7 @@ export function abrirEditorImagem(arquivo, opcoes = {}) {
     const overlay = document.createElement("div");
     overlay.className = "editor-imagem-overlay";
 
-    if (loja === "closet" || loja === "3d") {
+    if (loja === "closet") {
       overlay.dataset.loja = loja;
     }
 

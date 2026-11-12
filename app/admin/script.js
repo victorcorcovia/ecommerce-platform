@@ -28,13 +28,6 @@ const formProduto = document.getElementById("formProduto");
 const cadastroProduto = document.getElementById("cadastroProduto");
 
 const lojaProduto = document.getElementById("lojaProduto");
-const campoPersonalizacaoProduto = document.getElementById(
-  "campoPersonalizacaoProduto",
-);
-
-const permitePersonalizacaoProduto = document.getElementById(
-  "permitePersonalizacaoProduto",
-);
 const campoTamanhosProduto = document.getElementById("campoTamanhosProduto");
 const nomeProduto = document.getElementById("nomeProduto");
 const categoriaProduto = document.getElementById("categoriaProduto");
@@ -54,7 +47,6 @@ const fotosProduto = document.getElementById("fotosProduto");
 const previewFotosProduto = document.getElementById("previewFotosProduto");
 
 const tabelaProdutos = document.getElementById("tabelaProdutos");
-const filtroLoja = document.getElementById("filtroLoja");
 const buscarProduto = document.getElementById("buscarProduto");
 
 // ==========================================
@@ -155,7 +147,6 @@ let imagensOriginaisProduto = [];
 
 function obterNomeLoja(loja) {
   if (loja === "closet") return "Closet";
-  if (loja === "3d") return "Decor 3D";
   return loja;
 }
 
@@ -233,7 +224,6 @@ if (btnNovoProduto && formProduto) {
     limparFotosProduto();
     atualizarCategoriasProduto();
     atualizarVisibilidadeTamanhos();
-    atualizarVisibilidadePersonalizacao();
 
     formProduto.classList.add("aberto");
 
@@ -272,7 +262,7 @@ if (cadastroProduto) {
       );
       return;
     }
-    const loja = lojaProduto.value;
+    const loja = "closet";
     const nome = nomeProduto.value.trim();
     const categoriaId = categoriaProduto.value;
     const preco = Number(precoProduto.value);
@@ -288,11 +278,6 @@ if (cadastroProduto) {
 
     if (!loja || !nome || !categoriaId) {
       alert("Preencha os campos obrigatórios.");
-      return;
-    }
-
-    if (!["closet", "3d"].includes(loja)) {
-      alert("Selecione uma loja válida.");
       return;
     }
 
@@ -349,9 +334,8 @@ if (cadastroProduto) {
           nome: cor.nome,
           codigo: cor.codigo,
         })),
-        tamanhos: loja === "closet" ? [...tamanhosProduto] : [],
-        permitePersonalizacao:
-          loja === "3d" && permitePersonalizacaoProduto.checked,
+        tamanhos: [...tamanhosProduto],
+        permitePersonalizacao: false,
       };
 
       // ======================================
@@ -445,6 +429,17 @@ if (cadastroProduto) {
       renderizarCoresProduto();
 
       tamanhosProduto = [];
+      // Escolher a grade que melhor corresponde aos tamanhos já salvos.
+      if (padraoTamanhosProduto && tamanhosProduto.length > 0) {
+        const correspondencias = Object.entries(PADROES_TAMANHOS).map(([chave, padrao]) => ({
+          chave,
+          quantidade: tamanhosProduto.filter((tamanho) => padrao.tamanhos.includes(tamanho)).length,
+        }));
+        correspondencias.sort((a, b) => b.quantidade - a.quantidade);
+        if (correspondencias[0]?.quantidade > 0) {
+          padraoTamanhosProduto.value = correspondencias[0].chave;
+        }
+      }
       renderizarTamanhosProduto();
 
       limparFotosProduto();
@@ -502,19 +497,14 @@ async function carregarProdutos() {
 function renderizarProdutos() {
   if (!tabelaProdutos) return;
 
-  const lojaSelecionada = filtroLoja ? filtroLoja.value : "todas";
-
   const busca = buscarProduto ? buscarProduto.value.trim().toLowerCase() : "";
 
   const produtosFiltrados = produtos.filter((produto) => {
-    const correspondeLoja =
-      lojaSelecionada === "todas" || produto.loja === lojaSelecionada;
-
     const nomeProdutoBusca = String(produto.nome || "").toLowerCase();
 
     const correspondeBusca = nomeProdutoBusca.includes(busca);
 
-    return correspondeLoja && correspondeBusca;
+    return produto.loja === "closet" && correspondeBusca;
   });
 
   if (produtosFiltrados.length === 0) {
@@ -606,13 +596,6 @@ if (btnAdicionarCorProduto) {
 // PRODUTOS - FILTROS
 // ==========================================
 
-if (filtroLoja) {
-  filtroLoja.addEventListener("change", () => {
-    renderizarProdutos();
-    renderizarCategorias();
-  });
-}
-
 if (buscarProduto) {
   buscarProduto.addEventListener("input", renderizarProdutos);
 }
@@ -655,11 +638,6 @@ if (tabelaProdutos) {
 
       statusProduto.value = produto.status;
       descricaoProduto.value = produto.descricao || "";
-
-      permitePersonalizacaoProduto.checked =
-        produto.loja === "3d" && produto.permitePersonalizacao === true;
-
-      atualizarVisibilidadePersonalizacao();
 
       coresProduto = Array.isArray(produto.cores)
         ? produto.cores.map((cor) => ({ ...cor }))
@@ -837,13 +815,9 @@ if (btnCancelarCategoria && cadastroCategoria) {
 function renderizarCategorias() {
   if (!tabelaCategorias) return;
 
-  const categoriasFiltradas = categorias.filter((categoria) => {
-    if (!filtroLoja || filtroLoja.value === "todas") {
-      return true;
-    }
-
-    return categoria.loja === filtroLoja.value;
-  });
+  const categoriasFiltradas = categorias.filter(
+    (categoria) => categoria.loja === "closet",
+  );
 
   if (categoriasFiltradas.length === 0) {
     tabelaCategorias.innerHTML = `
@@ -901,7 +875,7 @@ if (cadastroCategoria) {
   cadastroCategoria.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const loja = lojaCategoria.value;
+    const loja = "closet";
     const nome = nomeCategoria.value.trim();
 
     if (!loja || !nome) {
@@ -1012,18 +986,6 @@ if (tabelaCategorias) {
   });
 }
 
-function atualizarVisibilidadePersonalizacao() {
-  if (!lojaProduto || !campoPersonalizacaoProduto) return;
-
-  const ehDecor3D = lojaProduto.value === "3d";
-
-  campoPersonalizacaoProduto.style.display = ehDecor3D ? "block" : "none";
-
-  if (!ehDecor3D && permitePersonalizacaoProduto) {
-    permitePersonalizacaoProduto.checked = false;
-  }
-}
-
 // ==========================================
 // CATEGORIAS NO CADASTRO DE PRODUTO
 // ==========================================
@@ -1082,36 +1044,12 @@ function atualizarCategoriasProduto() {
 // ==========================================
 
 function atualizarVisibilidadeTamanhos() {
-  if (!lojaProduto || !campoTamanhosProduto) return;
-
-  const ehCloset = lojaProduto.value === "closet";
-
-  campoTamanhosProduto.style.display = ehCloset ? "block" : "none";
+  if (!campoTamanhosProduto) return;
+  campoTamanhosProduto.style.display = "block";
 }
 
-if (lojaProduto) {
-  lojaProduto.addEventListener("change", () => {
-    if (editandoFotosProduto) {
-      alert("Aguarde a conclusão da edição das fotografias.");
-      return;
-    }
+atualizarVisibilidadeTamanhos();
 
-    if (fotosEditadasProduto.length > 0) {
-      limparFotosProduto();
-
-      alert(
-        "As fotografias selecionadas foram removidas porque a loja foi alterada. Adicione-as novamente para utilizar o recorte correto.",
-      );
-    }
-
-    atualizarCategoriasProduto();
-    atualizarVisibilidadeTamanhos();
-    atualizarVisibilidadePersonalizacao();
-  });
-
-  atualizarVisibilidadeTamanhos();
-  atualizarVisibilidadePersonalizacao();
-}
 // ==========================================
 // PRODUTOS - PRÉ-VISUALIZAÇÃO DAS FOTOS
 // ==========================================
@@ -1205,17 +1143,10 @@ if (fotosProduto) {
     const arquivos = Array.from(fotosProduto.files || []);
     if (arquivos.length === 0) return;
 
-    const loja = lojaProduto.value;
-
-    if (!["closet", "3d"].includes(loja)) {
-      alert("Selecione a loja antes de adicionar fotografias.");
-      fotosProduto.value = "";
-      return;
-    }
+    const loja = "closet";
 
     editandoFotosProduto = true;
     lojaEdicaoFotosProduto = loja;
-    lojaProduto.disabled = true;
     fotosProduto.disabled = true;
 
     const transferencia = new DataTransfer();
@@ -1236,12 +1167,12 @@ if (fotosProduto) {
           continue;
         }
 
-        const proporcao = loja === "closet" ? 3 / 4 : 1;
+        const proporcao = 3 / 4;
 
         const imagemEditada = await abrirEditorImagem(arquivo, {
           loja,
           proporcao,
-          largura: loja === "closet" ? 900 : 1200,
+          largura: 900,
           altura: 1200,
         });
 
@@ -1266,7 +1197,6 @@ if (fotosProduto) {
     } finally {
       editandoFotosProduto = false;
       lojaEdicaoFotosProduto = null;
-      lojaProduto.disabled = false;
       fotosProduto.disabled = false;
     }
   });
@@ -1291,59 +1221,93 @@ iniciarPainel();
 
 let tamanhosProduto = [];
 
-const inputTamanhoProduto = document.getElementById("novoTamanhoProduto");
-const btnAdicionarTamanhoProduto = document.getElementById(
-  "btnAdicionarTamanhoProduto",
-);
-const listaTamanhosProduto = document.getElementById("listaTamanhosProduto");
+const PADROES_TAMANHOS = {
+  alfabeticos: {
+    descricao: "Tamanhos em letras para roupas e vestuário.",
+    tamanhos: ["PP", "P", "M", "G", "GG", "XG", "XGG", "G1", "G2", "G3", "G4", "G5"],
+  },
+  "vestuario-numerico": {
+    descricao: "Numeração brasileira de roupas (confirme a grade do fabricante).",
+    tamanhos: Array.from({ length: 17 }, (_, indice) => String(32 + indice * 2)),
+  },
+  infantil: {
+    descricao: "Numeração de roupas infantis.",
+    tamanhos: ["1", "2", "3", "4", "6", "8", "10", "12", "14", "16"],
+  },
+  calcados: {
+    descricao: "Numeração brasileira de calçados.",
+    tamanhos: Array.from({ length: 19 }, (_, indice) => String(27 + indice)),
+  },
+  bebe: {
+    descricao: "Faixas etárias para roupas de bebê.",
+    tamanhos: ["RN", "0–3 meses", "3–6 meses", "6–9 meses", "9–12 meses", "12–18 meses", "18–24 meses"],
+  },
+};
 
-// Exibir tamanhos cadastrados
+const padraoTamanhosProduto = document.getElementById("padraoTamanhosProduto");
+const descricaoPadraoTamanhosProduto = document.getElementById("descricaoPadraoTamanhosProduto");
+const opcoesTamanhosProduto = document.getElementById("opcoesTamanhosProduto");
+const resumoTamanhosProduto = document.getElementById("resumoTamanhosProduto");
+const contadorTamanhosProduto = document.getElementById("contadorTamanhosProduto");
+const listaTamanhosSelecionadosProduto = document.getElementById("listaTamanhosSelecionadosProduto");
+const limparTamanhosProduto = document.getElementById("limparTamanhosProduto");
+
 function renderizarTamanhosProduto() {
-  if (!listaTamanhosProduto) return;
+  if (!opcoesTamanhosProduto || !padraoTamanhosProduto) return;
 
-  listaTamanhosProduto.innerHTML = "";
+  const padrao = PADROES_TAMANHOS[padraoTamanhosProduto.value] || PADROES_TAMANHOS.alfabeticos;
+  if (descricaoPadraoTamanhosProduto) descricaoPadraoTamanhosProduto.textContent = padrao.descricao;
+  if (contadorTamanhosProduto) contadorTamanhosProduto.textContent = `${tamanhosProduto.length} selecionados`;
 
-  tamanhosProduto.forEach((tamanho, indice) => {
-    const item = document.createElement("div");
-    item.className = "item-tamanho-produto";
-
-    const texto = document.createElement("span");
-    texto.textContent = tamanho;
-
-    const botaoExcluir = document.createElement("button");
-    botaoExcluir.type = "button";
-    botaoExcluir.textContent = "×";
-    botaoExcluir.setAttribute("aria-label", `Excluir tamanho ${tamanho}`);
-
-    botaoExcluir.addEventListener("click", () => {
-      tamanhosProduto.splice(indice, 1);
+  opcoesTamanhosProduto.replaceChildren();
+  padrao.tamanhos.forEach((tamanho) => {
+    const botao = document.createElement("button");
+    botao.type = "button";
+    botao.className = "grade-tamanhos-opcao";
+    botao.textContent = tamanho;
+    botao.setAttribute("aria-pressed", String(tamanhosProduto.includes(tamanho)));
+    botao.addEventListener("click", () => {
+      if (salvandoProduto) return;
+      if (tamanhosProduto.includes(tamanho)) {
+        tamanhosProduto = tamanhosProduto.filter((item) => item !== tamanho);
+      } else {
+        tamanhosProduto.push(tamanho);
+      }
       renderizarTamanhosProduto();
     });
-
-    item.append(texto, botaoExcluir);
-    listaTamanhosProduto.appendChild(item);
+    opcoesTamanhosProduto.appendChild(botao);
   });
-}
 
-// Adicionar tamanho
-if (btnAdicionarTamanhoProduto && inputTamanhoProduto) {
-  btnAdicionarTamanhoProduto.addEventListener("click", () => {
-    const tamanho = inputTamanhoProduto.value.trim().toUpperCase();
-
-    if (!tamanho) return;
-
-    if (tamanhosProduto.includes(tamanho)) {
-      alert("Este tamanho já foi adicionado.");
-      return;
+  if (listaTamanhosSelecionadosProduto) {
+    listaTamanhosSelecionadosProduto.replaceChildren();
+    if (tamanhosProduto.length === 0) {
+      const vazio = document.createElement("span");
+      vazio.className = "grade-tamanhos-vazio";
+      vazio.textContent = "Nenhum tamanho selecionado.";
+      listaTamanhosSelecionadosProduto.appendChild(vazio);
+    } else {
+      tamanhosProduto.forEach((tamanho) => {
+        const chip = document.createElement("span");
+        chip.className = "grade-tamanhos-chip";
+        chip.textContent = tamanho;
+        listaTamanhosSelecionadosProduto.appendChild(chip);
+      });
     }
-
-    tamanhosProduto.push(tamanho);
-
-    inputTamanhoProduto.value = "";
-    renderizarTamanhosProduto();
-    inputTamanhoProduto.focus();
-  });
+  }
+  if (resumoTamanhosProduto) {
+    resumoTamanhosProduto.textContent = tamanhosProduto.length === 0
+      ? "Selecione os tamanhos para disponibilizar na loja"
+      : `${tamanhosProduto.length} tamanho(s) disponível(is) para venda`;
+  }
 }
+
+padraoTamanhosProduto?.addEventListener("change", renderizarTamanhosProduto);
+limparTamanhosProduto?.addEventListener("click", () => {
+  if (salvandoProduto) return;
+  tamanhosProduto = [];
+  renderizarTamanhosProduto();
+});
+renderizarTamanhosProduto();
 
 
 /* ==========================================
@@ -1366,3 +1330,22 @@ if (btnNovaEmbalagem && btnCancelarEmbalagem && cadastroEmbalagem) {
     cadastroEmbalagem.classList.remove("aberto");
   });
 }
+
+// Harmoniza o menu nativo da grade de tamanhos com o tema ativo do painel.
+// Observa mudanças de tema sem alterar as preferências salvas do usuário.
+function atualizarTemaSeletorTamanhos() {
+  if (!padraoTamanhosProduto) return;
+  const cor = getComputedStyle(padraoTamanhosProduto).color;
+  const valores = cor.match(/[\d.]+/g);
+  if (!valores || valores.length < 3) return;
+  const [r, g, b] = valores.slice(0, 3).map(Number);
+  const textoClaro = (r * 0.2126 + g * 0.7152 + b * 0.0722) > 145;
+  padraoTamanhosProduto.style.setProperty('--lolly-esquema-select', textoClaro ? 'dark' : 'light');
+  padraoTamanhosProduto.style.setProperty('--lolly-opcao-fundo', textoClaro ? '#252932' : '#ffffff');
+  padraoTamanhosProduto.style.setProperty('--lolly-opcao-texto', textoClaro ? '#f5f6f8' : '#20242c');
+}
+
+atualizarTemaSeletorTamanhos();
+const observadorTemaTamanhos = new MutationObserver(atualizarTemaSeletorTamanhos);
+observadorTemaTamanhos.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme', 'data-tema', 'style'] });
+observadorTemaTamanhos.observe(document.body, { attributes: true, attributeFilter: ['class', 'data-theme', 'data-tema', 'style'] });

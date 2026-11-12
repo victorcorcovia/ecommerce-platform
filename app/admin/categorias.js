@@ -5,8 +5,7 @@ import {
   addDoc,
   getDocs,
   doc,
-  updateDoc,
-  deleteDoc,
+  runTransaction,
   query,
   where,
 } from "firebase/firestore";
@@ -33,21 +32,6 @@ export async function carregarCategorias() {
     });
   });
 
-  // Categorias da Decor 3D
-  const consulta3D = query(
-    collection(db, "categorias"),
-    where("loja", "==", "3d"),
-  );
-
-  const resultado3D = await getDocs(consulta3D);
-
-  resultado3D.forEach((documento) => {
-    categorias.push({
-      id: documento.id,
-      ...documento.data(),
-    });
-  });
-
   return categorias;
 }
 
@@ -56,7 +40,7 @@ export async function carregarCategorias() {
 // ==========================================
 
 export async function cadastrarCategoria(loja, nome) {
-  if (!["closet", "3d"].includes(loja) || !nome?.trim()) {
+  if (loja !== "closet" || !nome?.trim()) {
     throw new Error("Dados da categoria inválidos.");
   }
 
@@ -71,15 +55,18 @@ export async function cadastrarCategoria(loja, nome) {
 // ==========================================
 
 export async function editarCategoria(id, loja, nome) {
-  if (!id || !["closet", "3d"].includes(loja) || !nome?.trim()) {
+  if (!id || loja !== "closet" || !nome?.trim()) {
     throw new Error("Dados da categoria inválidos.");
   }
 
   const referencia = doc(db, "categorias", id);
 
-  await updateDoc(referencia, {
-    loja,
-    nome: nome.trim(),
+  await runTransaction(db, async (transacao) => {
+    const existente = await transacao.get(referencia);
+    if (!existente.exists() || existente.data().loja !== "closet") {
+      throw new Error("Categoria da Closet não encontrada.");
+    }
+    transacao.update(referencia, { nome: nome.trim() });
   });
 }
 
@@ -94,5 +81,11 @@ export async function excluirCategoria(id) {
 
   const referencia = doc(db, "categorias", id);
 
-  await deleteDoc(referencia);
+  await runTransaction(db, async (transacao) => {
+    const existente = await transacao.get(referencia);
+    if (!existente.exists() || existente.data().loja !== "closet") {
+      throw new Error("Categoria da Closet não encontrada.");
+    }
+    transacao.delete(referencia);
+  });
 }

@@ -8,7 +8,7 @@ export async function enviarImagemProduto(arquivo, loja) {
     throw new Error("Selecione um arquivo de imagem válido.");
   }
 
-  if (!["closet", "3d"].includes(loja)) {
+  if (loja !== "closet") {
     throw new Error("Loja inválida.");
   }
 

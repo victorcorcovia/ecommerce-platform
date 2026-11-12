@@ -11,7 +11,7 @@ function prepararCategoriaPublica(categoria) {
 
   const loja = categoria.loja.trim().toLowerCase();
 
-  if (!["closet", "3d"].includes(loja)) {
+  if (loja !== "closet") {
     return null;
   }
 
