@@ -7,6 +7,7 @@
     <title>Produtos | Painel Administrativo</title>
 
     <link rel="stylesheet" href="style.css" />
+
   </head>
 
   <body>
@@ -14,7 +15,7 @@
       <!-- MENU LATERAL -->
       <aside class="sidebar">
         <div class="logo">
-          <h2>Lojas Lolly</h2>
+          <h2>Lolly Closet</h2>
           <span>Painel Administrativo</span>
         </div>
 
@@ -60,7 +61,7 @@
         <header class="topo">
           <div>
             <h1>Produtos</h1>
-            <p>Gerencie os produtos das duas lojas</p>
+            <p>Gerencie os produtos da Lolly Closet</p>
           </div>
 
           <div class="acoes-topo">
@@ -78,16 +79,6 @@
         <!-- BARRA DE AÇÕES -->
         <section class="barra-produtos">
           <div class="filtros-produtos">
-            <div class="campo-filtro">
-              <label for="filtroLoja">Loja</label>
-
-              <select id="filtroLoja">
-                <option value="todas">Todas as lojas</option>
-                <option value="closet">Closet</option>
-                <option value="3d">Decor 3D</option>
-              </select>
-            </div>
-
             <div class="campo-filtro">
               <label for="buscarProduto">Buscar produto</label>
 
@@ -111,7 +102,7 @@
             <div class="cabecalho-form">
               <div>
                 <h2>Novo produto</h2>
-                <p>Cadastre um produto em uma das lojas</p>
+                <p>Cadastre um produto da Lolly Closet</p>
               </div>
 
               <button type="button" class="btn-fechar" id="btnFecharProduto">
@@ -120,168 +111,230 @@
             </div>
 
             <form id="cadastroProduto">
-              <div class="grid-form">
-                <div class="campo-form">
-                  <label for="lojaProduto">Loja *</label>
-
-                  <select id="lojaProduto" required>
-                    <option value="">Selecione a loja</option>
-                    <option value="closet">Closet</option>
-                    <option value="3d">Decor 3D</option>
-                  </select>
-                </div>
-
-                <div class="campo-form">
-                  <label for="nomeProduto">Nome do produto *</label>
-
-                  <input
-                    type="text"
-                    id="nomeProduto"
-                    placeholder="Ex: Pijama Americano Rosa"
-                    required
-                  />
-                </div>
-
-                <div class="campo-form">
-                  <label for="categoriaProduto">Categoria *</label>
-
-                  <select id="categoriaProduto" required>
-                    <option value="">Selecione uma categoria</option>
-                  </select>
-                </div>
-
-                <div class="campo-form">
-                  <label for="precoProduto">Preço *</label>
-
-                  <input
-                    type="number"
-                    id="precoProduto"
-                    placeholder="0,00"
-                    min="0"
-                    step="0.01"
-                    required
-                  />
-                </div>
-
-                <div class="campo-form">
-                  <label for="estoqueProduto">Quantidade em estoque *</label>
-
-                  <input
-                    type="number"
-                    id="estoqueProduto"
-                    value="0"
-                    min="0"
-                    required
-                  />
-                </div>
-
-                <div class="campo-form">
-                  <label for="statusProduto">Status</label>
-
-                  <select id="statusProduto">
-                    <option value="ativo">Ativo</option>
-                    <option value="inativo">Inativo</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="campo-form campo-completo">
-                <label for="descricaoProduto">Descrição</label>
-
-                <textarea
-                  id="descricaoProduto"
-                  rows="5"
-                  placeholder="Descrição do produto..."
-                ></textarea>
-              </div>
-
-              <!-- PERSONALIZAÇÃO COM NOME - DECOR 3D -->
-              <div
-                class="campo-form campo-completo"
-                id="campoPersonalizacaoProduto"
-                style="display: none"
+              <section
+                class="secao-cadastro"
+                aria-labelledby="tituloDadosProduto"
               >
-                <label for="permitePersonalizacaoProduto">
-                  <input type="checkbox" id="permitePersonalizacaoProduto" />
-                  Permitir personalização com nome
-                </label>
+                <div class="secao-cadastro-titulo">
+                  <h3 id="tituloDadosProduto">Informações do produto</h3>
+                  <p>Dados básicos para identificação e venda.</p>
+                </div>
+                <div class="grid-form">
+                  <input type="hidden" id="lojaProduto" value="closet" />
 
-                <small>
-                  Quando ativado, o cliente poderá informar um nome para
-                  personalizar este produto.
-                </small>
-              </div>
+                  <div class="campo-form">
+                    <label for="nomeProduto">Nome do produto *</label>
 
-              <div class="variacoes-produto">
-                <!-- TAMANHOS DISPONÍVEIS -->
-                <div
-                  class="campo-form campo-completo"
-                  id="campoTamanhosProduto"
-                >
-                  <label for="novoTamanhoProduto">Tamanhos disponíveis</label>
-
-                  <div class="seletor-tamanhos-produto">
                     <input
                       type="text"
-                      id="novoTamanhoProduto"
-                      placeholder="Ex: P, M, G, GG ou 38"
-                      maxlength="15"
+                      id="nomeProduto"
+                      placeholder="Ex: Pijama Americano Rosa"
+                      required
                     />
-
-                    <button type="button" id="btnAdicionarTamanhoProduto">
-                      + Adicionar tamanho
-                    </button>
                   </div>
 
-                  <div id="listaTamanhosProduto" aria-live="polite"></div>
+                  <div class="campo-form">
+                    <label for="categoriaProduto">Categoria *</label>
 
-                  <small>
-                    Adicione os tamanhos disponíveis para este produto.
-                  </small>
-                </div>
+                    <select id="categoriaProduto" required>
+                      <option value="">Selecione uma categoria</option>
+                    </select>
+                  </div>
 
-                <!-- CORES DISPONÍVEIS -->
-                <div class="campo-form campo-completo" id="campoCoresProduto">
-                  <label>Cores disponíveis</label>
+                  <div class="campo-form">
+                    <label for="precoProduto">Preço *</label>
 
-                  <div class="seletor-cores-produto">
                     <input
-                      type="color"
-                      id="codigoCorProduto"
-                      value="#e9a8b5"
-                      aria-label="Selecionar tonalidade"
+                      type="number"
+                      id="precoProduto"
+                      placeholder="0,00"
+                      min="0"
+                      step="0.01"
+                      required
                     />
-
-                    <button type="button" id="btnAdicionarCorProduto">
-                      + Adicionar cor
-                    </button>
                   </div>
 
-                  <div id="listaCoresProduto" aria-live="polite"></div>
+                  <div class="campo-form">
+                    <label for="estoqueProduto">Quantidade em estoque *</label>
 
-                  <small>
-                    Selecione uma tonalidade e adicione as cores disponíveis.
-                  </small>
+                    <input
+                      type="number"
+                      id="estoqueProduto"
+                      value="0"
+                      min="0"
+                      required
+                    />
+                  </div>
+
+                  <div class="campo-form">
+                    <label for="statusProduto">Status</label>
+
+                    <select id="statusProduto">
+                      <option value="ativo">Ativo</option>
+                      <option value="inativo">Inativo</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
-              <div class="campo-form campo-completo">
-                <label for="fotosProduto">Fotos do produto</label>
 
-                <input
-                  type="file"
-                  id="fotosProduto"
-                  accept="image/*"
-                  multiple
-                />
+                <div class="campo-form campo-completo">
+                  <label for="descricaoProduto">Descrição</label>
 
-                <small>Você poderá selecionar várias fotos.</small>
+                  <textarea
+                    id="descricaoProduto"
+                    rows="5"
+                    placeholder="Descrição do produto..."
+                  ></textarea>
+                </div>
+              </section>
 
-                <div
-                  id="previewFotosProduto"
-                  class="preview-fotos-produto"
-                  aria-live="polite"
-                ></div>
-              </div>
+              <section
+                class="secao-cadastro"
+                aria-labelledby="tituloVariacoesProduto"
+              >
+                <div class="secao-cadastro-titulo">
+                  <h3 id="tituloVariacoesProduto">Variações do produto</h3>
+                  <p>Defina os tamanhos e cores disponíveis na loja.</p>
+                </div>
+                <div class="variacoes-produto">
+                  <!-- TAMANHOS DISPONÍVEIS -->
+                  <div
+                    class="campo-form campo-completo"
+                    id="campoTamanhosProduto"
+                  >
+                    <div class="grade-tamanhos-intro">
+                      <strong>Grade de tamanhos</strong>
+                      <small
+                        >Selecione o padrão de numeração e marque os tamanhos
+                        disponíveis para o produto.</small
+                      >
+                    </div>
+                    <div class="grade-tamanhos-controles">
+                      <label for="padraoTamanhosProduto"
+                        >Padrão de tamanhos</label
+                      >
+                      <select id="padraoTamanhosProduto">
+                        <option value="alfabeticos">
+                          Vestuário — Tamanhos alfabéticos
+                        </option>
+                        <option value="vestuario-numerico">
+                          Vestuário — Numeração brasileira
+                        </option>
+                        <option value="infantil">
+                          Moda infantil — Numeração
+                        </option>
+                        <option value="calcados">
+                          Calçados — Numeração brasileira
+                        </option>
+                        <option value="bebe">
+                          Moda bebê — Tamanhos por idade
+                        </option>
+                      </select>
+                      <small id="descricaoPadraoTamanhosProduto"></small>
+                    </div>
+                    <div class="grade-tamanhos-cabecalho">
+                      <strong>Selecione os tamanhos</strong>
+                      <span id="contadorTamanhosProduto" aria-live="polite"
+                        >0 selecionados</span
+                      >
+                    </div>
+                    <div
+                      id="opcoesTamanhosProduto"
+                      class="grade-tamanhos-opcoes"
+                      role="group"
+                      aria-label="Tamanhos disponíveis"
+                    ></div>
+                  </div>
+
+                  <div class="variacoes-rodape">
+                    <!-- CORES DISPONÍVEIS -->
+                    <div
+                      class="campo-form campo-completo"
+                      id="campoCoresProduto"
+                    >
+                      <label>Cores disponíveis</label>
+
+                      <div class="seletor-cores-produto">
+                        <input
+                          type="color"
+                          id="codigoCorProduto"
+                          value="#e9a8b5"
+                          aria-label="Selecionar tonalidade"
+                        />
+
+                        <button type="button" id="btnAdicionarCorProduto">
+                          + Adicionar cor
+                        </button>
+                      </div>
+
+                      <div id="listaCoresProduto" aria-live="polite"></div>
+
+                      <small>
+                        Selecione uma tonalidade e adicione as cores
+                        disponíveis.
+                      </small>
+                    </div>
+                    <div
+                      class="campo-form campo-completo painel-tamanhos-selecionados"
+                    >
+                      <div class="grade-tamanhos-rodape">
+                        <div class="grade-tamanhos-resumo">
+                          <strong>Tamanhos selecionados</strong>
+                          <div
+                            id="listaTamanhosSelecionadosProduto"
+                            class="grade-tamanhos-selecionados"
+                            aria-live="polite"
+                          >
+                            <span class="grade-tamanhos-vazio"
+                              >Nenhum tamanho selecionado.</span
+                            >
+                          </div>
+                          <span
+                            id="resumoTamanhosProduto"
+                            class="grade-tamanhos-contagem"
+                            aria-live="polite"
+                            >Nenhum tamanho selecionado</span
+                          >
+                        </div>
+                        <button
+                          type="button"
+                          id="limparTamanhosProduto"
+                          class="grade-tamanhos-limpar"
+                        >
+                          Limpar seleção
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section
+                class="secao-cadastro"
+                aria-labelledby="tituloFotosProduto"
+              >
+                <div class="secao-cadastro-titulo">
+                  <h3 id="tituloFotosProduto">Imagens do produto</h3>
+                  <p>Adicione e organize as fotografias exibidas na loja.</p>
+                </div>
+                <div class="campo-form campo-completo">
+                  <label for="fotosProduto">Fotos do produto</label>
+
+                  <input
+                    type="file"
+                    id="fotosProduto"
+                    accept="image/*"
+                    multiple
+                  />
+
+                  <small>Você poderá selecionar várias fotos.</small>
+
+                  <div
+                    id="previewFotosProduto"
+                    class="preview-fotos-produto"
+                    aria-live="polite"
+                  ></div>
+                </div>
+              </section>
 
               <div class="acoes-form">
                 <button
@@ -331,7 +384,7 @@
           <div class="cabecalho-categorias">
             <div>
               <h2>Categorias</h2>
-              <p>Gerencie as categorias de produtos de cada loja</p>
+              <p>Gerencie as categorias da Lolly Closet</p>
             </div>
 
             <button
@@ -346,15 +399,7 @@
           <!-- FORMULÁRIO -->
           <form id="cadastroCategoria" class="form-categoria-produto">
             <div class="grid-form">
-              <div class="campo-form">
-                <label for="lojaCategoria">Loja *</label>
-
-                <select id="lojaCategoria" required>
-                  <option value="">Selecione a loja</option>
-                  <option value="closet">Closet</option>
-                  <option value="3d">Decor 3D</option>
-                </select>
-              </div>
+              <input type="hidden" id="lojaCategoria" value="closet" />
 
               <div class="campo-form">
                 <label for="nomeCategoria">Nome da categoria *</label>
@@ -397,6 +442,128 @@
                 <tr>
                   <td colspan="4" class="sem-dados">
                     Nenhuma categoria cadastrada.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- GERENCIAMENTO DE EMBALAGENS -->
+        <section class="gerenciar-embalagens">
+          <div class="cabecalho-embalagens">
+            <div>
+              <h2>Embalagens</h2>
+              <p>Gerencie as embalagens utilizadas no envio dos produtos</p>
+            </div>
+
+            <button
+              type="button"
+              class="btn-novo-produto"
+              id="btnNovaEmbalagem"
+            >
+              + Nova embalagem
+            </button>
+          </div>
+
+          <!-- FORMULÁRIO -->
+          <form id="cadastroEmbalagem" class="form-embalagem-produto">
+            <div class="grid-form">
+              <div class="campo-form">
+                <label for="nomeEmbalagem">Nome da embalagem *</label>
+                <input
+                  type="text"
+                  id="nomeEmbalagem"
+                  placeholder="Ex: Caixa pequena"
+                  maxlength="100"
+                  required
+                />
+              </div>
+
+              <input type="hidden" id="lojaEmbalagem" value="closet" />
+
+              <div class="campo-form">
+                <label for="comprimentoEmbalagem">Comprimento (cm) *</label>
+                <input
+                  type="number"
+                  id="comprimentoEmbalagem"
+                  min="0.1"
+                  step="0.1"
+                  required
+                />
+              </div>
+
+              <div class="campo-form">
+                <label for="larguraEmbalagem">Largura (cm) *</label>
+                <input
+                  type="number"
+                  id="larguraEmbalagem"
+                  min="0.1"
+                  step="0.1"
+                  required
+                />
+              </div>
+
+              <div class="campo-form">
+                <label for="alturaEmbalagem">Altura (cm) *</label>
+                <input
+                  type="number"
+                  id="alturaEmbalagem"
+                  min="0.1"
+                  step="0.1"
+                  required
+                />
+              </div>
+
+              <div class="campo-form">
+                <label for="pesoEmbalagem">Peso da embalagem vazia (g) *</label>
+                <input
+                  type="number"
+                  id="pesoEmbalagem"
+                  min="0"
+                  step="1"
+                  required
+                />
+              </div>
+
+              <div class="campo-form">
+                <label for="statusEmbalagem">Status *</label>
+                <select id="statusEmbalagem" required>
+                  <option value="ativa">Ativa</option>
+                  <option value="inativa">Inativa</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="acoes-form">
+              <button
+                type="button"
+                class="btn-cancelar"
+                id="btnCancelarEmbalagem"
+              >
+                Cancelar
+              </button>
+              <button type="submit" class="btn-salvar">Salvar embalagem</button>
+            </div>
+          </form>
+
+          <!-- TABELA -->
+          <div class="tabela-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Embalagem</th>
+                  <th>Loja</th>
+                  <th>Dimensões (cm)</th>
+                  <th>Peso (g)</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="tabelaEmbalagens">
+                <tr>
+                  <td colspan="6" class="sem-dados">
+                    Nenhuma embalagem cadastrada.
                   </td>
                 </tr>
               </tbody>

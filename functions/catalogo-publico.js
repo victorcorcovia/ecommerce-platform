@@ -2,7 +2,7 @@
 
 // Prepara os dados que poderão aparecer na loja.
 function prepararProdutoPublico(id, produto) {
-  if (!produto || !["closet", "3d"].includes(produto.loja)) {
+  if (!produto || produto.loja !== "closet") {
     return null;
   }
 
@@ -23,9 +23,8 @@ function prepararProdutoPublico(id, produto) {
         : 0,
     descricao: produto.descricao || "",
 
-    // Personalização com nome exclusiva da Decor 3D
-    permitePersonalizacao:
-      produto.loja === "3d" && produto.permitePersonalizacao === true,
+    // Campo legado mantido para compatibilidade com consumidores existentes.
+    permitePersonalizacao: false,
 
     // Tamanhos disponíveis do produto
     tamanhos: Array.isArray(produto.tamanhos)

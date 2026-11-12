@@ -155,6 +155,7 @@ async function carregarDetalhesProduto() {
       if (imagemElemento) {
         imagemElemento.src = fotos[indiceAtual];
         imagemElemento.alt = `${produto.nome} - foto ${indiceAtual + 1}`;
+        imagemElemento.style.visibility = "visible";
       }
 
       if (galeriaMiniaturas) {
@@ -208,7 +209,6 @@ async function carregarDetalhesProduto() {
       botaoAdicionar.disabled = false;
     }
 
-    // A integração do carrinho será feita na próxima etapa.
   } catch (erro) {
     console.error("Erro ao carregar produto:", erro);
 

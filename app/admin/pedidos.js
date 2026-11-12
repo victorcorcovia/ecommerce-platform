@@ -19,7 +19,6 @@ import {
 const $ = (id) => document.getElementById(id);
 
 const tabelaPedidos = $("tabelaPedidos");
-const filtroLojaPedidos = $("filtroLojaPedidos");
 const filtroStatusPedidos = $("filtroStatusPedidos");
 const buscarPedido = $("buscarPedido");
 
@@ -27,7 +26,6 @@ const detalhesPedido = $("detalhesPedido");
 const numeroPedidoDetalhes = $("numeroPedidoDetalhes");
 const detalheCliente = $("detalheCliente");
 const detalheEmail = $("detalheEmail");
-const detalheLoja = $("detalheLoja");
 const detalhePagamento = $("detalhePagamento");
 const detalheSubtotal = $("detalheSubtotal");
 const detalheFrete = $("detalheFrete");
@@ -56,7 +54,6 @@ const formNovoPedido = $("formNovoPedido");
 const btnFecharNovoPedido = $("btnFecharNovoPedido");
 const btnCancelarNovoPedido = $("btnCancelarNovoPedido");
 
-const pedidoLoja = $("pedidoLoja");
 const pedidoProduto = $("pedidoProduto");
 const pedidoQuantidade = $("pedidoQuantidade");
 const pedidoFrete = $("pedidoFrete");
@@ -73,12 +70,6 @@ let itensPedidoManual = [];
 // ==========================================
 // FUNÇÕES AUXILIARES
 // ==========================================
-
-function obterNomeLoja(loja) {
-  if (loja === "closet") return "Closet";
-  if (loja === "3d") return "Decor 3D";
-  return loja || "—";
-}
 
 function obterNomeStatus(status) {
   const nomes = {
@@ -259,21 +250,12 @@ async function carregarPedidos() {
   try {
     const colecao = collection(db, "pedidos");
 
-    const [resultadoCloset, resultado3D] = await Promise.all([
-      getDocs(query(colecao, where("loja", "==", "closet"))),
-      getDocs(query(colecao, where("loja", "==", "3d"))),
-    ]);
+    const resultado = await getDocs(query(colecao, where("loja", "==", "closet")));
 
-    pedidos = [];
-
-    for (const resultado of [resultadoCloset, resultado3D]) {
-      resultado.forEach((documento) => {
-        pedidos.push({
-          id: documento.id,
-          ...documento.data(),
-        });
-      });
-    }
+    pedidos = resultado.docs.map((documento) => ({
+      id: documento.id,
+      ...documento.data(),
+    }));
 
     pedidos.sort((a, b) => {
       const dataA = a.criadoEm?.toMillis?.() || 0;
@@ -287,7 +269,7 @@ async function carregarPedidos() {
 
     if (tabelaPedidos) {
       tabelaPedidos.innerHTML =
-        '<tr><td colspan="8" class="sem-dados">Erro ao carregar os pedidos.</td></tr>';
+        '<tr><td colspan="7" class="sem-dados">Erro ao carregar os pedidos.</td></tr>';
     }
   }
 }
@@ -299,12 +281,10 @@ async function carregarPedidos() {
 function renderizarPedidos() {
   if (!tabelaPedidos) return;
 
-  const loja = filtroLojaPedidos?.value || "todas";
   const status = filtroStatusPedidos?.value || "todos";
   const busca = (buscarPedido?.value || "").toLowerCase().trim();
 
   const filtrados = pedidos.filter((pedido) => {
-    if (loja !== "todas" && pedido.loja !== loja) return false;
     if (status !== "todos" && pedido.status !== status) return false;
 
     if (busca) {
@@ -323,7 +303,7 @@ function renderizarPedidos() {
 
   if (filtrados.length === 0) {
     tabelaPedidos.innerHTML =
-      '<tr><td colspan="8" class="sem-dados">Nenhum pedido encontrado.</td></tr>';
+      '<tr><td colspan="7" class="sem-dados">Nenhum pedido encontrado.</td></tr>';
     return;
   }
 
@@ -332,7 +312,6 @@ function renderizarPedidos() {
 
     adicionarCelula(linha, pedido.numero || "—");
     adicionarCelula(linha, pedido.clienteNome || "—");
-    adicionarCelula(linha, obterNomeLoja(pedido.loja));
     adicionarCelula(linha, formatarData(pedido.criadoEm));
     adicionarCelula(linha, pedido.statusPagamento || "—");
     adicionarCelula(linha, formatarValor(pedido.total));
@@ -360,7 +339,6 @@ function renderizarPedidos() {
   });
 }
 
-filtroLojaPedidos?.addEventListener("change", renderizarPedidos);
 filtroStatusPedidos?.addEventListener("change", renderizarPedidos);
 buscarPedido?.addEventListener("input", renderizarPedidos);
 
@@ -424,6 +402,7 @@ function atualizarSituacaoEstoque(pedido) {
 // ==========================================
 
 function abrirDetalhesPedido(pedido) {
+  if (pedido?.loja !== "closet") return;
   if (!detalhesPedido) {
     console.error('Não foi encontrado id="detalhesPedido" no pedidos.html.');
     alert("A seção de detalhes do pedido não foi encontrada no HTML.");
@@ -438,7 +417,6 @@ function abrirDetalhesPedido(pedido) {
   escrever("numeroPedidoDetalhes", pedido.numero || "Pedido");
   escrever("detalheCliente", pedido.clienteNome || "—");
   escrever("detalheEmail", pedido.clienteEmail || "—");
-  escrever("detalheLoja", obterNomeLoja(pedido.loja));
   escrever("detalhePagamento", pedido.statusPagamento || "—");
   escrever("detalheSubtotal", formatarValor(pedido.subtotal));
   escrever("detalheFrete", formatarValor(pedido.frete));
@@ -552,6 +530,9 @@ function registrarMovimentacoes(
 // ==========================================
 
 async function lerProdutosDaTransacao(transacao, dadosPedido, tipo) {
+  if (dadosPedido.loja !== "closet") {
+    throw new Error("Pedido de outra loja não pode movimentar estoque.");
+  }
   const itens = dadosPedido.itens;
 
   if (!Array.isArray(itens) || itens.length === 0) {
@@ -652,6 +633,10 @@ btnReintegrarEstoque?.addEventListener("click", async () => {
       }
 
       const dados = snapshot.data();
+
+      if (dados.loja !== "closet") {
+        throw new Error("Este pedido não pertence à Lolly Closet.");
+      }
 
       if (
         dados.status !== "cancelado" ||
@@ -768,6 +753,10 @@ alterarStatusPedido?.addEventListener("change", async () => {
       }
 
       const dados = snapshot.data();
+
+      if (dados.loja !== "closet") {
+        throw new Error("Este pedido não pertence à Lolly Closet.");
+      }
 
       if (dados.status === "cancelado") {
         throw new Error(
@@ -904,6 +893,7 @@ alterarStatusPedido?.addEventListener("change", async () => {
 // ==========================================
 
 function abrirFormularioNovoPedido() {
+  carregarProdutosPedido();
   ocultar(detalhesPedido);
   mostrar(formNovoPedido);
 
@@ -926,7 +916,7 @@ btnCancelarNovoPedido?.addEventListener("click", fecharFormularioNovoPedido);
 // ==========================================
 
 async function carregarProdutosPedido() {
-  const loja = pedidoLoja?.value;
+  const loja = "closet";
 
   produtosPedido = [];
   itensPedidoManual = [];
@@ -935,12 +925,6 @@ async function carregarProdutosPedido() {
   if (!pedidoProduto) return;
 
   pedidoProduto.innerHTML = '<option value="">Selecione um produto</option>';
-
-  if (!loja) {
-    pedidoProduto.innerHTML =
-      '<option value="">Selecione uma loja primeiro</option>';
-    return;
-  }
 
   pedidoProduto.disabled = true;
 
@@ -984,7 +968,7 @@ async function carregarProdutosPedido() {
   }
 }
 
-pedidoLoja?.addEventListener("change", carregarProdutosPedido);
+
 
 // ==========================================
 // ATUALIZAR ITENS DO NOVO PEDIDO
@@ -1100,7 +1084,7 @@ $("cadastroPedido")?.addEventListener("submit", async (evento) => {
 
   if (!botaoSalvar || botaoSalvar.disabled) return;
 
-  const loja = pedidoLoja?.value;
+  const loja = "closet";
   const clienteNome = $("pedidoClienteNome")?.value.trim() || "";
   const clienteEmail = $("pedidoClienteEmail")?.value.trim() || "";
   const clienteTelefone = $("pedidoClienteTelefone")?.value.trim() || "";
@@ -1112,11 +1096,6 @@ $("cadastroPedido")?.addEventListener("submit", async (evento) => {
   // ==========================================
   // VALIDAÇÕES
   // ==========================================
-
-  if (!["closet", "3d"].includes(loja)) {
-    alert("Selecione uma loja válida.");
-    return;
-  }
 
   if (!clienteNome) {
     alert("Informe o nome do cliente.");
@@ -1292,7 +1271,7 @@ $("cadastroPedido")?.addEventListener("submit", async (evento) => {
         const produto = snapshot.data();
 
         if (produto.loja !== loja) {
-          throw new Error("Um produto não pertence à loja selecionada.");
+          throw new Error("Um produto não pertence à Lolly Closet.");
         }
 
         const estoqueAtual = Number(produto.estoque);
@@ -1443,7 +1422,7 @@ $("cadastroPedido")?.addEventListener("submit", async (evento) => {
 
     if (pedidoProduto) {
       pedidoProduto.innerHTML =
-        '<option value="">Selecione uma loja primeiro</option>';
+        '<option value="">Selecione um produto</option>';
     }
 
     fecharFormularioNovoPedido();

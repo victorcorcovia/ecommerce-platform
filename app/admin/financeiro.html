@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Financeiro | Lojas Lolly</title>
+    <title>Financeiro | Lolly Closet</title>
 
     <link rel="stylesheet" href="./style.css" />
   </head>
@@ -61,7 +61,7 @@
         <header class="topo">
           <div>
             <h1>Financeiro</h1>
-            <p>Acompanhe os resultados da Closet e da Decor 3D.</p>
+            <p>Acompanhe os resultados financeiros da Lolly Closet.</p>
           </div>
 
           <div class="acoes-topo">
@@ -79,15 +79,6 @@
         <!-- FILTROS -->
         <section class="barra-produtos">
           <div class="filtros-produtos">
-            <div class="campo-filtro">
-              <label for="filtroLojaFinanceiro">Loja</label>
-
-              <select id="filtroLojaFinanceiro">
-                <option value="todas">Todas as lojas</option>
-                <option value="closet">Closet</option>
-                <option value="3d">Decor 3D</option>
-              </select>
-            </div>
 
             <div class="campo-filtro">
               <label for="filtroPeriodoFinanceiro">Período</label>
@@ -138,17 +129,16 @@
           </div>
         </section>
 
-        <!-- RESULTADOS POR LOJA -->
+        <!-- RESUMO DETALHADO -->
         <section class="lista-produtos">
           <div class="titulo-secao">
-            <h2>Resultados por loja</h2>
+            <h2>Resumo detalhado</h2>
           </div>
 
           <div class="tabela-container">
             <table>
               <thead>
                 <tr>
-                  <th>Loja</th>
                   <th>Pedidos</th>
                   <th>Pedidos pagos</th>
                   <th>Faturamento</th>
@@ -160,7 +150,7 @@
 
               <tbody id="tabelaFinanceiro">
                 <tr>
-                  <td colspan="5" class="sem-dados">
+                  <td colspan="6" class="sem-dados">
                     Nenhum dado financeiro encontrado.
                   </td>
                 </tr>

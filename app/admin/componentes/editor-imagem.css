@@ -67,12 +67,6 @@
   --editor-cor-hover: #96713c;
 }
 
-/* Lolly Decor 3D */
-.editor-imagem-overlay[data-loja="3d"] {
-  --editor-cor-principal: #466348;
-  --editor-cor-hover: #789B7A;
-}
-
 /* Botão de confirmação */
 .editor-imagem-overlay .editor-imagem-confirmar {
   background: var(--editor-cor-principal);

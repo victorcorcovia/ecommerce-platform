@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Painel Administrativo | Lojas Lolly</title>
+    <title>Painel Administrativo | Lolly Closet</title>
 
     <link rel="stylesheet" href="style.css" />
   </head>
@@ -14,7 +14,7 @@
       <!-- MENU LATERAL -->
       <aside class="sidebar">
         <div class="logo">
-          <h2>Lojas Lolly</h2>
+          <h2>Lolly Closet</h2>
           <span>Painel Administrativo</span>
         </div>
 
@@ -61,7 +61,7 @@
         <header class="topo">
           <div>
             <h1>Dashboard</h1>
-            <p>Visão geral das lojas</p>
+            <p>Visão geral da Lolly Closet</p>
           </div>
 
           <div class="acoes-topo">
@@ -79,16 +79,6 @@
 
         <!-- FILTROS DO DASHBOARD -->
         <section class="filtro-loja">
-          <div>
-            <label for="lojaSelecionada">Loja:</label>
-
-            <select id="lojaSelecionada">
-              <option value="todas">Todas as lojas</option>
-              <option value="closet">Closet</option>
-              <option value="3d">Decor 3D</option>
-            </select>
-          </div>
-
           <div>
             <label for="periodoDashboard">Período:</label>
 
@@ -163,56 +153,6 @@
           </div>
         </section>
 
-        <!-- RESULTADOS POR LOJA -->
-        <section class="resumo-lojas dashboard-resumo-lojas">
-          <div class="titulo-secao">
-            <h2>Resultados por loja</h2>
-            <p>Acompanhe o desempenho financeiro de cada loja.</p>
-          </div>
-
-          <div class="cards-lojas">
-            <!-- CLOSET -->
-            <div class="card-loja">
-              <h3>Closet</h3>
-
-              <div class="dashboard-metrica">
-                <span>Faturamento</span>
-                <strong id="faturamentoCloset">R$ 0,00</strong>
-              </div>
-
-              <div class="dashboard-metrica">
-                <span>Custos</span>
-                <strong id="custosCloset">R$ 0,00</strong>
-              </div>
-
-              <div class="dashboard-metrica">
-                <span>Lucro</span>
-                <strong id="lucroCloset">R$ 0,00</strong>
-              </div>
-            </div>
-
-            <!-- DECOR 3D -->
-            <div class="card-loja">
-              <h3>Decor 3D</h3>
-
-              <div class="dashboard-metrica">
-                <span>Faturamento</span>
-                <strong id="faturamento3D">R$ 0,00</strong>
-              </div>
-
-              <div class="dashboard-metrica">
-                <span>Custos</span>
-                <strong id="custos3D">R$ 0,00</strong>
-              </div>
-
-              <div class="dashboard-metrica">
-                <span>Lucro</span>
-                <strong id="lucro3D">R$ 0,00</strong>
-              </div>
-            </div>
-          </div>
-        </section>
-
         <!-- PEDIDOS RECENTES -->
         <section class="pedidos-recentes">
           <div class="titulo-secao">
@@ -224,7 +164,6 @@
               <thead>
                 <tr>
                   <th>Pedido</th>
-                  <th>Loja</th>
                   <th>Cliente</th>
                   <th>Data</th>
                   <th>Valor</th>
@@ -234,7 +173,7 @@
 
               <tbody id="listaPedidos">
                 <tr>
-                  <td colspan="6" class="sem-dados">
+                  <td colspan="5" class="sem-dados">
                     Nenhum pedido realizado.
                   </td>
                 </tr>
@@ -267,7 +206,6 @@
               <thead>
                 <tr>
                   <th>Produto</th>
-                  <th>Loja</th>
                   <th>Quantidade</th>
                   <th>Situação</th>
                 </tr>
@@ -275,7 +213,7 @@
 
               <tbody id="listaAlertasEstoque">
                 <tr>
-                  <td colspan="4" class="sem-dados">
+                  <td colspan="3" class="sem-dados">
                     Carregando informações...
                   </td>
                 </tr>

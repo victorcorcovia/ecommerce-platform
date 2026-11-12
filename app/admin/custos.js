@@ -17,7 +17,6 @@ const formularioCusto = document.getElementById("formularioCusto");
 const btnCancelarCusto = document.getElementById("btnCancelarCusto");
 const formCusto = document.getElementById("formCusto");
 
-const custoLoja = document.getElementById("custoLoja");
 const custoDescricao = document.getElementById("custoDescricao");
 const custoCategoria = document.getElementById("custoCategoria");
 const custoValor = document.getElementById("custoValor");
@@ -25,7 +24,6 @@ const custoData = document.getElementById("custoData");
 const custoObservacao = document.getElementById("custoObservacao");
 const tabelaCustos = document.getElementById("tabelaCustos");
 
-const filtroLojaCustos = document.getElementById("filtroLojaCustos");
 const filtroPeriodoCustos = document.getElementById("filtroPeriodoCustos");
 const buscarCusto = document.getElementById("buscarCusto");
 
@@ -58,7 +56,7 @@ formCusto.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const dadosCusto = {
-    loja: custoLoja.value,
+    loja: "closet",
     descricao: custoDescricao.value.trim(),
     categoria: custoCategoria.value,
     valor: Number(custoValor.value),
@@ -101,30 +99,10 @@ async function carregarCustos() {
       where("loja", "==", "closet"),
     );
 
-    const consultaDecor3D = query(
-      collection(db, "custos"),
-      where("loja", "==", "3d"),
-    );
-
-    const [resultadoCloset, resultadoDecor3D] = await Promise.all([
-      getDocs(consultaCloset),
-      getDocs(consultaDecor3D),
-    ]);
-
+    const resultadoCloset = await getDocs(consultaCloset);
     custos = [];
-
     resultadoCloset.forEach((documento) => {
-      custos.push({
-        id: documento.id,
-        ...documento.data(),
-      });
-    });
-
-    resultadoDecor3D.forEach((documento) => {
-      custos.push({
-        id: documento.id,
-        ...documento.data(),
-      });
+      custos.push({ id: documento.id, ...documento.data() });
     });
 
     custos.sort((a, b) => {
@@ -138,7 +116,6 @@ async function carregarCustos() {
 }
 
 function obterCustosFiltrados() {
-  const lojaSelecionada = filtroLojaCustos.value;
   const periodoSelecionado = filtroPeriodoCustos.value;
   const busca = buscarCusto.value.trim().toLowerCase();
 
@@ -146,10 +123,7 @@ function obterCustosFiltrados() {
   hoje.setHours(0, 0, 0, 0);
 
   return custos.filter((custo) => {
-    const correspondeLoja =
-      lojaSelecionada === "todas" || custo.loja === lojaSelecionada;
-
-    const textoCusto = `
+const textoCusto = `
       ${custo.descricao || ""}
       ${custo.categoria || ""}
       ${custo.observacao || ""}
@@ -159,7 +133,8 @@ function obterCustosFiltrados() {
 
     let correspondePeriodo = true;
 
-    if (periodoSelecionado !== "todos" && custo.data) {
+    if (periodoSelecionado !== "todos") {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(custo.data || "")) return false;
       const [ano, mes, dia] = custo.data.split("-").map(Number);
 
       const dataCusto = new Date(ano, mes - 1, dia);
@@ -194,7 +169,7 @@ function obterCustosFiltrados() {
       }
     }
 
-    return correspondeLoja && correspondeBusca && correspondePeriodo;
+    return correspondeBusca && correspondePeriodo;
   });
 }
 
@@ -218,7 +193,7 @@ function renderizarCustos() {
   if (custosFiltrados.length === 0) {
     tabelaCustos.innerHTML = `
       <tr>
-        <td colspan="7" class="sem-dados">
+        <td colspan="6" class="sem-dados">
           Nenhum custo cadastrado.
         </td>
       </tr>
@@ -232,11 +207,10 @@ function renderizarCustos() {
 
     linha.innerHTML = `
       <td>${formatarData(custo.data)}</td>
-      <td>${obterNomeLoja(custo.loja)}</td>
-      <td>${custo.descricao}</td>
+      <td class="custo-descricao"></td>
       <td>${obterNomeCategoria(custo.categoria)}</td>
       <td>${formatarValor(custo.valor)}</td>
-      <td>${custo.observacao || "—"}</td>
+      <td class="custo-observacao"></td>
       <td>
   <button
     type="button"
@@ -256,6 +230,8 @@ function renderizarCustos() {
 </td>
     `;
 
+    linha.querySelector(".custo-descricao").textContent = custo.descricao || "—";
+    linha.querySelector(".custo-observacao").textContent = custo.observacao || "—";
     tabelaCustos.appendChild(linha);
   });
 
@@ -270,13 +246,6 @@ function renderizarCustos() {
       excluirCusto(botao.dataset.id);
     });
   });
-}
-
-function obterNomeLoja(loja) {
-  if (loja === "closet") return "Closet";
-  if (loja === "3d") return "Decor 3D";
-
-  return "—";
 }
 
 function obterNomeCategoria(categoria) {
@@ -316,7 +285,6 @@ function editarCusto(id) {
 
   custoEmEdicao = id;
 
-  custoLoja.value = custo.loja;
   custoDescricao.value = custo.descricao;
   custoCategoria.value = custo.categoria;
   custoValor.value = custo.valor;
@@ -352,8 +320,6 @@ async function excluirCusto(id) {
     alert("Não foi possível excluir o custo.");
   }
 }
-
-filtroLojaCustos.addEventListener("change", renderizarCustos);
 
 filtroPeriodoCustos.addEventListener("change", renderizarCustos);
 

@@ -85,12 +85,10 @@ setGlobalOptions({
 
 const PASTAS_PRODUTOS = Object.freeze({
   closet: "Lojas-Lolly/Closet/produtos",
-  "3d": "Lojas-Lolly/Decor3D/produtos",
 });
 
 const PASTAS_BANNERS = Object.freeze({
   closet: "Lojas-Lolly/Closet/banners",
-  "3d": "Lojas-Lolly/Decor3D/banners",
 });
 
 // ==========================================
@@ -109,10 +107,10 @@ async function validarAdministrador(request, loja) {
     throw new HttpsError("unauthenticated", "VocÃª precisa estar autenticado.");
   }
 
-  if (typeof loja !== "string" || !Object.hasOwn(PASTAS_PRODUTOS, loja)) {
+  if (loja !== "closet") {
     throw new HttpsError(
       "invalid-argument",
-      "Loja invÃ¡lida. Utilize closet ou 3d.",
+      "Loja inválida. Utilize closet.",
     );
   }
 
@@ -1369,7 +1367,9 @@ exports.processarExclusaoImagemPendente = onDocumentCreated(
       return;
     }
     // Bloquear exclusões reais enquanto não forem autorizadas.
+    // Registros legados da Decor 3D exigem revisão manual e nunca são excluídos aqui.
     if (
+      dados.loja !== "closet" ||
       process.env.FUNCTIONS_EMULATOR === "true" ||
       process.env.CLOUDINARY_DELETE_ENABLED !== "true"
     ) {
@@ -1396,7 +1396,7 @@ exports.processarExclusaoImagemPendente = onDocumentCreated(
       // 3. VERIFICAR IMAGENS EM USO
       // ====================================
 
-      // Consulta produtos das duas lojas.
+      // Consulta todos os produtos, inclusive registros históricos, para evitar exclusão de imagem em uso.
       // Se a consulta falhar, nÃ£o exclui a imagem.
 
       const produtos = await db.collection("produtos").get();
@@ -1767,11 +1767,11 @@ function validarPersonalizacaoProduto(valor, loja) {
     );
   }
 
-  // PersonalizaÃ§Ã£o com nome Ã© exclusiva da Decor 3D.
-  if (loja !== "3d" && valor === true) {
+  // A Closet não oferece personalização com nome.
+  if (valor === true) {
     throw new HttpsError(
       "invalid-argument",
-      "PersonalizaÃ§Ã£o com nome disponÃ­vel apenas na Decor 3D.",
+      "Personalização com nome não disponível na Closet.",
     );
   }
 

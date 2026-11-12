@@ -13,14 +13,14 @@ import {
   where,
 } from "firebase/firestore";
 
-const lojaAparencia = document.getElementById("lojaAparencia");
+const LOJA = "closet";
 const listaProdutos = document.getElementById("listaProdutosNovidades");
 const botaoSalvarNovidades = document.getElementById("salvarNovidades");
 
 let carregamentoConcluido = false;
 
 async function carregarProdutosNovidades() {
-  const loja = lojaAparencia.value;
+  const loja = LOJA;
   carregamentoConcluido = false;
   botaoSalvarNovidades.disabled = true;
 
@@ -44,9 +44,6 @@ async function carregarProdutosNovidades() {
     const idsSalvos = new Set(
       Array.isArray(produtosSalvos) ? produtosSalvos : [],
     );
-
-    // Evita mostrar produtos de outra loja
-    if (loja !== lojaAparencia.value) return;
 
     listaProdutos.replaceChildren();
 
@@ -100,8 +97,7 @@ async function carregarProdutosNovidades() {
       const nomeLoja = document.createElement("span");
       nomeLoja.className = "produto-novidade-loja";
 
-      nomeLoja.textContent =
-        produto.loja === "closet" ? "Lolly Closet" : "Lolly Decor 3D";
+      nomeLoja.textContent = "Lolly Closet";
 
       informacoes.append(nome, preco, nomeLoja);
 
@@ -118,7 +114,7 @@ async function carregarProdutosNovidades() {
 
         if (selecionados.length > 3) {
           checkbox.checked = false;
-          alert("Você pode selecionar no máximo 3 produtos por loja.");
+          alert("Você pode selecionar no máximo 3 produtos.");
         }
       });
 
@@ -132,14 +128,12 @@ async function carregarProdutosNovidades() {
   }
 }
 
-lojaAparencia.addEventListener("change", carregarProdutosNovidades);
-
 carregarProdutosNovidades();
 
 botaoSalvarNovidades.addEventListener("click", async () => {
   if (!carregamentoConcluido) return;
 
-  const loja = lojaAparencia.value;
+  const loja = LOJA;
 
   const produtosIds = Array.from(
     listaProdutos.querySelectorAll('input[name="produtoNovidade"]:checked'),
@@ -167,7 +161,7 @@ botaoSalvarNovidades.addEventListener("click", async () => {
     console.error("Erro ao salvar Novidades:", erro);
     alert("Não foi possível salvar as Novidades: " + erro.message);
   } finally {
-    if (loja === lojaAparencia.value && carregamentoConcluido) {
+    if (carregamentoConcluido) {
       botaoSalvarNovidades.disabled = false;
     }
   }

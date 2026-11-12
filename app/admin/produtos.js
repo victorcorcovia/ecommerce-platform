@@ -54,21 +54,6 @@ export async function buscarProdutos() {
     });
   });
 
-  // DECOR 3D
-  const consulta3D = query(
-    collection(db, "produtos"),
-    where("loja", "==", "3d"),
-  );
-
-  const resultado3D = await getDocs(consulta3D);
-
-  resultado3D.forEach((documento) => {
-    produtos.push({
-      id: documento.id,
-      ...documento.data(),
-    });
-  });
-
   return produtos;
 }
 
@@ -87,7 +72,7 @@ export async function editarProduto(id, dadosProduto, imagensOriginaisIds) {
 
   const { loja, imagens, ...outrosDados } = dadosProduto;
 
-  if (!["closet", "3d"].includes(loja)) {
+  if (loja !== "closet") {
     throw new Error("Loja inválida.");
   }
 
@@ -152,7 +137,7 @@ export async function excluirProduto(id, loja) {
     throw new Error("ID do produto não informado.");
   }
 
-  if (!["closet", "3d"].includes(loja)) {
+  if (loja !== "closet") {
     throw new Error("Loja do produto inválida.");
   }
 

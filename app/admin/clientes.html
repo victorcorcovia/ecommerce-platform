@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Clientes | Lojas Lolly</title>
+    <title>Clientes | Lolly Closet</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
 
@@ -11,7 +11,7 @@
     <div class="admin-container">
       <aside class="sidebar">
         <div class="logo">
-          <h2>Lojas Lolly</h2>
+          <h2>Lolly Closet</h2>
           <span>Painel Administrativo</span>
         </div>
 
@@ -33,7 +33,7 @@
         <header class="topo">
           <div>
             <h1>Clientes</h1>
-            <p>Consulte os clientes da Closet e da Decor 3D.</p>
+            <p>Consulte os clientes e o histórico de pedidos da Lolly Closet.</p>
           </div>
 
           <div class="acoes-topo">
@@ -49,14 +49,6 @@
 
         <section class="barra-produtos">
           <div class="filtros-produtos">
-            <div class="campo-filtro">
-              <label for="filtroLojaClientes">Loja</label>
-              <select id="filtroLojaClientes">
-                <option value="todas">Todas as lojas</option>
-                <option value="closet">Closet</option>
-                <option value="3d">Decor 3D</option>
-              </select>
-            </div>
 
             <div class="campo-filtro">
               <label for="buscarCliente">Buscar cliente</label>
@@ -80,7 +72,6 @@
                 <tr>
                   <th>Cliente</th>
                   <th>E-mail</th>
-                  <th>Loja</th>
                   <th>Pedidos</th>
                   <th>Total gasto</th>
                   <th>Último pedido</th>
@@ -89,7 +80,7 @@
               </thead>
               <tbody id="tabelaClientes">
                 <tr>
-                  <td colspan="7" class="sem-dados">Carregando clientes...</td>
+                  <td colspan="6" class="sem-dados">Carregando clientes...</td>
                 </tr>
               </tbody>
             </table>
@@ -143,10 +134,6 @@
             <div class="campo-form">
               <label>Telefone</label>
               <p id="detalheClienteTelefone">—</p>
-            </div>
-            <div class="campo-form">
-              <label>Loja</label>
-              <p id="detalheClienteLoja">—</p>
             </div>
             <div class="campo-form">
               <label>Quantidade de pedidos</label>
@@ -263,7 +250,6 @@
               <thead>
                 <tr>
                   <th>Pedido</th>
-                  <th>Loja</th>
                   <th>Data</th>
                   <th>Pagamento</th>
                   <th>Total</th>
@@ -274,7 +260,7 @@
 
               <tbody id="tabelaPedidosCliente">
                 <tr>
-                  <td colspan="7" class="sem-dados">
+                  <td colspan="6" class="sem-dados">
                     Nenhum pedido encontrado.
                   </td>
                 </tr>
